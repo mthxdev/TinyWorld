@@ -77,9 +77,11 @@ class BuildingBuilder {
         let postGeo = SCNBox(width: 0.1, height: 0.6, length: 0.1, chamferRadius: 0)
         postGeo.firstMaterial?.diffuse.contents = texGen.getWoodTexture()
         
-        // Placer les poteaux en carré de 5x5 autour de la maison
-        for x in stride(from: -2.5, through: 2.5, by: 0.8) {
-            for z in [-2.5, 2.5] {
+        // Placer les poteaux en carre de 5x5 autour de la maison
+        for xVal in stride(from: -2.5, through: 2.5, by: 0.8) {
+            for zVal in [-2.5, 2.5] {
+                let x = Float(xVal)
+                let z = Float(zVal)
                 // Laisser un trou pour la porte
                 if z == 2.5 && abs(x) < 0.9 { continue }
                 let post = SCNNode(geometry: postGeo)
@@ -87,10 +89,12 @@ class BuildingBuilder {
                 fenceNode.addChildNode(post)
             }
         }
-        for z in stride(from: -2.5, through: 2.5, by: 0.8) {
-            for x in [-2.5, 2.5] {
+        for zVal in stride(from: -2.5, through: 2.5, by: 0.8) {
+            for xVal in [-2.5, 2.5] {
+                let x = Float(xVal)
+                let z = Float(zVal)
                 let post = SCNNode(geometry: postGeo)
-                post.position = SCNVector3(x, 0.3, Float(z))
+                post.position = SCNVector3(x, 0.3, z)
                 fenceNode.addChildNode(post)
             }
         }

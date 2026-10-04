@@ -68,7 +68,7 @@ class TextureGenerator {
             for x in 0..<256 {
                 for y in 0..<256 {
                     // Tuiles horizontales
-                    let tileY = (y % 32) < 2 ? 0.6 : 1.0
+                    let tileY: CGFloat = (y % 32) < 2 ? 0.6 : 1.0
                     let noise = CGFloat.random(in: 0.9...1.0)
                     let r = 0.8 * tileY * noise
                     let g = 0.3 * tileY * noise

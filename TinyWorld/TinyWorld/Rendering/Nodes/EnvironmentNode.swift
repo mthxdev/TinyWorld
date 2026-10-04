@@ -156,7 +156,7 @@ class EnvironmentNode: SCNNode {
         let dx = end.x - start.x
         let dz = end.z - start.z
         let distance = (dx*dx + dz*dz).squareRoot()
-        let steps = Int(distance / 0.8)
+        let steps = Int(distance / Float(0.8))
         
         let stoneTex = TextureGenerator.shared.getStoneTexture()
         
@@ -285,7 +285,7 @@ class EnvironmentNode: SCNNode {
         ambientLightNode.light?.color = ambientColor
         
         if time >= 6 && time <= 18 {
-            let dayProgress = (time - 6) / 12.0
+            let dayProgress = (time - 6) / Float(12.0)
             let angleX = Float.pi - (Float.pi * dayProgress)
             directionalLightNode.eulerAngles = SCNVector3(x: -angleX, y: Float.pi/4, z: 0)
         }
