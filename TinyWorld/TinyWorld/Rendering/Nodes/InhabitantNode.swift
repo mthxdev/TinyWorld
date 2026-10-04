@@ -54,7 +54,7 @@ class InhabitantNode: SCNNode {
         if self.position.x != targetPosition.x || self.position.z != targetPosition.z {
             let dx = targetPosition.x - self.position.x
             let dz = targetPosition.z - self.position.z
-            let angle = atan2(dx, dz)
+            let angle = atan2(Double(dx), Double(dz))
             
             // Rotation fluide
             let actionRotate = SCNAction.rotateTo(x: 0, y: CGFloat(angle), z: 0, duration: 0.1)
@@ -106,8 +106,8 @@ class InhabitantNode: SCNNode {
             // Reset position/rotation
             leftArm.runAction(SCNAction.rotateTo(x: 0, y: 0, z: 0, duration: 0.2))
             rightArm.runAction(SCNAction.rotateTo(x: 0, y: 0, z: 0, duration: 0.2))
-            bodyNode.runAction(SCNAction.moveTo(y: 0.4, duration: 0.2))
-            headNode.runAction(SCNAction.moveTo(y: 0.85, duration: 0.2))
+            bodyNode.runAction(SCNAction.move(to: SCNVector3(0, 0.4, 0), duration: 0.2))
+            headNode.runAction(SCNAction.move(to: SCNVector3(0, 0.85, 0), duration: 0.2))
         }
     }
 }

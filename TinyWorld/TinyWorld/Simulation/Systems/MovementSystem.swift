@@ -26,7 +26,7 @@ class MovementSystem {
                 
                 let dx = destX - inhabitant.positionX
                 let dz = destZ - inhabitant.positionZ
-                let distance = sqrt(dx*dx + dz*dz)
+                let distance = (dx*dx + dz*dz).squareRoot()
                 
                 // Déplacement selon la vitesse et le tick
                 let moveAmount = inhabitant.speed * deltaTime * Float(5.0) // Ajustement global de la vitesse
