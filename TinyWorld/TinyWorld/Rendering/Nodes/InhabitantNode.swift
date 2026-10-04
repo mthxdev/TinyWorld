@@ -11,6 +11,8 @@ class InhabitantNode: SCNNode {
     // Pour l'animation
     private var isWalking = false
     
+    private var lastSyncPosition: SCNVector3?
+    
     init(id: UUID) {
         self.inhabitantId = id
         
@@ -50,17 +52,24 @@ class InhabitantNode: SCNNode {
     
     func sync(with data: InhabitantData) {
         let targetPosition = SCNVector3(data.positionX, 0, data.positionZ)
+        let currentPos = lastSyncPosition ?? self.position
         
-        if self.position.x != targetPosition.x || self.position.z != targetPosition.z {
-            let dx = targetPosition.x - self.position.x
-            let dz = targetPosition.z - self.position.z
+        let dx = targetPosition.x - currentPos.x
+        let dz = targetPosition.z - currentPos.z
+        let distance = (dx*dx + dz*dz).squareRoot()
+        
+        if distance > 0.001 {
             let angle = atan2(Double(dx), Double(dz))
             
             // Rotation fluide
             let actionRotate = SCNAction.rotateTo(x: 0, y: CGFloat(angle), z: 0, duration: 0.1)
             self.runAction(actionRotate)
             
-            self.position = targetPosition
+            // Interpolation fluide de la position
+            let actionMove = SCNAction.move(to: targetPosition, duration: 0.1)
+            self.runAction(actionMove, forKey: "smoothMove")
+            
+            self.lastSyncPosition = targetPosition
         }
         
         updateAnimation(isMoving: data.state == .moving, speed: data.speed)
