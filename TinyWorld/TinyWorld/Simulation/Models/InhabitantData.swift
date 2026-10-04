@@ -12,4 +12,6 @@ struct InhabitantData: Identifiable {
     var state: InhabitantState
     var destinationX: Float?
     var destinationZ: Float?
+    var speed: Float // Vitesse de déplacement propre à chaque habitant
+    var waitTimer: Float // Temps restant avant de bouger à nouveau
 }

@@ -17,7 +17,9 @@ struct WorldData {
                 positionZ: Float.random(in: -size/2...size/2),
                 state: .idle,
                 destinationX: nil,
-                destinationZ: nil
+                destinationZ: nil,
+                speed: Float.random(in: 0.3...0.7), // Variation de vitesse
+                waitTimer: Float.random(in: 0.0...2.0) // Désynchronisation initiale
             )
         }
     }
