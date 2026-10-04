@@ -1,0 +1,28 @@
+name: TinyWorld
+options:
+  bundleIdPrefix: com.mathieu
+  deploymentTarget:
+    iOS: 16.0
+targets:
+  TinyWorld:
+    type: application
+    platform: iOS
+    deploymentTarget: 16.0
+    sources:
+      - TinyWorld
+    info:
+      path: TinyWorld/Info.plist
+      properties:
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    settings:
+      base:
+        DEVELOPMENT_TEAM: "" # A renseigner pour le vrai build SideStore si necessaire
+        SWIFT_VERSION: 5.0
+        CODE_SIGN_IDENTITY: "Apple Development"
+        CODE_SIGN_STYLE: Automatic
