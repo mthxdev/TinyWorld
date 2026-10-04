@@ -3,6 +3,7 @@ import SceneKit
 
 struct MainView: View {
     @StateObject private var engine = SimulationEngine()
+    @State private var gameScene = GameScene()
     @State private var isLoaded = false
     
     var body: some View {
@@ -10,8 +11,11 @@ struct MainView: View {
             if isLoaded {
                 // Jeu principal
                 ZStack {
-                    SceneContainerView(engine: engine)
+                    SceneContainerView(scene: gameScene, engine: engine)
                         .edgesIgnoringSafeArea(.all)
+                        .onReceive(engine.$world) { newWorld in
+                            gameScene.sync(with: newWorld)
+                        }
                     
                     VStack {
                         HStack {
@@ -20,11 +24,11 @@ struct MainView: View {
                                     .font(.headline)
                                     .foregroundColor(.white)
                                     .shadow(color: .black.opacity(0.8), radius: 2)
-                                Text("Habitants: \(engine.worldData.inhabitants.count)")
+                                Text("Habitants: \(engine.world.inhabitants.count)")
                                     .font(.subheadline)
                                     .foregroundColor(.white)
                                     .shadow(color: .black.opacity(0.8), radius: 2)
-                                Text("Score Dév: \(engine.worldData.developmentScore)")
+                                Text("Score Dév: \(engine.world.developmentScore)")
                                     .font(.subheadline)
                                     .foregroundColor(.yellow)
                                     .shadow(color: .black.opacity(0.8), radius: 2)
@@ -42,7 +46,7 @@ struct MainView: View {
                         
                         // Panel de construction contextuel
                         if let zoneId = engine.selectedZoneId,
-                           let zone = engine.worldData.zones.first(where: { $0.id == zoneId }),
+                           let zone = engine.world.zones.first(where: { $0.id == zoneId }),
                            !zone.isBuilt {
                             
                             VStack(spacing: 10) {
@@ -51,7 +55,7 @@ struct MainView: View {
                                 Text("Coût : \(zone.cost) pts")
                                     .font(.subheadline)
                                 
-                                if engine.worldData.developmentScore >= zone.cost {
+                                if engine.world.developmentScore >= zone.cost {
                                     Button(action: {
                                         engine.buildZone(id: zoneId)
                                     }) {

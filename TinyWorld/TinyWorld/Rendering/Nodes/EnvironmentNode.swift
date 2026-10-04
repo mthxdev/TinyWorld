@@ -134,10 +134,10 @@ class EnvironmentNode: SCNNode {
     private func createBuiltZoneNode(zone: Zone) -> SCNNode {
         let wrapper = SCNNode()
         wrapper.name = "built_wrapper"
-        wrapper.position = SCNVector3(zone.positionX, 0, zone.positionZ)
+        wrapper.position = SCNVector3(zone.centerX, 0, zone.centerZ)
         
         // Base de la parcelle
-        let plotGeo = SCNBox(width: CGFloat(zone.size), height: 0.1, length: CGFloat(zone.size), chamferRadius: 0.2)
+        let plotGeo = SCNBox(width: CGFloat(zone.radius * 2.0), height: 0.1, length: CGFloat(zone.radius * 2.0), chamferRadius: 0.2)
         plotGeo.firstMaterial?.diffuse.contents = UIColor(red: 0.7, green: 0.65, blue: 0.5, alpha: 1.0)
         let plot = SCNNode(geometry: plotGeo)
         plot.position.y = 0.05
@@ -146,17 +146,21 @@ class EnvironmentNode: SCNNode {
         var building: SCNNode?
         
         switch zone.type {
-        case .residential:
+        case .home:
             building = BuildingBuilder.shared.buildHouse(variant: zone.id.hashValue)
+        case .work:
+            building = BuildingBuilder.shared.buildFactory()
+        case .food:
+            building = BuildingBuilder.shared.buildShop()
         case .farm:
             building = BuildingBuilder.shared.buildFarm()
         case .forest:
             for _ in 0..<5 {
                 let tree = BuildingBuilder.shared.buildTree(tall: true)
                 tree.position = SCNVector3(
-                    Float.random(in: -Float(zone.size)/2.5...Float(zone.size)/2.5),
+                    Float.random(in: -zone.radius/1.5...zone.radius/1.5),
                     0,
-                    Float.random(in: -Float(zone.size)/2.5...Float(zone.size)/2.5)
+                    Float.random(in: -zone.radius/1.5...zone.radius/1.5)
                 )
                 wrapper.addChildNode(tree)
             }
@@ -170,19 +174,21 @@ class EnvironmentNode: SCNNode {
         }
         
         // Creer le chemin vers le centre du village (origine) avec des pierres (path-stones-short.obj)
-        let start = SCNVector3(zone.positionX, 0.05, zone.positionZ)
+        let start = SCNVector3(zone.centerX, 0.05, zone.centerZ)
         let end = SCNVector3(0, 0.05, 0)
         let dx = end.x - start.x
         let dz = end.z - start.z
-        let distance = (dx*dx + dz*dz).squareRoot()
-        let steps = Int(distance / Float(1.5))
+        let distance = hypot(Float(dx), Float(dz))
+        let steps = Int(distance / 1.5)
         
-        for i in 1..<steps {
-            let ratio = Float(i) / Float(steps)
-            let pathStone = AssetManager.shared.getModel(named: "path-stones-short", folder: "suburban")
-            pathStone.position = SCNVector3(start.x + dx * ratio, 0.06, start.z + dz * ratio)
-            pathStone.eulerAngles.y = Float.random(in: 0...Float.pi)
-            wrapper.addChildNode(pathStone)
+        if steps > 1 {
+            for i in 1..<steps {
+                let ratio = Float(i) / Float(steps)
+                let pathStone = AssetManager.shared.getModel(named: "path-stones-short", folder: "suburban")
+                pathStone.position = SCNVector3(start.x + Float(dx) * ratio, 0.06, start.z + Float(dz) * ratio)
+                pathStone.eulerAngles.y = Float.random(in: 0...Float.pi)
+                wrapper.addChildNode(pathStone)
+            }
         }
         
         return wrapper
@@ -190,7 +196,7 @@ class EnvironmentNode: SCNNode {
     
     private func createUnbuiltZoneNode(zone: Zone) -> SCNNode {
         let wrapper = SCNNode()
-        wrapper.position = SCNVector3(zone.positionX, 0, zone.positionZ)
+        wrapper.position = SCNVector3(zone.centerX, 0, zone.centerZ)
         
         // Un panneau de construction
         let sign = AssetManager.shared.getModel(named: "fence", folder: "suburban")
