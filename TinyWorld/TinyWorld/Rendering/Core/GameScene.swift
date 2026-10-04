@@ -9,7 +9,7 @@ class GameScene: SCNScene {
         self.cameraController = CameraController(scene: SCNScene()) // sera reaffecte ci-dessous
         super.init()
         
-        // Initialisation de la caméra et du monde visuel
+        // Initialisation de la camera et du monde visuel
         self.cameraController.pivotNode.removeFromParentNode()
         self.rootNode.addChildNode(cameraController.pivotNode)
         
@@ -21,16 +21,34 @@ class GameScene: SCNScene {
         fatalError("init(coder:) has not been implemented")
     }
     
-    /// Méthode appelée par SwiftUI (ou un Timer de la Vue) pour synchroniser la scène avec l'état de la simulation.
-    /// Note: GameScene ne connait pas "SimulationEngine", juste les datas, pour respecter l'architecture pure.
     func sync(with worldData: WorldData) {
-        // 1. Mettre à jour le cycle jour/nuit
+        // 1. Mettre a jour le cycle jour/nuit
         environmentNode.updateTimeOfDay(worldData.timeOfDay)
         
-        // 2. Mettre à jour (ou créer) les noeuds habitants
+        let isDay = worldData.timeOfDay > 6 && worldData.timeOfDay < 18
+        let targetColor = isDay ? UIColor(red: 0.5, green: 0.8, blue: 0.9, alpha: 1.0) : UIColor(red: 0.05, green: 0.1, blue: 0.2, alpha: 1.0)
+        
+        if let currentColor = self.background.contents as? UIColor {
+            var r1: CGFloat = 0, g1: CGFloat = 0, b1: CGFloat = 0, a1: CGFloat = 0
+            var r2: CGFloat = 0, g2: CGFloat = 0, b2: CGFloat = 0, a2: CGFloat = 0
+            currentColor.getRed(&r1, green: &g1, blue: &b1, alpha: &a1)
+            targetColor.getRed(&r2, green: &g2, blue: &b2, alpha: &a2)
+            
+            let blended = UIColor(
+                red: r1 + (r2 - r1) * 0.05,
+                green: g1 + (g2 - g1) * 0.05,
+                blue: b1 + (b2 - b1) * 0.05,
+                alpha: 1.0
+            )
+            self.background.contents = blended
+        } else {
+            self.background.contents = targetColor
+        }
+        
+        // 2. Mettre a jour (ou creer) les noeuds habitants
         for inhabitantData in worldData.inhabitants {
             if let node = inhabitantNodes[inhabitantData.id] {
-                // Existe déjà, on met à jour
+                // Existe deja, on met a jour
                 node.sync(with: inhabitantData)
             } else {
                 // Nouveau

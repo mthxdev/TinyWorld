@@ -1,6 +1,6 @@
 import Foundation
 
-enum Activity {
+enum Activity: String, Codable {
     case sleeping
     case eating
     case working
@@ -8,8 +8,10 @@ enum Activity {
     case wandering
 }
 
-struct InhabitantData: Identifiable {
+struct InhabitantData: Identifiable, Codable {
     let id: UUID
+    let name: String
+    
     var positionX: Float
     var positionZ: Float
     
@@ -22,9 +24,9 @@ struct InhabitantData: Identifiable {
     var speed: Float
     var waitTimer: Float
     
-    // Préférences de routine (pour désynchroniser)
-    var wakeUpTime: Float // ex: 6.0 à 7.5
-    var sleepTime: Float  // ex: 21.0 à 23.0
+    // Préférences de routine
+    var wakeUpTime: Float
+    var sleepTime: Float
     var homeZoneIndex: Int
     var workZoneIndex: Int
 }

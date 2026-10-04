@@ -20,9 +20,9 @@ class InhabitantNode: SCNNode {
         let bodyGeo = SCNBox(width: 0.4, height: 0.6, length: 0.3, chamferRadius: 0.1)
         bodyGeo.firstMaterial?.diffuse.contents = UIColor(red: 0.8, green: 0.3, blue: 0.3, alpha: 1.0)
         bodyNode = SCNNode(geometry: bodyGeo)
-        bodyNode.position = SCNVector3(0, 0.4, 0) // Surélevé pour les "jambes" imaginaires ou futures
+        bodyNode.position = SCNVector3(0, 0.4, 0)
         
-        // Tête
+        // Tete
         let headGeo = SCNSphere(radius: 0.25)
         headGeo.firstMaterial?.diffuse.contents = UIColor(white: 0.9, alpha: 1.0)
         headNode = SCNNode(geometry: headGeo)
@@ -39,6 +39,7 @@ class InhabitantNode: SCNNode {
         rightArm.position = SCNVector3(0.3, 0.4, 0)
         
         super.init()
+        self.name = id.uuidString
         
         addChildNode(bodyNode)
         addChildNode(headNode)
@@ -83,8 +84,6 @@ class InhabitantNode: SCNNode {
         if isMoving && !isWalking {
             isWalking = true
             
-            // Calculer la durée de l'animation en fonction de la vitesse (plus rapide = animation plus rapide)
-            // ex: speed=0.5 -> duration = 0.2. speed=1.0 -> duration = 0.1
             let baseAnimDuration: TimeInterval = 0.3
             let duration = max(0.1, baseAnimDuration / TimeInterval(max(0.1, speed * 2.0)))
             
@@ -96,7 +95,7 @@ class InhabitantNode: SCNNode {
             let leftSeq = SCNAction.sequence([leftFwd, leftBack, leftBack, leftFwd])
             leftArm.runAction(SCNAction.repeatForever(leftSeq), forKey: "walk")
             
-            // Bras droit (opposé)
+            // Bras droit (oppose)
             let rightFwd = SCNAction.rotateTo(x: armSwing, y: 0, z: 0, duration: duration)
             let rightBack = SCNAction.rotateTo(x: -armSwing, y: 0, z: 0, duration: duration)
             let rightSeq = SCNAction.sequence([rightBack, rightFwd, rightFwd, rightBack])

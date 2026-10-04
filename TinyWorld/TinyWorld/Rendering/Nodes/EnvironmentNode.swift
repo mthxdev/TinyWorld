@@ -14,13 +14,13 @@ class EnvironmentNode: SCNNode {
         // Soleil
         let dirLight = SCNLight()
         dirLight.type = .directional
-        dirLight.intensity = 1000
+        dirLight.intensity = 1500
         dirLight.castsShadow = true
         directionalLightNode = SCNNode()
         directionalLightNode.light = dirLight
         directionalLightNode.eulerAngles = SCNVector3(x: -Float.pi/4, y: Float.pi/4, z: 0)
         
-        // Lumière ambiante
+        // Lumiere ambiante
         let ambLight = SCNLight()
         ambLight.type = .ambient
         ambLight.intensity = 200
@@ -35,17 +35,68 @@ class EnvironmentNode: SCNNode {
         
         // Affichage des zones
         for zone in world.zones {
-            let zoneGeo = SCNCylinder(radius: CGFloat(zone.radius), height: 0.01)
-            let color: UIColor
+            let zoneNode = SCNNode()
+            zoneNode.position = SCNVector3(zone.centerX, 0, zone.centerZ)
+            
             switch zone.type {
-            case .home: color = UIColor.blue.withAlphaComponent(0.3)
-            case .work: color = UIColor.orange.withAlphaComponent(0.3)
-            case .food: color = UIColor.red.withAlphaComponent(0.3)
-            case .park: color = UIColor.green.withAlphaComponent(0.3)
+            case .home:
+                // Maison : cube + toit pyramide
+                let base = SCNBox(width: 2.0, height: 1.5, length: 2.0, chamferRadius: 0.1)
+                base.firstMaterial?.diffuse.contents = UIColor(red: 0.9, green: 0.8, blue: 0.7, alpha: 1.0)
+                let baseNode = SCNNode(geometry: base)
+                baseNode.position.y = 0.75
+                zoneNode.addChildNode(baseNode)
+                
+                let roof = SCNPyramid(width: 2.2, height: 1.0, length: 2.2)
+                roof.firstMaterial?.diffuse.contents = UIColor(red: 0.8, green: 0.3, blue: 0.3, alpha: 1.0)
+                let roofNode = SCNNode(geometry: roof)
+                roofNode.position.y = 1.5
+                zoneNode.addChildNode(roofNode)
+                
+            case .work:
+                // Bureau/Usine : gros bloc rectangulaire
+                let factory = SCNBox(width: 3.5, height: 2.0, length: 2.5, chamferRadius: 0.1)
+                factory.firstMaterial?.diffuse.contents = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1.0)
+                let factoryNode = SCNNode(geometry: factory)
+                factoryNode.position.y = 1.0
+                zoneNode.addChildNode(factoryNode)
+                
+            case .food:
+                // Stand de nourriture / Restaurant (cylindre ou box)
+                let shop = SCNBox(width: 2.0, height: 1.2, length: 2.0, chamferRadius: 0.2)
+                shop.firstMaterial?.diffuse.contents = UIColor(red: 0.9, green: 0.5, blue: 0.2, alpha: 1.0)
+                let shopNode = SCNNode(geometry: shop)
+                shopNode.position.y = 0.6
+                zoneNode.addChildNode(shopNode)
+                
+            case .park:
+                // Parc avec arbres
+                for _ in 0..<3 {
+                    let treeNode = SCNNode()
+                    let trunk = SCNCylinder(radius: 0.2, height: 1.0)
+                    trunk.firstMaterial?.diffuse.contents = UIColor.brown
+                    let trunkNode = SCNNode(geometry: trunk)
+                    trunkNode.position.y = 0.5
+                    
+                    let leaves = SCNSphere(radius: 0.8)
+                    leaves.firstMaterial?.diffuse.contents = UIColor(red: 0.2, green: 0.7, blue: 0.2, alpha: 1.0)
+                    let leavesNode = SCNNode(geometry: leaves)
+                    leavesNode.position.y = 1.2
+                    
+                    treeNode.addChildNode(trunkNode)
+                    treeNode.addChildNode(leavesNode)
+                    treeNode.position = SCNVector3(Float.random(in: -1.5...1.5), 0, Float.random(in: -1.5...1.5))
+                    zoneNode.addChildNode(treeNode)
+                }
             }
-            zoneGeo.firstMaterial?.diffuse.contents = color
-            let zoneNode = SCNNode(geometry: zoneGeo)
-            zoneNode.position = SCNVector3(zone.centerX, 0.01, zone.centerZ)
+            
+            // Sol indicateur
+            let basePlate = SCNCylinder(radius: CGFloat(zone.radius), height: 0.01)
+            basePlate.firstMaterial?.diffuse.contents = UIColor.white.withAlphaComponent(0.1)
+            let plateNode = SCNNode(geometry: basePlate)
+            plateNode.position.y = 0.005
+            zoneNode.addChildNode(plateNode)
+            
             addChildNode(zoneNode)
         }
     }
@@ -55,14 +106,9 @@ class EnvironmentNode: SCNNode {
     }
     
     func updateTimeOfDay(_ time: Float) {
-        // timeOfDay de 0 à 24
-        // A midi (12), intensité max. A minuit (0/24), intensité min.
         let isDay = time > 6 && time < 18
-        
-        let targetIntensity: CGFloat = isDay ? 1000 : 100
-        let currentIntensity = directionalLightNode.light?.intensity ?? 1000
-        
-        // Interpolation simple (visuelle pure)
+        let targetIntensity: CGFloat = isDay ? 1500 : 200
+        let currentIntensity = directionalLightNode.light?.intensity ?? 1500
         directionalLightNode.light?.intensity = currentIntensity + (targetIntensity - currentIntensity) * 0.05
     }
 }
