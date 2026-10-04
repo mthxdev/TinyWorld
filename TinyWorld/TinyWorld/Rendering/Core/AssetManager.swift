@@ -1,4 +1,5 @@
 import SceneKit
+import UIKit
 
 class AssetManager {
     static let shared = AssetManager()

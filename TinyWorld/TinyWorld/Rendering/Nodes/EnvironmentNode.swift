@@ -1,4 +1,5 @@
 import SceneKit
+import UIKit
 
 class EnvironmentNode: SCNNode {
     private var directionalLightNode: SCNNode!

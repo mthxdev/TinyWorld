@@ -82,7 +82,7 @@ struct MainView: View {
                 ZStack {
                     Color(red: 0.1, green: 0.15, blue: 0.2).edgesIgnoringSafeArea(.all)
                     VStack(spacing: 20) {
-                        Image(uiImage: UIImage(named: "AppIcon") ?? UIImage())
+                        Image("AppIcon")
                             .resizable()
                             .frame(width: 120, height: 120)
                             .cornerRadius(25)

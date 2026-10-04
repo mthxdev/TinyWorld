@@ -36,7 +36,11 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             clean build > build_log.txt 2>&1 || {
               echo "==== BUILD FAILED ===="
-              cat build_log.txt
+              git config --global user.name 'github-actions'
+              git config --global user.email 'github-actions@github.com'
+              git add build_log.txt
+              git commit -m "Upload build log [skip ci]"
+              git push
               exit 1
             }
           
