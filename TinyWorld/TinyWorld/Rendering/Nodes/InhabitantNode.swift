@@ -51,7 +51,9 @@ class InhabitantNode: SCNNode {
     }
     
     func sync(with data: InhabitantData) {
-        let targetPosition = SCNVector3(data.positionX, 0, data.positionZ)
+        let isSleeping = data.activity == .sleeping
+        let targetY: Float = isSleeping ? 0.2 : 0.0
+        let targetPosition = SCNVector3(data.positionX, targetY, data.positionZ)
         let currentPos = lastSyncPosition ?? self.position
         
         let dx = targetPosition.x - currentPos.x
@@ -59,11 +61,12 @@ class InhabitantNode: SCNNode {
         let distance = (dx*dx + dz*dz).squareRoot()
         
         if distance > 0.001 {
-            let angle = atan2(Double(dx), Double(dz))
-            
-            // Rotation fluide
-            let actionRotate = SCNAction.rotateTo(x: 0, y: CGFloat(angle), z: 0, duration: 0.1)
-            self.runAction(actionRotate)
+            // Orientation (seulement s'il ne dort pas, pour ne pas tourner en dormant)
+            if !isSleeping {
+                let angle = atan2(Double(dx), Double(dz))
+                let actionRotate = SCNAction.rotateTo(x: 0, y: CGFloat(angle), z: 0, duration: 0.1)
+                self.runAction(actionRotate)
+            }
             
             // Interpolation fluide de la position
             let actionMove = SCNAction.move(to: targetPosition, duration: 0.1)
@@ -72,7 +75,8 @@ class InhabitantNode: SCNNode {
             self.lastSyncPosition = targetPosition
         }
         
-        updateAnimation(isMoving: data.state == .moving, speed: data.speed)
+        updateAnimation(isMoving: data.isMoving, speed: data.speed)
+        updateActivityState(activity: data.activity)
     }
     
     private func updateAnimation(isMoving: Bool, speed: Float) {
@@ -117,6 +121,15 @@ class InhabitantNode: SCNNode {
             rightArm.runAction(SCNAction.rotateTo(x: 0, y: 0, z: 0, duration: 0.2))
             bodyNode.runAction(SCNAction.move(to: SCNVector3(0, 0.4, 0), duration: 0.2))
             headNode.runAction(SCNAction.move(to: SCNVector3(0, 0.85, 0), duration: 0.2))
+        }
+    }
+    
+    func updateActivityState(activity: Activity) {
+        // Si dort, il s'allonge
+        if activity == .sleeping {
+            self.eulerAngles.x = -Float.pi / 2
+        } else {
+            self.eulerAngles.x = 0
         }
     }
 }

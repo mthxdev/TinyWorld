@@ -13,7 +13,7 @@ class GameScene: SCNScene {
         self.cameraController.pivotNode.removeFromParentNode()
         self.rootNode.addChildNode(cameraController.pivotNode)
         
-        self.environmentNode = EnvironmentNode(worldSize: 20.0)
+        self.environmentNode = EnvironmentNode(world: WorldData())
         self.rootNode.addChildNode(environmentNode)
     }
     

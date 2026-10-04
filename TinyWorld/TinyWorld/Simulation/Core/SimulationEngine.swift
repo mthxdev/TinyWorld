@@ -7,6 +7,7 @@ class SimulationEngine: ObservableObject {
     private var timer: Timer?
     
     private let movementSystem = MovementSystem()
+    private let activitySystem = ActivitySystem()
     
     init() {
         self.world = WorldData()
@@ -28,8 +29,9 @@ class SimulationEngine: ObservableObject {
         world.timeOfDay += 0.05
         if world.timeOfDay >= 24.0 { world.timeOfDay = 0.0 }
         
-        // Délégation de la logique de déplacement
+        // Délégation de la logique
         var tempWorld = world
+        activitySystem.update(world: &tempWorld, deltaTime: deltaTime)
         movementSystem.update(world: &tempWorld, deltaTime: deltaTime)
         world = tempWorld
     }

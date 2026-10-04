@@ -4,9 +4,9 @@ class EnvironmentNode: SCNNode {
     private var directionalLightNode: SCNNode
     private var ambientLightNode: SCNNode
     
-    init(worldSize: Float) {
+    init(world: WorldData) {
         // Sol
-        let groundGeometry = SCNPlane(width: CGFloat(worldSize), height: CGFloat(worldSize))
+        let groundGeometry = SCNPlane(width: CGFloat(world.size), height: CGFloat(world.size))
         groundGeometry.firstMaterial?.diffuse.contents = UIColor(red: 0.4, green: 0.8, blue: 0.4, alpha: 1.0)
         let groundNode = SCNNode(geometry: groundGeometry)
         groundNode.eulerAngles.x = -Float.pi / 2
@@ -32,6 +32,22 @@ class EnvironmentNode: SCNNode {
         addChildNode(groundNode)
         addChildNode(directionalLightNode)
         addChildNode(ambientLightNode)
+        
+        // Affichage des zones
+        for zone in world.zones {
+            let zoneGeo = SCNCylinder(radius: CGFloat(zone.radius), height: 0.01)
+            let color: UIColor
+            switch zone.type {
+            case .home: color = UIColor.blue.withAlphaComponent(0.3)
+            case .work: color = UIColor.orange.withAlphaComponent(0.3)
+            case .food: color = UIColor.red.withAlphaComponent(0.3)
+            case .park: color = UIColor.green.withAlphaComponent(0.3)
+            }
+            zoneGeo.firstMaterial?.diffuse.contents = color
+            let zoneNode = SCNNode(geometry: zoneGeo)
+            zoneNode.position = SCNVector3(zone.centerX, 0.01, zone.centerZ)
+            addChildNode(zoneNode)
+        }
     }
     
     required init?(coder: NSCoder) {

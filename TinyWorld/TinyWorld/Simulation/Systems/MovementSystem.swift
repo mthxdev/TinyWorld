@@ -5,21 +5,10 @@ class MovementSystem {
         for i in 0..<world.inhabitants.count {
             var inhabitant = world.inhabitants[i]
             
-            switch inhabitant.state {
-            case .idle:
-                // Attente avant de bouger
-                inhabitant.waitTimer -= deltaTime
-                if inhabitant.waitTimer <= 0 {
-                    inhabitant.state = .moving
-                    // Nouvelle destination aléatoire sur le terrain
-                    inhabitant.destinationX = Float.random(in: -world.size/2...world.size/2)
-                    inhabitant.destinationZ = Float.random(in: -world.size/2...world.size/2)
-                }
-                
-            case .moving:
+            if inhabitant.isMoving {
+                // Déplacement vers un point spécifique (destination)
                 guard let destX = inhabitant.destinationX, let destZ = inhabitant.destinationZ else {
-                    inhabitant.state = .idle
-                    inhabitant.waitTimer = Float.random(in: 1.0...5.0)
+                    inhabitant.isMoving = false
                     world.inhabitants[i] = inhabitant
                     continue
                 }
@@ -28,22 +17,33 @@ class MovementSystem {
                 let dz = destZ - inhabitant.positionZ
                 let distance = (dx*dx + dz*dz).squareRoot()
                 
-                // Déplacement selon la vitesse et le tick
-                let moveAmount = inhabitant.speed * deltaTime * Float(5.0) // Ajustement global de la vitesse
+                let moveAmount = inhabitant.speed * deltaTime * Float(5.0)
                 
                 if distance <= moveAmount {
                     // Arrivé à destination
                     inhabitant.positionX = destX
                     inhabitant.positionZ = destZ
-                    inhabitant.state = .idle
+                    inhabitant.isMoving = false
                     inhabitant.destinationX = nil
                     inhabitant.destinationZ = nil
-                    inhabitant.waitTimer = Float.random(in: 2.0...8.0) // Attente désynchronisée
+                    inhabitant.waitTimer = Float.random(in: 2.0...5.0) // Pause avant micro-déplacement
                 } else {
-                    // Mouvement vers la destination
                     let ratio = moveAmount / distance
                     inhabitant.positionX += dx * ratio
                     inhabitant.positionZ += dz * ratio
+                }
+            } else {
+                // L'habitant est à destination. S'il ne dort pas, on le fait bouger un tout petit peu.
+                if inhabitant.activity != .sleeping {
+                    inhabitant.waitTimer -= deltaTime
+                    if inhabitant.waitTimer <= 0 {
+                        inhabitant.isMoving = true
+                        // Micro-déplacement très proche
+                        let angle = Float.random(in: 0...(2 * .pi))
+                        let r = Float.random(in: 0...1.0)
+                        inhabitant.destinationX = inhabitant.positionX + r * cos(angle)
+                        inhabitant.destinationZ = inhabitant.positionZ + r * sin(angle)
+                    }
                 }
             }
             
