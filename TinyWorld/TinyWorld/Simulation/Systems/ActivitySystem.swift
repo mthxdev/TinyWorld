@@ -66,9 +66,9 @@ class ActivitySystem {
             }
             return activeZones.first { $0.id == inhabitant.homeZoneId }
         case .wandering:
-            // S'il n'y a pas de parc, on erre pres de la maison
-            if let parkZone = activeZones.first(where: { $0.type == .park }) {
-                return parkZone
+            var leisureZones = activeZones.filter { $0.type == .park || $0.type == .forest }
+            if !leisureZones.isEmpty {
+                return leisureZones.randomElement()
             }
             return activeZones.first { $0.id == inhabitant.homeZoneId }
         }

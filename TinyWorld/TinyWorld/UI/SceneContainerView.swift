@@ -19,23 +19,36 @@ struct SceneContainerView: UIViewRepresentable {
             let location = gesture.location(in: scnView)
             let hits = scnView.hitTest(location, options: [.boundingBoxOnly: true])
             
-            // Chercher le premier noeud avec un nom (l'UUID de l'habitant)
             for hit in hits {
-                if let name = hit.node.name, let uuid = UUID(uuidString: name) {
-                    DispatchQueue.main.async {
-                        self.engine.selectedInhabitantId = uuid
+                if let name = hit.node.name {
+                    if name.starts(with: "zone_") {
+                        let idStr = name.replacingOccurrences(of: "zone_", with: "")
+                        if let zoneId = Int(idStr) {
+                            DispatchQueue.main.async {
+                                self.engine.selectedZoneId = zoneId
+                                self.engine.selectedInhabitantId = nil
+                            }
+                            return
+                        }
+                    } else if let uuid = UUID(uuidString: name) {
+                        DispatchQueue.main.async {
+                            self.engine.selectedInhabitantId = uuid
+                            self.engine.selectedZoneId = nil
+                        }
+                        return
                     }
-                    return
                 } else if let parentName = hit.node.parent?.name, let uuid = UUID(uuidString: parentName) {
                     DispatchQueue.main.async {
                         self.engine.selectedInhabitantId = uuid
+                        self.engine.selectedZoneId = nil
                     }
                     return
                 }
             }
-            // Clique dans le vide -> deselection
+            
             DispatchQueue.main.async {
                 self.engine.selectedInhabitantId = nil
+                self.engine.selectedZoneId = nil
             }
         }
     }

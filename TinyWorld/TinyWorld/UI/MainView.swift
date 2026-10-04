@@ -8,12 +8,9 @@ struct MainView: View {
 
     var body: some View {
         ZStack {
-            // Conteneur de la scene 3D
             SceneContainerView(scene: gameScene, engine: simulationEngine)
                 .ignoresSafeArea()
-                .onAppear {
-                    simulationEngine.start()
-                }
+                .onAppear { simulationEngine.start() }
                 .onReceive(simulationEngine.$world) { updatedWorld in
                     gameScene.sync(with: updatedWorld)
                 }
@@ -25,7 +22,6 @@ struct MainView: View {
                     }
                 }
 
-            // HUD minimal (Overlay)
             VStack {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 4) {
@@ -40,6 +36,10 @@ struct MainView: View {
                         Text("\(simulationEngine.world.inhabitants.count) habitants")
                             .font(.caption)
                             .foregroundColor(.gray)
+                            
+                        Text("Dev: \(Int(simulationEngine.world.developmentScore))")
+                            .font(.caption)
+                            .foregroundColor(.yellow)
                     }
                     .foregroundColor(.white)
                     .padding()
@@ -48,13 +48,37 @@ struct MainView: View {
                     
                     Spacer()
                     
-                    // Panneau d'informations sur l'habitant sélectionné
                     if let inhabitant = simulationEngine.selectedInhabitant {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(inhabitant.name)
                                 .font(.headline)
                             Text(activityDescription(for: inhabitant.activity))
                                 .font(.subheadline)
+                        }
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.black.opacity(0.7))
+                        .cornerRadius(10)
+                    } else if let zone = simulationEngine.selectedZone, !zone.isBuilt {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Projet: \(zone.name)")
+                                .font(.headline)
+                            Text("Coût: \(Int(zone.cost))")
+                                .font(.subheadline)
+                                .foregroundColor(simulationEngine.world.developmentScore >= zone.cost ? .green : .red)
+                            
+                            Button(action: {
+                                simulationEngine.buildZone(id: zone.id)
+                            }) {
+                                Text("Construire")
+                                    .fontWeight(.bold)
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 8)
+                                    .background(simulationEngine.world.developmentScore >= zone.cost ? Color.blue : Color.gray)
+                                    .cornerRadius(8)
+                                    .foregroundColor(.white)
+                            }
+                            .disabled(simulationEngine.world.developmentScore < zone.cost)
                         }
                         .foregroundColor(.white)
                         .padding()
@@ -73,10 +97,10 @@ struct MainView: View {
     private func activityDescription(for activity: Activity) -> String {
         switch activity {
         case .sleeping: return "Dort paisiblement"
-        case .eating: return "Mange"
+        case .eating: return "Au marché"
         case .working: return "Travaille"
         case .resting: return "Se repose chez soi"
-        case .wandering: return "Se promène"
+        case .wandering: return "Se promène au parc"
         }
     }
 }

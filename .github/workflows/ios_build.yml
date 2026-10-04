@@ -29,16 +29,15 @@ jobs:
             -scheme TinyWorld \
             -sdk iphoneos \
             -configuration Release \
+            SYMROOT=$PWD/build \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
-            clean build \
-            CODE_SIGNING_ALLOWED=NO \
-            archive -archivePath TinyWorld.xcarchive
+            clean build
           
-          # Convert archive to ipa
+          # Convert app to ipa
           mkdir -p Payload
-          mv TinyWorld.xcarchive/Products/Applications/TinyWorld.app Payload/
+          mv build/Release-iphoneos/TinyWorld.app Payload/
           zip -r TinyWorld.ipa Payload
         working-directory: TinyWorld
 

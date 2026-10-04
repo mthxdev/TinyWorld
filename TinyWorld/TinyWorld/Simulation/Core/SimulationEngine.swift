@@ -4,6 +4,7 @@ import Combine
 class SimulationEngine: ObservableObject {
     @Published var world: WorldData
     @Published var selectedInhabitantId: UUID?
+    @Published var selectedZoneId: Int?
     
     private var timer: Timer?
     
@@ -12,7 +13,6 @@ class SimulationEngine: ObservableObject {
     private let evolutionSystem = EvolutionSystem()
     
     // Echelle : 1 seconde reelle = 0.02 heure in-game (50 secondes reelles = 1 heure in-game).
-    // Un jour complet (24h) dure donc 1200 secondes (20 minutes).
     private let timeScale: Float = 0.02
     
     init() {
@@ -43,11 +43,38 @@ class SimulationEngine: ObservableObject {
         SaveManager.shared.save(world: world)
     }
     
+    func buildZone(id: Int) {
+        guard let idx = world.zones.firstIndex(where: { $0.id == id }) else { return }
+        let zone = world.zones[idx]
+        if !zone.isBuilt && world.developmentScore >= zone.cost {
+            world.developmentScore -= zone.cost
+            world.zones[idx].isBuilt = true
+            
+            // Ajouter des habitants ou affecter des emplois
+            if zone.type == .home {
+                // Si on construit une maison, on ajoute des habitants
+                // Ils travailleront a l'atelier par defaut (1) ou a la ferme (4) si construite
+                let workId = world.zones.first(where: { $0.type == .farm && $0.isBuilt })?.id ?? 1
+                world.addInhabitants(count: 2, toHome: id, work: workId)
+            } else if zone.type == .farm {
+                // Rediriger 2 habitants vers la ferme
+                var count = 0
+                for i in 0..<world.inhabitants.count {
+                    if world.inhabitants[i].workZoneId == 1 && count < 2 {
+                        world.inhabitants[i].workZoneId = id
+                        count += 1
+                    }
+                }
+            }
+            
+            selectedZoneId = nil
+        }
+    }
+    
     private func catchUpOfflineTime() {
         let now = Date()
         let elapsedRealSeconds = now.timeIntervalSince(world.lastSavedDate)
         
-        // On cap le rattrapage à 24 heures réelles
         let cappedElapsed = min(elapsedRealSeconds, 24 * 3600) 
         
         if cappedElapsed > 1 {
@@ -60,12 +87,7 @@ class SimulationEngine: ObservableObject {
     }
     
     private func tick(deltaTime: Float) {
-        updateSystems(deltaTime: deltaTime)
-    }
-    
-    private func updateSystems(deltaTime: Float) {
-        // Temps
-        let timeToAdd = timeScale * deltaTime // 0.02 * 0.1 = 0.002
+        let timeToAdd = timeScale * deltaTime
         world.timeOfDay += timeToAdd
         if world.timeOfDay >= 24.0 { world.timeOfDay = 0.0 }
         
@@ -76,9 +98,13 @@ class SimulationEngine: ObservableObject {
         world = tempWorld
     }
     
-    // UI Helper
     var selectedInhabitant: InhabitantData? {
         guard let id = selectedInhabitantId else { return nil }
         return world.inhabitants.first { $0.id == id }
+    }
+    
+    var selectedZone: Zone? {
+        guard let id = selectedZoneId else { return nil }
+        return world.zones.first { $0.id == id }
     }
 }
