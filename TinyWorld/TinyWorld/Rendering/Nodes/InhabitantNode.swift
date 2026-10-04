@@ -4,7 +4,7 @@ import UIKit
 class InhabitantNode: SCNNode {
     let inhabitantId: UUID
     
-    // Articulation joints (pivots)
+    // Articulation joints
     private let pelvis = SCNNode()
     private let leftShoulder = SCNNode()
     private let rightShoulder = SCNNode()
@@ -26,7 +26,6 @@ class InhabitantNode: SCNNode {
         self.inhabitantId = id
         super.init()
         self.name = id.uuidString
-        
         setupAnatomy()
     }
     
@@ -35,29 +34,39 @@ class InhabitantNode: SCNNode {
     }
     
     private func setupAnatomy() {
-        // Pelvis is the center of the character (hips level), around y = 0.5
+        // Pelvis au centre
         pelvis.position = SCNVector3(0, 0.45, 0)
         addChildNode(pelvis)
         
         // Torso
         let torsoGeo = SCNBox(width: 0.35, height: 0.4, length: 0.25, chamferRadius: 0.05)
         bodyNode.geometry = torsoGeo
-        bodyNode.position = SCNVector3(0, 0.2, 0) // Shifted up from pelvis
+        bodyNode.position = SCNVector3(0, 0.2, 0)
         pelvis.addChildNode(bodyNode)
         
         // Head Joint
         headJoint.position = SCNVector3(0, 0.45, 0)
         pelvis.addChildNode(headJoint)
         
-        let headGeo = SCNBox(width: 0.3, height: 0.3, length: 0.3, chamferRadius: 0.08)
+        let headGeo = SCNBox(width: 0.3, height: 0.3, length: 0.3, chamferRadius: 0.05)
         headNode.geometry = headGeo
         headNode.position = SCNVector3(0, 0.15, 0)
         headJoint.addChildNode(headNode)
         
+        // Yeux
+        let eyeGeo = SCNSphere(radius: 0.03)
+        eyeGeo.firstMaterial?.diffuse.contents = UIColor.black
+        let lEye = SCNNode(geometry: eyeGeo)
+        lEye.position = SCNVector3(-0.06, 0.18, 0.15)
+        let rEye = SCNNode(geometry: eyeGeo)
+        rEye.position = SCNVector3(0.06, 0.18, 0.15)
+        headJoint.addChildNode(lEye)
+        headJoint.addChildNode(rEye)
+        
         // Hair / Hat
         let hairGeo = SCNBox(width: 0.32, height: 0.1, length: 0.32, chamferRadius: 0.02)
         hairNode.geometry = hairGeo
-        hairNode.position = SCNVector3(0, 0.35, 0)
+        hairNode.position = SCNVector3(0, 0.33, 0)
         headJoint.addChildNode(hairNode)
         
         // Arms
@@ -66,9 +75,9 @@ class InhabitantNode: SCNNode {
         pelvis.addChildNode(leftShoulder)
         pelvis.addChildNode(rightShoulder)
         
-        let armGeo = SCNBox(width: 0.12, height: 0.35, length: 0.12, chamferRadius: 0.04)
+        let armGeo = SCNBox(width: 0.12, height: 0.35, length: 0.12, chamferRadius: 0.02)
         let lArm = SCNNode(geometry: armGeo)
-        lArm.position = SCNVector3(0, -0.15, 0) // Grow downwards
+        lArm.position = SCNVector3(0, -0.15, 0)
         leftShoulder.addChildNode(lArm)
         
         let rArm = SCNNode(geometry: armGeo)
@@ -76,8 +85,8 @@ class InhabitantNode: SCNNode {
         rightShoulder.addChildNode(rArm)
         
         // Legs
-        leftHip.position = SCNVector3(-0.1, 0.0, 0)
-        rightHip.position = SCNVector3(0.1, 0.0, 0)
+        leftHip.position = SCNVector3(-0.12, 0.0, 0)
+        rightHip.position = SCNVector3(0.12, 0.0, 0)
         pelvis.addChildNode(leftHip)
         pelvis.addChildNode(rightHip)
         
@@ -90,15 +99,16 @@ class InhabitantNode: SCNNode {
         rLeg.position = SCNVector3(0, -0.2, 0)
         rightHip.addChildNode(rLeg)
         
-        // Setup default materials to avoid nil crashes
-        let defaultMat = SCNMaterial()
-        defaultMat.diffuse.contents = UIColor.gray
+        // Shoes
+        let shoeGeo = SCNBox(width: 0.16, height: 0.08, length: 0.22, chamferRadius: 0.02)
+        shoeGeo.firstMaterial?.diffuse.contents = UIColor(red: 0.2, green: 0.1, blue: 0.1, alpha: 1.0)
+        let lShoe = SCNNode(geometry: shoeGeo)
+        lShoe.position = SCNVector3(0, -0.2, 0.04)
+        lLeg.addChildNode(lShoe)
+        let rShoe = SCNNode(geometry: shoeGeo)
+        rShoe.position = SCNVector3(0, -0.2, 0.04)
+        rLeg.addChildNode(rShoe)
         
-        [torsoGeo, headGeo, hairGeo, armGeo, legGeo].forEach { geo in
-            geo.firstMaterial = defaultMat.copy() as? SCNMaterial
-        }
-        
-        // Ombres
         self.childNodes.forEach { castShadowsRecursively(node: $0) }
     }
     
@@ -108,7 +118,6 @@ class InhabitantNode: SCNNode {
     }
     
     private func applyAppearance(from data: InhabitantData) {
-        // Generer des couleurs deterministes basees sur l'UUID pour la peau et les pantalons
         var hash = data.id.hashValue
         let skinTones: [UIColor] = [
             UIColor(red: 1.0, green: 0.8, blue: 0.6, alpha: 1.0),
@@ -139,22 +148,18 @@ class InhabitantNode: SCNNode {
         
         let shirtColor = UIColor(red: CGFloat(data.colorR), green: CGFloat(data.colorG), blue: CGFloat(data.colorB), alpha: 1.0)
         
-        // Appliquer les couleurs
         headNode.geometry?.firstMaterial?.diffuse.contents = skinColor
-        
-        // Torso et bras = T-shirt
         bodyNode.geometry?.firstMaterial?.diffuse.contents = shirtColor
-        leftShoulder.childNodes.first?.geometry?.firstMaterial?.diffuse.contents = skinColor // Bras nus ou manches ? Disons peau pour les bras.
-        rightShoulder.childNodes.first?.geometry?.firstMaterial?.diffuse.contents = skinColor
+        leftShoulder.childNodes.first?.geometry?.firstMaterial?.diffuse.contents = shirtColor // Manches courtes
+        rightShoulder.childNodes.first?.geometry?.firstMaterial?.diffuse.contents = shirtColor
         
-        // Pantalon
         leftHip.childNodes.first?.geometry?.firstMaterial?.diffuse.contents = pantsColor
         rightHip.childNodes.first?.geometry?.firstMaterial?.diffuse.contents = pantsColor
         
-        // Cheveux / Chapeau
         if data.hasHat {
-            hairNode.geometry = SCNCylinder(radius: 0.2, height: 0.15)
-            hairNode.geometry?.firstMaterial?.diffuse.contents = UIColor.darkGray
+            let hatGeo = SCNCylinder(radius: 0.2, height: 0.15)
+            hatGeo.firstMaterial?.diffuse.contents = UIColor.darkGray
+            hairNode.geometry = hatGeo
             hairNode.position = SCNVector3(0, 0.35, 0)
         } else {
             hairNode.geometry?.firstMaterial?.diffuse.contents = hairColor
@@ -179,7 +184,6 @@ class InhabitantNode: SCNNode {
         if distance > 0.001 {
             if !isSleeping {
                 let angle = atan2(Double(dx), Double(dz))
-                // On oriente tout le node vers la direction
                 let actionRotate = SCNAction.rotateTo(x: 0, y: CGFloat(angle), z: 0, duration: 0.1)
                 self.runAction(actionRotate)
             }
@@ -189,42 +193,33 @@ class InhabitantNode: SCNNode {
             self.lastSyncPosition = targetPosition
         }
         
-        updateAnimation(isMoving: data.isMoving, speed: data.speed)
+        updateAnimation(isMoving: data.isMoving, speed: data.speed, activity: data.activity)
         updateActivityState(activity: data.activity)
     }
     
-    private func updateAnimation(isMoving: Bool, speed: Float) {
+    private func updateAnimation(isMoving: Bool, speed: Float, activity: Activity) {
         if isMoving && !isWalking {
             isWalking = true
             
             let duration = max(0.15, 0.3 / TimeInterval(max(0.1, speed * 2.0)))
             let swing = CGFloat.pi / 4.5
             
-            // Animation Bras (Opposes aux jambes)
             let armFwd = SCNAction.rotateTo(x: swing, y: 0, z: 0, duration: duration)
             let armBack = SCNAction.rotateTo(x: -swing, y: 0, z: 0, duration: duration)
             armFwd.timingMode = .easeInEaseOut
             armBack.timingMode = .easeInEaseOut
             
-            let lArmSeq = SCNAction.sequence([armFwd, armBack, armBack, armFwd])
-            leftShoulder.runAction(SCNAction.repeatForever(lArmSeq), forKey: "walk")
+            leftShoulder.runAction(SCNAction.repeatForever(SCNAction.sequence([armFwd, armBack, armBack, armFwd])), forKey: "walk")
+            rightShoulder.runAction(SCNAction.repeatForever(SCNAction.sequence([armBack, armFwd, armFwd, armBack])), forKey: "walk")
             
-            let rArmSeq = SCNAction.sequence([armBack, armFwd, armFwd, armBack])
-            rightShoulder.runAction(SCNAction.repeatForever(rArmSeq), forKey: "walk")
-            
-            // Animation Jambes
             let legFwd = SCNAction.rotateTo(x: swing, y: 0, z: 0, duration: duration)
             let legBack = SCNAction.rotateTo(x: -swing, y: 0, z: 0, duration: duration)
             legFwd.timingMode = .easeInEaseOut
             legBack.timingMode = .easeInEaseOut
             
-            let lLegSeq = SCNAction.sequence([legBack, legFwd, legFwd, legBack])
-            leftHip.runAction(SCNAction.repeatForever(lLegSeq), forKey: "walk")
+            leftHip.runAction(SCNAction.repeatForever(SCNAction.sequence([legBack, legFwd, legFwd, legBack])), forKey: "walk")
+            rightHip.runAction(SCNAction.repeatForever(SCNAction.sequence([legFwd, legBack, legBack, legFwd])), forKey: "walk")
             
-            let rLegSeq = SCNAction.sequence([legFwd, legBack, legBack, legFwd])
-            rightHip.runAction(SCNAction.repeatForever(rLegSeq), forKey: "walk")
-            
-            // Bobbing du corps
             let up = SCNAction.moveBy(x: 0, y: 0.08, z: 0, duration: duration)
             let down = SCNAction.moveBy(x: 0, y: -0.08, z: 0, duration: duration)
             up.timingMode = .easeOut
@@ -246,13 +241,26 @@ class InhabitantNode: SCNNode {
             rightHip.runAction(SCNAction.rotateTo(x: 0, y: 0, z: 0, duration: resetDur))
             pelvis.runAction(SCNAction.move(to: SCNVector3(0, 0.45, 0), duration: resetDur))
         }
+        
+        // Idle animation
+        if !isMoving && activity != .sleeping {
+            if pelvis.action(forKey: "idle") == nil {
+                let breathUp = SCNAction.scale(to: 1.02, duration: 1.5)
+                let breathDown = SCNAction.scale(to: 1.0, duration: 1.5)
+                breathUp.timingMode = .easeInEaseOut
+                breathDown.timingMode = .easeInEaseOut
+                pelvis.runAction(SCNAction.repeatForever(SCNAction.sequence([breathUp, breathDown])), forKey: "idle")
+            }
+        } else {
+            pelvis.removeAction(forKey: "idle")
+            pelvis.scale = SCNVector3(1, 1, 1)
+        }
     }
     
     func updateActivityState(activity: Activity) {
         if activity == .sleeping {
-            // S'allonge pour dormir
             self.eulerAngles.x = -Float.pi / 2
-            self.position.y = 0.1 // Legerement sureleve pour eviter le z-fighting avec le sol
+            self.position.y = 0.1
         } else {
             self.eulerAngles.x = 0
             self.position.y = 0.0
