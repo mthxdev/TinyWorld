@@ -1,0 +1,936 @@
+Command line invocation:
+    /Applications/Xcode_26.6.app/Contents/Developer/usr/bin/xcodebuild -project TinyWorld.xcodeproj -scheme TinyWorld -sdk iphoneos -configuration Release SYMROOT=/Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= clean build
+
+Build settings from command line:
+    CODE_SIGN_IDENTITY = 
+    CODE_SIGNING_ALLOWED = NO
+    CODE_SIGNING_REQUIRED = NO
+    SDKROOT = iphoneos26.5
+    SYMROOT = /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build
+
+2026-10-04 19:07:34.897 xcodebuild[1877:9242] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device }
+{ platform:macOS, arch:arm64, variant:Designed for [iPad,iPhone], id:628f3c7b105e248659b19d8c265b6c48ab72be1f, name:My Mac }
+{ platform:iOS Simulator, id:dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder, name:Any iOS Simulator Device }
+note: Using codesigning identity override: 
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+** CLEAN SUCCEEDED **
+
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device }
+{ platform:macOS, arch:arm64, variant:Designed for [iPad,iPhone], id:628f3c7b105e248659b19d8c265b6c48ab72be1f, name:My Mac }
+{ platform:iOS Simulator, id:dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder, name:Any iOS Simulator Device }
+note: Using codesigning identity override: 
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (1 target)
+    Target 'TinyWorld' in project 'TinyWorld' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode_26.6.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode_26.6.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: d79c666d52ad224db41889d6d49221d6
+Build description path: /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/XCBuildData/d79c666d52ad224db41889d6d49221d6.xcbuilddata
+CreateBuildDirectory /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld.xcodeproj
+    builtin-create-build-directory /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build
+
+CreateBuildDirectory /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld.xcodeproj
+    builtin-create-build-directory /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex
+
+ClangStatCache /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk /Users/runner/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.5-23F81a-688ef53f1462e2c8f657fdc38a81448fee66e23052a0157c865c76b268046726.sdkstatcache
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld.xcodeproj
+    /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -o /Users/runner/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.5-23F81a-688ef53f1462e2c8f657fdc38a81448fee66e23052a0157c865c76b268046726.sdkstatcache
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld-02b2e3fe7d949d6d64b5bbc91f14ba7c-VFS-iphoneos/all-product-headers.yaml
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld.xcodeproj
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld-02b2e3fe7d949d6d64b5bbc91f14ba7c-VFS-iphoneos/all-product-headers.yaml
+
+CreateBuildDirectory /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld.xcodeproj
+    builtin-create-build-directory /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos
+
+CreateBuildDirectory /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld.xcodeproj
+    builtin-create-build-directory /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+CreateBuildDirectory /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/ExplicitPrecompiledModules
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld.xcodeproj
+    builtin-create-build-directory /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+CreateBuildDirectory /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/EagerLinkingTBDs/Release-iphoneos
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld.xcodeproj
+    builtin-create-build-directory /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/EagerLinkingTBDs/Release-iphoneos
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld.hmap (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld.hmap
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld.DependencyStaticMetadataFileList (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld.DependencyMetadataFileList (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld.DependencyMetadataFileList
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-project-headers.hmap (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-project-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-own-target-headers.hmap (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-own-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-generated-files.hmap (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-generated-files.hmap
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-all-target-headers.hmap (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-all-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-all-non-framework-target-headers.hmap (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld_const_extract_protocols.json (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld_const_extract_protocols.json
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld.SwiftFileList (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld.SwiftFileList
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld.SwiftConstValuesFileList (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld.SwiftConstValuesFileList
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld.LinkFileList (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld.LinkFileList
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld-OutputFileMap.json (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld-OutputFileMap.json
+
+MkDir /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos/TinyWorld.app (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    /bin/mkdir -p /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos/TinyWorld.app
+
+MkDir /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_output/unthinned (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    /bin/mkdir -p /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_output/unthinned
+
+MkDir /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_output/thinned (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    /bin/mkdir -p /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_output/thinned
+
+GenerateAssetSymbols /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/Assets.xcassets (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    /Applications/Xcode_26.6.app/Contents/Developer/usr/bin/actool /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/Assets.xcassets --compile /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos/TinyWorld.app --output-format human-readable-text --notices --warnings --export-dependency-info /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_dependencies --output-partial-info-plist /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_generated_info.plist --app-icon AppIcon --compress-pngs --enable-on-demand-resources YES --development-region en --target-device iphone --target-device ipad --minimum-deployment-target 16.0 --platform iphoneos --bundle-identifier com.mathieu.TinyWorld --generate-swift-asset-symbol-extensions NO --generate-swift-asset-symbols /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/DerivedSources/GeneratedAssetSymbols.swift --generate-objc-asset-symbols /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/DerivedSources/GeneratedAssetSymbols.h --generate-asset-symbol-index /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+/* com.apple.actool.compilation-results */
+/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/DerivedSources/GeneratedAssetSymbols.h
+/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/DerivedSources/GeneratedAssetSymbols.swift
+
+
+Copy SceneKit assets /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/art.scnassets (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    /Applications/Xcode_26.6.app/Contents/Developer/usr/bin/copySceneKitAssets /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/art.scnassets -o /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos/TinyWorld.app/art.scnassets --target-platform\=iphoneos --target-version\=16.0 --target-build-dir\=/Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos --resources-folder-path\=TinyWorld.app
+copySceneKitAssets: Copy character/elf.dae
+copySceneKitAssets: Copy character/Face_tex_002_toObj.jpg
+copySceneKitAssets: Copy character/Hair_tex_001.jpg
+copySceneKitAssets: Copy character/ce.jpg
+copySceneKitAssets: Copy character/Body_tex_003.jpg
+copySceneKitAssets: Copy nature/tree_cone.obj
+copySceneKitAssets: Copy nature/stone_smallA.obj
+copySceneKitAssets: Copy nature/rock_tallH.mtl
+copySceneKitAssets: Copy nature/plant_bushDetailed.mtl
+copySceneKitAssets: Copy nature/ground_grass.obj
+copySceneKitAssets: Copy nature/tree_plateau.obj
+copySceneKitAssets: Copy nature/tree_pineSmallA.obj
+copySceneKitAssets: Copy nature/cliff_cornerInnerTop_rock.mtl
+copySceneKitAssets: Copy nature/flower_yellowB.mtl
+copySceneKitAssets: Copy nature/tree_pineTallA.obj
+copySceneKitAssets: Copy nature/grass_leafsLarge.mtl
+copySceneKitAssets: Copy nature/rock_largeF.obj
+copySceneKitAssets: Copy nature/stone_smallTopA.obj
+copySceneKitAssets: Copy nature/bridge_side_woodRound.obj
+copySceneKitAssets: Copy nature/campfire_logs.obj
+copySceneKitAssets: Copy nature/stone_smallFlatA.mtl
+copySceneKitAssets: Copy nature/cliff_steps_stone.mtl
+copySceneKitAssets: Copy nature/mushroom_red.obj
+copySceneKitAssets: Copy nature/ground_riverCross.obj
+copySceneKitAssets: Copy nature/rock_tallB.obj
+copySceneKitAssets: Copy nature/cactus_tall.obj
+copySceneKitAssets: Copy nature/cliff_halfCorner_rock.mtl
+copySceneKitAssets: Copy nature/tree_pineRoundF.mtl
+copySceneKitAssets: Copy nature/rock_tallC.obj
+copySceneKitAssets: Copy nature/rock_smallA.obj
+copySceneKitAssets: Copy nature/crops_wheatStageB.mtl
+copySceneKitAssets: Copy nature/tree_small_dark.obj
+copySceneKitAssets: Copy nature/tree_pineTallB_detailed.obj
+copySceneKitAssets: Copy nature/plant_bushSmall.obj
+copySceneKitAssets: Copy nature/ground_riverEnd.mtl
+copySceneKitAssets: Copy nature/flower_yellowC.mtl
+copySceneKitAssets: Copy nature/stone_largeF.obj
+copySceneKitAssets: Copy nature/mushroom_redTall.mtl
+copySceneKitAssets: Copy nature/cliff_cornerLarge_stone.mtl
+copySceneKitAssets: Copy nature/plant_bushTriangle.mtl
+copySceneKitAssets: Copy nature/ground_pathCross.mtl
+copySceneKitAssets: Copy nature/cliff_blockSlopeWalls_stone.mtl
+copySceneKitAssets: Copy nature/bridge_side_stone.mtl
+copySceneKitAssets: Copy nature/rock_tallI.mtl
+copySceneKitAssets: Copy nature/bridge_center_stoneRound.obj
+copySceneKitAssets: Copy nature/stone_smallB.obj
+copySceneKitAssets: Copy nature/tree_palmBend.mtl
+copySceneKitAssets: Copy nature/tree_pineTallA_detailed.mtl
+copySceneKitAssets: Copy nature/bridge_center_wood.obj
+copySceneKitAssets: Copy nature/grass_leafs.mtl
+copySceneKitAssets: Copy nature/rock_smallI.mtl
+copySceneKitAssets: Copy nature/tree_pineSmallB.obj
+copySceneKitAssets: Copy nature/ground_pathBendBank.mtl
+copySceneKitAssets: Copy nature/stone_largeD.obj
+copySceneKitAssets: Copy nature/flower_yellowA.mtl
+copySceneKitAssets: Copy nature/tree_detailed_fall.obj
+copySceneKitAssets: Copy nature/bridge_side_wood.obj
+copySceneKitAssets: Copy nature/tree_pineTallB.obj
+copySceneKitAssets: Copy nature/rock_largeE.obj
+copySceneKitAssets: Copy nature/tree_blocks_dark.obj
+copySceneKitAssets: Copy nature/stone_smallTopB.obj
+copySceneKitAssets: Copy nature/rock_smallC.obj
+copySceneKitAssets: Copy nature/crops_dirtDoubleRowCorner.mtl
+copySceneKitAssets: Copy nature/stump_round.obj
+copySceneKitAssets: Copy nature/tree_plateau_dark.obj
+copySceneKitAssets: Copy nature/tree_palmTall.mtl
+copySceneKitAssets: Copy nature/stone_smallFlatB.mtl
+copySceneKitAssets: Copy nature/rock_tallA.obj
+copySceneKitAssets: Copy nature/sign.obj
+copySceneKitAssets: Copy nature/tree_pineRoundE.mtl
+copySceneKitAssets: Copy nature/stone_smallH.mtl
+copySceneKitAssets: Copy nature/cliff_blockSlope_rock.mtl
+copySceneKitAssets: Copy nature/log_large.mtl
+copySceneKitAssets: Copy nature/stone_smallI.mtl
+copySceneKitAssets: Copy nature/tree_pineRoundD.mtl
+copySceneKitAssets: Copy nature/crop_turnip.obj
+copySceneKitAssets: Copy nature/stone_smallFlatC.mtl
+copySceneKitAssets: Copy nature/tree_simple_dark.mtl
+copySceneKitAssets: Copy nature/crops_wheatStageA.mtl
+copySceneKitAssets: Copy nature/rock_smallB.obj
+copySceneKitAssets: Copy nature/cliff_stepsCornerInner_stone.mtl
+copySceneKitAssets: Copy nature/fence_gate.obj
+copySceneKitAssets: Copy nature/campfire_stones.mtl
+copySceneKitAssets: Copy nature/bed.obj
+copySceneKitAssets: Copy nature/cliff_blockQuarter_rock.obj
+copySceneKitAssets: Copy nature/rock_largeD.obj
+copySceneKitAssets: Copy nature/tree_pineTallC.obj
+copySceneKitAssets: Copy nature/path_stoneEnd.obj
+copySceneKitAssets: Copy nature/cliff_steps_rock.obj
+copySceneKitAssets: Copy nature/stone_largeE.obj
+copySceneKitAssets: Copy nature/cliff_cornerInner_stone.obj
+copySceneKitAssets: Copy nature/fence_simpleDiagonalCenter.obj
+copySceneKitAssets: Copy nature/tree_pineSmallC.obj
+copySceneKitAssets: Copy nature/rock_smallH.mtl
+copySceneKitAssets: Copy nature/cliff_blockSlopeHalfWalls_rock.mtl
+copySceneKitAssets: Copy nature/cliff_blockDiagonal_rock.mtl
+copySceneKitAssets: Copy nature/rock_tallJ.mtl
+copySceneKitAssets: Copy nature/cliff_cornerInnerTop_stone.mtl
+copySceneKitAssets: Copy nature/tree_simple.obj
+copySceneKitAssets: Copy nature/stone_smallC.obj
+copySceneKitAssets: Copy nature/plant_bush.mtl
+copySceneKitAssets: Copy nature/stone_smallG.obj
+copySceneKitAssets: Copy nature/crops_dirtRow.obj
+copySceneKitAssets: Copy nature/tree_pineTallC_detailed.obj
+copySceneKitAssets: Copy nature/stone_largeA.obj
+copySceneKitAssets: Copy nature/fence_simpleHigh.mtl
+copySceneKitAssets: Copy nature/tree_tall_dark.mtl
+copySceneKitAssets: Copy nature/tree_pineTallD_detailed.obj
+copySceneKitAssets: Copy nature/tree_thin_dark.obj
+copySceneKitAssets: Copy nature/ground_pathSide.obj
+copySceneKitAssets: Copy nature/cliff_halfCornerInner_rock.mtl
+copySceneKitAssets: Copy nature/bed_floor.mtl
+copySceneKitAssets: Copy nature/rock_smallF.obj
+copySceneKitAssets: Copy nature/cliff_topDiagonal_rock.obj
+copySceneKitAssets: Copy nature/rock_tallD.obj
+copySceneKitAssets: Copy nature/tree_palmDetailedShort.mtl
+copySceneKitAssets: Copy nature/rock_tallE.obj
+copySceneKitAssets: Copy nature/tree_pineRoundA.mtl
+copySceneKitAssets: Copy nature/cliff_cornerTop_stone.mtl
+copySceneKitAssets: Copy nature/rock_smallG.obj
+copySceneKitAssets: Copy nature/tree_oak.obj
+copySceneKitAssets: Copy nature/cliff_cornerTop_rock.mtl
+copySceneKitAssets: Copy nature/bridge_woodRoundNarrow.mtl
+copySceneKitAssets: Copy nature/tree_palm.obj
+copySceneKitAssets: Copy nature/stump_old.mtl
+copySceneKitAssets: Copy nature/path_stoneCircle.mtl
+copySceneKitAssets: Copy nature/rock_largeA.obj
+copySceneKitAssets: Copy nature/cliff_top_stone.obj
+copySceneKitAssets: Copy nature/cliff_large_rock.mtl
+copySceneKitAssets: Copy nature/tree_default_dark.obj
+copySceneKitAssets: Copy nature/fence_planksDouble.mtl
+copySceneKitAssets: Copy nature/stone_smallF.obj
+copySceneKitAssets: Copy nature/cliff_halfCornerInner_stone.obj
+copySceneKitAssets: Copy nature/cliff_corner_rock.obj
+copySceneKitAssets: Copy nature/ground_riverBend.obj
+copySceneKitAssets: Copy nature/plant_bushLarge.obj
+copySceneKitAssets: Copy nature/ground_pathStraight.obj
+copySceneKitAssets: Copy nature/stone_smallD.obj
+copySceneKitAssets: Copy nature/crop_pumpkin.mtl
+copySceneKitAssets: Copy nature/canoe.mtl
+copySceneKitAssets: Copy nature/ground_riverTile.obj
+copySceneKitAssets: Copy nature/cliff_waterfallTop_stone.obj
+copySceneKitAssets: Copy nature/stone_largeB.obj
+copySceneKitAssets: Copy nature/ground_pathRocks.obj
+copySceneKitAssets: Copy nature/cliff_top_rock.mtl
+copySceneKitAssets: Copy nature/tree_pineSmallD.obj
+copySceneKitAssets: Copy nature/tree_pineTallD.obj
+copySceneKitAssets: Copy nature/cliff_diagonal_stone.mtl
+copySceneKitAssets: Copy nature/cliff_large_stone.obj
+copySceneKitAssets: Copy nature/tent_detailedClosed.obj
+copySceneKitAssets: Copy nature/rock_largeC.obj
+copySceneKitAssets: Copy nature/grass.mtl
+copySceneKitAssets: Copy nature/path_stone.mtl
+copySceneKitAssets: Copy nature/tree_fat_darkh.obj
+copySceneKitAssets: Copy nature/fence_bend.obj
+copySceneKitAssets: Copy nature/mushroom_redGroup.obj
+copySceneKitAssets: Copy nature/ground_riverOpen.mtl
+copySceneKitAssets: Copy nature/rock_smallE.obj
+copySceneKitAssets: Copy nature/tree_pineRoundC.mtl
+copySceneKitAssets: Copy nature/rock_tallG.obj
+copySceneKitAssets: Copy nature/rock_tallF.obj
+copySceneKitAssets: Copy nature/tree_pineRoundB.mtl
+copySceneKitAssets: Copy nature/rock_smallD.obj
+copySceneKitAssets: Copy nature/bridge_side_stoneRound.mtl
+copySceneKitAssets: Copy nature/fence_simple.mtl
+copySceneKitAssets: Copy nature/ground_pathSideOpen.mtl
+copySceneKitAssets: Copy nature/tree_oak_fall.obj
+copySceneKitAssets: Copy nature/tree_small.obj
+copySceneKitAssets: Copy nature/rock_largeB.obj
+copySceneKitAssets: Copy nature/ground_riverRocks.mtl
+copySceneKitAssets: Copy nature/bridge_woodRound.obj
+copySceneKitAssets: Copy nature/cliff_waterfall_rock.mtl
+copySceneKitAssets: Copy nature/tree_cone_fall.mtl
+copySceneKitAssets: Copy nature/stone_largeC.obj
+copySceneKitAssets: Copy nature/stone_smallE.obj
+copySceneKitAssets: Copy nature/cactus_short.obj
+copySceneKitAssets: Copy nature/crops_dirtRowCorner.obj
+copySceneKitAssets: Copy nature/tree_pineDefaultA.mtl
+copySceneKitAssets: Copy nature/crops_leafsStageA.obj
+copySceneKitAssets: Copy nature/path_woodCorner.obj
+copySceneKitAssets: Copy nature/crops_bambooStageA.obj
+copySceneKitAssets: Copy nature/stump_squareDetailed.obj
+copySceneKitAssets: Copy nature/lily_small.mtl
+copySceneKitAssets: Copy nature/cliff_halfCorner_stone.obj
+copySceneKitAssets: Copy nature/pot_large.mtl
+copySceneKitAssets: Copy nature/tree_pineGroundB.mtl
+copySceneKitAssets: Copy nature/statue_ring.obj
+copySceneKitAssets: Copy nature/ground_riverSplit.obj
+copySceneKitAssets: Copy nature/tree_palmShort.obj
+copySceneKitAssets: Copy nature/tree_default_fall.obj
+copySceneKitAssets: Copy nature/stone_tallG.mtl
+copySceneKitAssets: Copy nature/cliff_cornerInnerLarge_rock.mtl
+copySceneKitAssets: Copy nature/cliff_stepsCorner_rock.obj
+copySceneKitAssets: Copy nature/fence_simpleCenter.mtl
+copySceneKitAssets: Copy nature/path_stoneCorner.obj
+copySceneKitAssets: Copy nature/campfire_planks.obj
+copySceneKitAssets: Copy nature/tree_default.obj
+copySceneKitAssets: Copy nature/tree_tall.obj
+copySceneKitAssets: Copy nature/fence_simpleDiagonal.mtl
+copySceneKitAssets: Copy nature/stone_tallF.mtl
+copySceneKitAssets: Copy nature/cliff_topDiagonal_stone.mtl
+copySceneKitAssets: Copy nature/plant_flatShort.mtl
+copySceneKitAssets: Copy nature/tree_tall_fall.mtl
+copySceneKitAssets: Copy nature/cliff_stone.obj
+copySceneKitAssets: Copy nature/tree_detailed.mtl
+copySceneKitAssets: Copy nature/cliff_rock.mtl
+copySceneKitAssets: Copy nature/crops_dirtDoubleRowEnd.mtl
+copySceneKitAssets: Copy nature/ground_pathSplit.mtl
+copySceneKitAssets: Copy nature/cliff_corner_stone.mtl
+copySceneKitAssets: Copy nature/tree_thin_fall.obj
+copySceneKitAssets: Copy nature/stump_squareDetailedWide.obj
+copySceneKitAssets: Copy nature/statue_columnDamaged.mtl
+copySceneKitAssets: Copy nature/platform_grass.mtl
+copySceneKitAssets: Copy nature/tree_oak_dark.obj
+copySceneKitAssets: Copy nature/tree_pineDefaultB.mtl
+copySceneKitAssets: Copy nature/platform_stone.mtl
+copySceneKitAssets: Copy nature/cliff_stepsCornerInner_rock.mtl
+copySceneKitAssets: Copy nature/crops_leafsStageB.obj
+copySceneKitAssets: Copy nature/stump_oldTall.mtl
+copySceneKitAssets: Copy nature/crops_bambooStageB.obj
+copySceneKitAssets: Copy nature/cliff_blockSlopeWalls_rock.obj
+copySceneKitAssets: Copy nature/bridge_center_stone.mtl
+copySceneKitAssets: Copy nature/tree_fat_fall.mtl
+copySceneKitAssets: Copy nature/platform_beach.mtl
+copySceneKitAssets: Copy nature/cliff_half_stone.obj
+copySceneKitAssets: Copy nature/cliff_half_rock.mtl
+copySceneKitAssets: Copy nature/tree_pineGroundA.mtl
+copySceneKitAssets: Copy nature/ground_riverBendBank.obj
+copySceneKitAssets: Copy nature/cliff_cave_stone.obj
+copySceneKitAssets: Copy nature/cliff_blockHalf_stone.mtl
+copySceneKitAssets: Copy nature/crops_dirtRowEnd.obj
+copySceneKitAssets: Copy nature/cliff_blockCave_stone.mtl
+copySceneKitAssets: Copy nature/cliff_blockHalf_rock.mtl
+copySceneKitAssets: Copy nature/tree_cone_dark.mtl
+copySceneKitAssets: Copy nature/stone_tallD.mtl
+copySceneKitAssets: Copy nature/bridge_stoneNarrow.mtl
+copySceneKitAssets: Copy nature/tent_smallClosed.obj
+copySceneKitAssets: Copy nature/statue_block.obj
+copySceneKitAssets: Copy nature/cliff_block_rock.obj
+copySceneKitAssets: Copy nature/tent_smallOpen.mtl
+copySceneKitAssets: Copy nature/stone_tallE.mtl
+copySceneKitAssets: Copy nature/fence_bendCenter.obj
+copySceneKitAssets: Copy nature/cliff_cornerInner_rock.obj
+copySceneKitAssets: Copy nature/mushroom_tanGroup.obj
+copySceneKitAssets: Copy nature/bridge_stoneRound.mtl
+copySceneKitAssets: Copy nature/crop_melon.mtl
+copySceneKitAssets: Copy nature/crops_cornStageD.obj
+copySceneKitAssets: Copy nature/bridge_woodNarrow.mtl
+copySceneKitAssets: Copy nature/tree_blocks.mtl
+copySceneKitAssets: Copy nature/path_woodEnd.obj
+copySceneKitAssets: Copy nature/grass_large.obj
+copySceneKitAssets: Copy nature/crops_dirtDoubleRow.obj
+copySceneKitAssets: Copy nature/cliff_blockSlopeHalfWalls_stone.mtl
+copySceneKitAssets: Copy nature/flower_purpleA.mtl
+copySceneKitAssets: Copy nature/rock_smallFlatB.obj
+copySceneKitAssets: Copy nature/mushroom_tanTall.obj
+copySceneKitAssets: Copy nature/cliff_blockQuarter_stone.mtl
+copySceneKitAssets: Copy nature/statue_obelisk.mtl
+copySceneKitAssets: Copy nature/ground_pathCornerSmall.mtl
+copySceneKitAssets: Copy nature/cliff_cornerLarge_rock.mtl
+copySceneKitAssets: Copy nature/tree_small_fall.obj
+copySceneKitAssets: Copy nature/stump_roundDetailed.mtl
+copySceneKitAssets: Copy nature/bridge_stone.obj
+copySceneKitAssets: Copy nature/cliff_diagonal_rock.obj
+copySceneKitAssets: Copy nature/crops_dirtSingle.mtl
+copySceneKitAssets: Copy nature/stone_tallA.mtl
+copySceneKitAssets: Copy nature/tree_thin.obj
+copySceneKitAssets: Copy nature/campfire_bricks.mtl
+copySceneKitAssets: Copy nature/stump_square.mtl
+copySceneKitAssets: Copy nature/flower_redC.mtl
+copySceneKitAssets: Copy nature/flower_redB.mtl
+copySceneKitAssets: Copy nature/cliff_cornerInnerLarge_stone.obj
+copySceneKitAssets: Copy nature/ground_pathBend.obj
+copySceneKitAssets: Copy nature/bridge_wood.mtl
+copySceneKitAssets: Copy nature/ground_pathTile.obj
+copySceneKitAssets: Copy nature/plant_flatTall.mtl
+copySceneKitAssets: Copy nature/cliff_stepsCorner_stone.obj
+copySceneKitAssets: Copy nature/ground_pathOpen.mtl
+copySceneKitAssets: Copy nature/ground_pathEnd.mtl
+copySceneKitAssets: Copy nature/crops_cornStageA.obj
+copySceneKitAssets: Copy nature/stone_tallJ.obj
+copySceneKitAssets: Copy nature/rock_smallTopA.mtl
+copySceneKitAssets: Copy nature/mushroom_tan.obj
+copySceneKitAssets: Copy nature/rock_smallFlatC.obj
+copySceneKitAssets: Copy nature/tree_palmDetailedTall.mtl
+copySceneKitAssets: Copy nature/ground_riverCornerSmall.obj
+copySceneKitAssets: Copy nature/cliff_block_stone.mtl
+copySceneKitAssets: Copy nature/flower_purpleB.mtl
+copySceneKitAssets: Copy nature/rock_smallFlatA.obj
+copySceneKitAssets: Copy nature/cliff_blockSlope_stone.mtl
+copySceneKitAssets: Copy nature/path_wood.obj
+copySceneKitAssets: Copy nature/ground_riverStraight.mtl
+copySceneKitAssets: Copy nature/stone_tallH.obj
+copySceneKitAssets: Copy nature/tree_simple_fall.mtl
+copySceneKitAssets: Copy nature/hanging_moss.obj
+copySceneKitAssets: Copy nature/cliff_cave_rock.obj
+copySceneKitAssets: Copy nature/crops_cornStageC.obj
+copySceneKitAssets: Copy nature/ground_pathEndClosed.mtl
+copySceneKitAssets: Copy nature/bridge_center_woodRound.obj
+copySceneKitAssets: Copy nature/log_stackLarge.mtl
+copySceneKitAssets: Copy nature/ground_pathCorner.mtl
+copySceneKitAssets: Copy nature/cliff_blockCave_rock.obj
+copySceneKitAssets: Copy nature/log_stack.mtl
+copySceneKitAssets: Copy nature/statue_head.obj
+copySceneKitAssets: Copy nature/canoe_paddle.obj
+copySceneKitAssets: Copy nature/statue_column.mtl
+copySceneKitAssets: Copy nature/stone_tallB.mtl
+copySceneKitAssets: Copy nature/cliff_waterfallTop_rock.obj
+copySceneKitAssets: Copy nature/ground_riverCorner.obj
+copySceneKitAssets: Copy nature/tent_detailedOpen.mtl
+copySceneKitAssets: Copy nature/plant_bushLargeTriangle.mtl
+copySceneKitAssets: Copy nature/tree_fat.obj
+copySceneKitAssets: Copy nature/cliff_waterfall_stone.mtl
+copySceneKitAssets: Copy nature/tree_detailed_dark.obj
+copySceneKitAssets: Copy nature/flower_redA.mtl
+copySceneKitAssets: Copy nature/lily_large.mtl
+copySceneKitAssets: Copy nature/pot_small.mtl
+copySceneKitAssets: Copy nature/stone_tallC.mtl
+copySceneKitAssets: Copy nature/crop_carrot.mtl
+copySceneKitAssets: Copy nature/fence_planks.mtl
+copySceneKitAssets: Copy nature/fence_corner.mtl
+copySceneKitAssets: Copy nature/ground_riverSideOpen.obj
+copySceneKitAssets: Copy nature/fence_simpleLow.obj
+copySceneKitAssets: Copy nature/crops_cornStageB.obj
+copySceneKitAssets: Copy nature/cliff_blockDiagonal_stone.mtl
+copySceneKitAssets: Copy nature/tree_plateau_fall.obj
+copySceneKitAssets: Copy nature/log.mtl
+copySceneKitAssets: Copy nature/stone_tallI.obj
+copySceneKitAssets: Copy nature/rock_smallTopB.mtl
+copySceneKitAssets: Copy nature/ground_riverSide.obj
+copySceneKitAssets: Copy nature/flower_purpleC.mtl
+copySceneKitAssets: Copy nature/ground_riverEndClosed.obj
+copySceneKitAssets: Copy nature/tree_blocks_fall.obj
+copySceneKitAssets: Copy nature/bridge_stoneRoundNarrow.obj
+copySceneKitAssets: Copy nature/statue_block.mtl
+copySceneKitAssets: Copy nature/tent_smallClosed.mtl
+copySceneKitAssets: Copy nature/cliff_block_rock.mtl
+copySceneKitAssets: Copy nature/tree_cone_dark.obj
+copySceneKitAssets: Copy nature/bridge_stoneNarrow.obj
+copySceneKitAssets: Copy nature/stone_tallD.obj
+copySceneKitAssets: Copy nature/cliff_blockHalf_rock.obj
+copySceneKitAssets: Copy nature/crops_dirtRowEnd.mtl
+copySceneKitAssets: Copy nature/cliff_blockHalf_stone.obj
+copySceneKitAssets: Copy nature/cliff_blockCave_stone.obj
+copySceneKitAssets: Copy nature/cliff_half_stone.mtl
+copySceneKitAssets: Copy nature/cliff_half_rock.obj
+copySceneKitAssets: Copy nature/platform_beach.obj
+copySceneKitAssets: Copy nature/tree_pineGroundA.obj
+copySceneKitAssets: Copy nature/ground_riverBendBank.mtl
+copySceneKitAssets: Copy nature/cliff_cave_stone.mtl
+copySceneKitAssets: Copy nature/crops_bambooStageB.mtl
+copySceneKitAssets: Copy nature/stump_oldTall.obj
+copySceneKitAssets: Copy nature/tree_fat_fall.obj
+copySceneKitAssets: Copy nature/cliff_blockSlopeWalls_rock.mtl
+copySceneKitAssets: Copy nature/bridge_center_stone.obj
+copySceneKitAssets: Copy nature/cliff_stepsCornerInner_rock.obj
+copySceneKitAssets: Copy nature/crops_leafsStageB.mtl
+copySceneKitAssets: Copy nature/tree_oak_dark.mtl
+copySceneKitAssets: Copy nature/platform_grass.obj
+copySceneKitAssets: Copy nature/tree_pineDefaultB.obj
+copySceneKitAssets: Copy nature/platform_stone.obj
+copySceneKitAssets: Copy nature/crops_dirtDoubleRow.mtl
+copySceneKitAssets: Copy nature/grass_large.mtl
+copySceneKitAssets: Copy nature/bridge_woodNarrow.obj
+copySceneKitAssets: Copy nature/tree_blocks.obj
+copySceneKitAssets: Copy nature/path_woodEnd.mtl
+copySceneKitAssets: Copy nature/bridge_stoneRound.obj
+copySceneKitAssets: Copy nature/crop_melon.obj
+copySceneKitAssets: Copy nature/crops_cornStageD.mtl
+copySceneKitAssets: Copy nature/cliff_cornerInner_rock.mtl
+copySceneKitAssets: Copy nature/mushroom_tanGroup.mtl
+copySceneKitAssets: Copy nature/fence_bendCenter.mtl
+copySceneKitAssets: Copy nature/stone_tallE.obj
+copySceneKitAssets: Copy nature/tent_smallOpen.obj
+copySceneKitAssets: Copy nature/cliff_cornerInnerLarge_rock.obj
+copySceneKitAssets: Copy nature/cliff_stepsCorner_rock.mtl
+copySceneKitAssets: Copy nature/fence_simpleCenter.obj
+copySceneKitAssets: Copy nature/tree_default_fall.mtl
+copySceneKitAssets: Copy nature/stone_tallG.obj
+copySceneKitAssets: Copy nature/tree_palmShort.mtl
+copySceneKitAssets: Copy nature/ground_riverSplit.mtl
+copySceneKitAssets: Copy nature/tree_pineGroundB.obj
+copySceneKitAssets: Copy nature/pot_large.obj
+copySceneKitAssets: Copy nature/statue_ring.mtl
+copySceneKitAssets: Copy nature/stump_squareDetailed.mtl
+copySceneKitAssets: Copy nature/path_woodCorner.mtl
+copySceneKitAssets: Copy nature/crops_bambooStageA.mtl
+copySceneKitAssets: Copy nature/cliff_halfCorner_stone.mtl
+copySceneKitAssets: Copy nature/lily_small.obj
+copySceneKitAssets: Copy nature/crops_leafsStageA.mtl
+copySceneKitAssets: Copy nature/tree_pineDefaultA.obj
+copySceneKitAssets: Copy nature/tree_thin_fall.mtl
+copySceneKitAssets: Copy nature/stump_squareDetailedWide.mtl
+copySceneKitAssets: Copy nature/statue_columnDamaged.obj
+copySceneKitAssets: Copy nature/cliff_corner_stone.obj
+copySceneKitAssets: Copy nature/cliff_rock.obj
+copySceneKitAssets: Copy nature/crops_dirtDoubleRowEnd.obj
+copySceneKitAssets: Copy nature/ground_pathSplit.obj
+copySceneKitAssets: Copy nature/tree_detailed.obj
+copySceneKitAssets: Copy nature/cliff_stone.mtl
+copySceneKitAssets: Copy nature/fence_simpleDiagonal.obj
+copySceneKitAssets: Copy nature/stone_tallF.obj
+copySceneKitAssets: Copy nature/cliff_topDiagonal_stone.obj
+copySceneKitAssets: Copy nature/plant_flatShort.obj
+copySceneKitAssets: Copy nature/tree_tall_fall.obj
+copySceneKitAssets: Copy nature/path_stoneCorner.mtl
+copySceneKitAssets: Copy nature/campfire_planks.mtl
+copySceneKitAssets: Copy nature/tree_tall.mtl
+copySceneKitAssets: Copy nature/tree_default.mtl
+copySceneKitAssets: Copy nature/tent_detailedOpen.obj
+copySceneKitAssets: Copy nature/plant_bushLargeTriangle.obj
+copySceneKitAssets: Copy nature/tree_fat.mtl
+copySceneKitAssets: Copy nature/statue_column.obj
+copySceneKitAssets: Copy nature/stone_tallB.obj
+copySceneKitAssets: Copy nature/cliff_waterfallTop_rock.mtl
+copySceneKitAssets: Copy nature/ground_riverCorner.mtl
+copySceneKitAssets: Copy nature/statue_head.mtl
+copySceneKitAssets: Copy nature/log_stack.obj
+copySceneKitAssets: Copy nature/canoe_paddle.mtl
+copySceneKitAssets: Copy nature/cliff_blockCave_rock.mtl
+copySceneKitAssets: Copy nature/bridge_center_woodRound.mtl
+copySceneKitAssets: Copy nature/ground_pathEndClosed.obj
+copySceneKitAssets: Copy nature/log_stackLarge.obj
+copySceneKitAssets: Copy nature/ground_pathCorner.obj
+copySceneKitAssets: Copy nature/tree_simple_fall.obj
+copySceneKitAssets: Copy nature/hanging_moss.mtl
+copySceneKitAssets: Copy nature/cliff_cave_rock.mtl
+copySceneKitAssets: Copy nature/crops_cornStageC.mtl
+copySceneKitAssets: Copy nature/path_wood.mtl
+copySceneKitAssets: Copy nature/cliff_blockSlope_stone.obj
+copySceneKitAssets: Copy nature/ground_riverStraight.obj
+copySceneKitAssets: Copy nature/stone_tallH.mtl
+copySceneKitAssets: Copy nature/rock_smallFlatA.mtl
+copySceneKitAssets: Copy nature/flower_purpleB.obj
+copySceneKitAssets: Copy nature/flower_purpleC.obj
+copySceneKitAssets: Copy nature/ground_riverSide.mtl
+copySceneKitAssets: Copy nature/ground_riverEndClosed.mtl
+copySceneKitAssets: Copy nature/bridge_stoneRoundNarrow.mtl
+copySceneKitAssets: Copy nature/tree_blocks_fall.mtl
+copySceneKitAssets: Copy nature/stone_tallI.mtl
+copySceneKitAssets: Copy nature/rock_smallTopB.obj
+copySceneKitAssets: Copy nature/crops_cornStageB.mtl
+copySceneKitAssets: Copy nature/tree_plateau_fall.mtl
+copySceneKitAssets: Copy nature/cliff_blockDiagonal_stone.obj
+copySceneKitAssets: Copy nature/log.obj
+copySceneKitAssets: Copy nature/fence_corner.obj
+copySceneKitAssets: Copy nature/ground_riverSideOpen.mtl
+copySceneKitAssets: Copy nature/fence_simpleLow.mtl
+copySceneKitAssets: Copy nature/crop_carrot.obj
+copySceneKitAssets: Copy nature/fence_planks.obj
+copySceneKitAssets: Copy nature/stone_tallC.obj
+copySceneKitAssets: Copy nature/pot_small.obj
+copySceneKitAssets: Copy nature/cliff_waterfall_stone.obj
+copySceneKitAssets: Copy nature/flower_redA.obj
+copySceneKitAssets: Copy nature/tree_detailed_dark.mtl
+copySceneKitAssets: Copy nature/lily_large.obj
+copySceneKitAssets: Copy nature/stump_square.obj
+copySceneKitAssets: Copy nature/flower_redC.obj
+copySceneKitAssets: Copy nature/stone_tallA.obj
+copySceneKitAssets: Copy nature/crops_dirtSingle.obj
+copySceneKitAssets: Copy nature/tree_thin.mtl
+copySceneKitAssets: Copy nature/campfire_bricks.obj
+copySceneKitAssets: Copy nature/bridge_stone.mtl
+copySceneKitAssets: Copy nature/cliff_diagonal_rock.mtl
+copySceneKitAssets: Copy nature/stump_roundDetailed.obj
+copySceneKitAssets: Copy nature/ground_pathCornerSmall.obj
+copySceneKitAssets: Copy nature/cliff_cornerLarge_rock.obj
+copySceneKitAssets: Copy nature/tree_small_fall.mtl
+copySceneKitAssets: Copy nature/cliff_blockQuarter_stone.obj
+copySceneKitAssets: Copy nature/statue_obelisk.obj
+copySceneKitAssets: Copy nature/cliff_blockSlopeHalfWalls_stone.obj
+copySceneKitAssets: Copy nature/rock_smallFlatB.mtl
+copySceneKitAssets: Copy nature/flower_purpleA.obj
+copySceneKitAssets: Copy nature/mushroom_tanTall.mtl
+copySceneKitAssets: Copy nature/mushroom_tan.mtl
+copySceneKitAssets: Copy nature/rock_smallFlatC.mtl
+copySceneKitAssets: Copy nature/ground_riverCornerSmall.mtl
+copySceneKitAssets: Copy nature/tree_palmDetailedTall.obj
+copySceneKitAssets: Copy nature/cliff_block_stone.obj
+copySceneKitAssets: Copy nature/stone_tallJ.mtl
+copySceneKitAssets: Copy nature/rock_smallTopA.obj
+copySceneKitAssets: Copy nature/crops_cornStageA.mtl
+copySceneKitAssets: Copy nature/ground_pathOpen.obj
+copySceneKitAssets: Copy nature/ground_pathEnd.obj
+copySceneKitAssets: Copy nature/plant_flatTall.obj
+copySceneKitAssets: Copy nature/ground_pathTile.mtl
+copySceneKitAssets: Copy nature/cliff_stepsCorner_stone.mtl
+copySceneKitAssets: Copy nature/bridge_wood.obj
+copySceneKitAssets: Copy nature/ground_pathBend.mtl
+copySceneKitAssets: Copy nature/cliff_cornerInnerLarge_stone.mtl
+copySceneKitAssets: Copy nature/flower_redB.obj
+copySceneKitAssets: Copy nature/rock_tallA.mtl
+copySceneKitAssets: Copy nature/sign.mtl
+copySceneKitAssets: Copy nature/stone_smallH.obj
+copySceneKitAssets: Copy nature/tree_pineRoundE.obj
+copySceneKitAssets: Copy nature/log_large.obj
+copySceneKitAssets: Copy nature/cliff_blockSlope_rock.obj
+copySceneKitAssets: Copy nature/rock_smallC.mtl
+copySceneKitAssets: Copy nature/tree_plateau_dark.mtl
+copySceneKitAssets: Copy nature/crops_dirtDoubleRowCorner.obj
+copySceneKitAssets: Copy nature/stump_round.mtl
+copySceneKitAssets: Copy nature/stone_smallFlatB.obj
+copySceneKitAssets: Copy nature/tree_palmTall.obj
+copySceneKitAssets: Copy nature/stone_smallTopB.mtl
+copySceneKitAssets: Copy nature/tree_blocks_dark.mtl
+copySceneKitAssets: Copy nature/rock_largeE.mtl
+copySceneKitAssets: Copy nature/flower_yellowA.obj
+copySceneKitAssets: Copy nature/tree_detailed_fall.mtl
+copySceneKitAssets: Copy nature/bridge_side_wood.mtl
+copySceneKitAssets: Copy nature/tree_pineTallB.mtl
+copySceneKitAssets: Copy nature/tree_pineSmallB.mtl
+copySceneKitAssets: Copy nature/ground_pathBendBank.obj
+copySceneKitAssets: Copy nature/stone_largeD.mtl
+copySceneKitAssets: Copy nature/tree_pineTallA_detailed.obj
+copySceneKitAssets: Copy nature/grass_leafs.obj
+copySceneKitAssets: Copy nature/bridge_center_wood.mtl
+copySceneKitAssets: Copy nature/rock_smallI.obj
+copySceneKitAssets: Copy nature/stone_smallB.mtl
+copySceneKitAssets: Copy nature/tree_palmBend.obj
+copySceneKitAssets: Copy nature/cliff_blockDiagonal_rock.obj
+copySceneKitAssets: Copy nature/rock_tallJ.obj
+copySceneKitAssets: Copy nature/cliff_cornerInnerTop_stone.obj
+copySceneKitAssets: Copy nature/plant_bush.obj
+copySceneKitAssets: Copy nature/tree_simple.mtl
+copySceneKitAssets: Copy nature/stone_smallC.mtl
+copySceneKitAssets: Copy nature/rock_smallH.obj
+copySceneKitAssets: Copy nature/cliff_blockSlopeHalfWalls_rock.obj
+copySceneKitAssets: Copy nature/stone_largeE.mtl
+copySceneKitAssets: Copy nature/cliff_cornerInner_stone.mtl
+copySceneKitAssets: Copy nature/tree_pineSmallC.mtl
+copySceneKitAssets: Copy nature/fence_simpleDiagonalCenter.mtl
+copySceneKitAssets: Copy nature/tree_pineTallC.mtl
+copySceneKitAssets: Copy nature/path_stoneEnd.mtl
+copySceneKitAssets: Copy nature/cliff_steps_rock.mtl
+copySceneKitAssets: Copy nature/cliff_blockQuarter_rock.mtl
+copySceneKitAssets: Copy nature/rock_largeD.mtl
+copySceneKitAssets: Copy nature/cliff_stepsCornerInner_stone.obj
+copySceneKitAssets: Copy nature/fence_gate.mtl
+copySceneKitAssets: Copy nature/campfire_stones.obj
+copySceneKitAssets: Copy nature/bed.mtl
+copySceneKitAssets: Copy nature/tree_simple_dark.obj
+copySceneKitAssets: Copy nature/stone_smallFlatC.obj
+copySceneKitAssets: Copy nature/crop_turnip.mtl
+copySceneKitAssets: Copy nature/crops_wheatStageA.obj
+copySceneKitAssets: Copy nature/rock_smallB.mtl
+copySceneKitAssets: Copy nature/tree_pineRoundD.obj
+copySceneKitAssets: Copy nature/stone_smallI.obj
+copySceneKitAssets: Copy nature/ground_riverCross.mtl
+copySceneKitAssets: Copy nature/rock_tallB.mtl
+copySceneKitAssets: Copy nature/cactus_tall.mtl
+copySceneKitAssets: Copy nature/cliff_halfCorner_rock.obj
+copySceneKitAssets: Copy nature/tree_pineRoundF.obj
+copySceneKitAssets: Copy nature/campfire_logs.mtl
+copySceneKitAssets: Copy nature/mushroom_red.mtl
+copySceneKitAssets: Copy nature/stone_smallFlatA.obj
+copySceneKitAssets: Copy nature/cliff_steps_stone.obj
+copySceneKitAssets: Copy nature/bridge_side_woodRound.mtl
+copySceneKitAssets: Copy nature/stone_smallTopA.mtl
+copySceneKitAssets: Copy nature/grass_leafsLarge.obj
+copySceneKitAssets: Copy nature/rock_largeF.mtl
+copySceneKitAssets: Copy nature/flower_yellowB.obj
+copySceneKitAssets: Copy nature/tree_pineTallA.mtl
+copySceneKitAssets: Copy nature/tree_plateau.mtl
+copySceneKitAssets: Copy nature/tree_pineSmallA.mtl
+copySceneKitAssets: Copy nature/cliff_cornerInnerTop_rock.obj
+copySceneKitAssets: Copy nature/ground_grass.mtl
+copySceneKitAssets: Copy nature/plant_bushDetailed.obj
+copySceneKitAssets: Copy nature/tree_cone.mtl
+copySceneKitAssets: Copy nature/stone_smallA.mtl
+copySceneKitAssets: Copy nature/rock_tallH.obj
+copySceneKitAssets: Copy nature/rock_tallI.obj
+copySceneKitAssets: Copy nature/bridge_side_stone.obj
+copySceneKitAssets: Copy nature/bridge_center_stoneRound.mtl
+copySceneKitAssets: Copy nature/cliff_cornerLarge_stone.obj
+copySceneKitAssets: Copy nature/ground_pathCross.obj
+copySceneKitAssets: Copy nature/plant_bushTriangle.obj
+copySceneKitAssets: Copy nature/cliff_blockSlopeWalls_stone.obj
+copySceneKitAssets: Copy nature/mushroom_redTall.obj
+copySceneKitAssets: Copy nature/stone_largeF.mtl
+copySceneKitAssets: Copy nature/flower_yellowC.obj
+copySceneKitAssets: Copy nature/ground_riverEnd.obj
+copySceneKitAssets: Copy nature/tree_pineTallB_detailed.mtl
+copySceneKitAssets: Copy nature/plant_bushSmall.mtl
+copySceneKitAssets: Copy nature/rock_smallA.mtl
+copySceneKitAssets: Copy nature/tree_small_dark.mtl
+copySceneKitAssets: Copy nature/crops_wheatStageB.obj
+copySceneKitAssets: Copy nature/rock_tallC.mtl
+copySceneKitAssets: Copy nature/tree_pineRoundC.obj
+copySceneKitAssets: Copy nature/rock_tallG.mtl
+copySceneKitAssets: Copy nature/mushroom_redGroup.mtl
+copySceneKitAssets: Copy nature/ground_riverOpen.obj
+copySceneKitAssets: Copy nature/rock_smallE.mtl
+copySceneKitAssets: Copy nature/fence_bend.mtl
+copySceneKitAssets: Copy nature/path_stone.obj
+copySceneKitAssets: Copy nature/rock_largeC.mtl
+copySceneKitAssets: Copy nature/grass.obj
+copySceneKitAssets: Copy nature/tree_fat_darkh.mtl
+copySceneKitAssets: Copy nature/tree_pineTallD.mtl
+copySceneKitAssets: Copy nature/cliff_diagonal_stone.obj
+copySceneKitAssets: Copy nature/cliff_large_stone.mtl
+copySceneKitAssets: Copy nature/tent_detailedClosed.mtl
+copySceneKitAssets: Copy nature/stone_largeB.mtl
+copySceneKitAssets: Copy nature/tree_pineSmallD.mtl
+copySceneKitAssets: Copy nature/ground_pathRocks.mtl
+copySceneKitAssets: Copy nature/cliff_top_rock.obj
+copySceneKitAssets: Copy nature/canoe.obj
+copySceneKitAssets: Copy nature/ground_riverTile.mtl
+copySceneKitAssets: Copy nature/cliff_waterfallTop_stone.mtl
+copySceneKitAssets: Copy nature/ground_riverBend.mtl
+copySceneKitAssets: Copy nature/plant_bushLarge.mtl
+copySceneKitAssets: Copy nature/ground_pathStraight.mtl
+copySceneKitAssets: Copy nature/stone_smallD.mtl
+copySceneKitAssets: Copy nature/crop_pumpkin.obj
+copySceneKitAssets: Copy nature/stone_smallE.mtl
+copySceneKitAssets: Copy nature/cactus_short.mtl
+copySceneKitAssets: Copy nature/crops_dirtRowCorner.mtl
+copySceneKitAssets: Copy nature/cliff_waterfall_rock.obj
+copySceneKitAssets: Copy nature/tree_cone_fall.obj
+copySceneKitAssets: Copy nature/stone_largeC.mtl
+copySceneKitAssets: Copy nature/bridge_woodRound.mtl
+copySceneKitAssets: Copy nature/tree_oak_fall.mtl
+copySceneKitAssets: Copy nature/tree_small.mtl
+copySceneKitAssets: Copy nature/ground_riverRocks.obj
+copySceneKitAssets: Copy nature/rock_largeB.mtl
+copySceneKitAssets: Copy nature/bridge_side_stoneRound.obj
+copySceneKitAssets: Copy nature/ground_pathSideOpen.obj
+copySceneKitAssets: Copy nature/fence_simple.obj
+copySceneKitAssets: Copy nature/rock_smallD.mtl
+copySceneKitAssets: Copy nature/rock_tallF.mtl
+copySceneKitAssets: Copy nature/tree_pineRoundB.obj
+copySceneKitAssets: Copy nature/cliff_topDiagonal_rock.mtl
+copySceneKitAssets: Copy nature/tree_palmDetailedShort.obj
+copySceneKitAssets: Copy nature/rock_tallD.mtl
+copySceneKitAssets: Copy nature/cliff_halfCornerInner_rock.obj
+copySceneKitAssets: Copy nature/bed_floor.obj
+copySceneKitAssets: Copy nature/rock_smallF.mtl
+copySceneKitAssets: Copy nature/ground_pathSide.mtl
+copySceneKitAssets: Copy nature/tree_thin_dark.mtl
+copySceneKitAssets: Copy nature/tree_pineTallD_detailed.mtl
+copySceneKitAssets: Copy nature/stone_largeA.mtl
+copySceneKitAssets: Copy nature/fence_simpleHigh.obj
+copySceneKitAssets: Copy nature/tree_tall_dark.obj
+copySceneKitAssets: Copy nature/tree_pineTallC_detailed.mtl
+copySceneKitAssets: Copy nature/stone_smallG.mtl
+copySceneKitAssets: Copy nature/crops_dirtRow.mtl
+copySceneKitAssets: Copy nature/stone_smallF.mtl
+copySceneKitAssets: Copy nature/cliff_corner_rock.mtl
+copySceneKitAssets: Copy nature/cliff_halfCornerInner_stone.mtl
+copySceneKitAssets: Copy nature/cliff_large_rock.obj
+copySceneKitAssets: Copy nature/fence_planksDouble.obj
+copySceneKitAssets: Copy nature/tree_default_dark.mtl
+copySceneKitAssets: Copy nature/cliff_top_stone.mtl
+copySceneKitAssets: Copy nature/rock_largeA.mtl
+copySceneKitAssets: Copy nature/stump_old.obj
+copySceneKitAssets: Copy nature/tree_palm.mtl
+copySceneKitAssets: Copy nature/bridge_woodRoundNarrow.obj
+copySceneKitAssets: Copy nature/cliff_cornerTop_rock.obj
+copySceneKitAssets: Copy nature/path_stoneCircle.obj
+copySceneKitAssets: Copy nature/cliff_cornerTop_stone.obj
+copySceneKitAssets: Copy nature/rock_smallG.mtl
+copySceneKitAssets: Copy nature/tree_oak.mtl
+copySceneKitAssets: Copy nature/rock_tallE.mtl
+copySceneKitAssets: Copy nature/tree_pineRoundA.obj
+copySceneKitAssets: Copy suburban/path-stones-messy.obj
+copySceneKitAssets: Copy suburban/fence-1x3.mtl
+copySceneKitAssets: Copy suburban/building-type-l.obj
+copySceneKitAssets: Copy suburban/building-type-q.mtl
+copySceneKitAssets: Copy suburban/building-type-f.mtl
+copySceneKitAssets: Copy suburban/building-type-g.mtl
+copySceneKitAssets: Copy suburban/building-type-p.mtl
+copySceneKitAssets: Copy suburban/building-type-m.obj
+copySceneKitAssets: Copy suburban/fence-1x2.mtl
+copySceneKitAssets: Copy suburban/fence-3x2.mtl
+copySceneKitAssets: Copy suburban/Textures/colormap.png
+copySceneKitAssets: Copy suburban/Textures/variation-c.png
+copySceneKitAssets: Copy suburban/Textures/variation-b.png
+copySceneKitAssets: Copy suburban/Textures/variation-a.png
+copySceneKitAssets: Copy suburban/building-type-o.obj
+copySceneKitAssets: Copy suburban/driveway-long.obj
+copySceneKitAssets: Copy suburban/building-type-r.mtl
+copySceneKitAssets: Copy suburban/building-type-e.mtl
+copySceneKitAssets: Copy suburban/path-stones-long.mtl
+copySceneKitAssets: Copy suburban/tree-small.obj
+copySceneKitAssets: Copy suburban/building-type-d.mtl
+copySceneKitAssets: Copy suburban/building-type-s.mtl
+copySceneKitAssets: Copy suburban/building-type-n.obj
+copySceneKitAssets: Copy suburban/fence-3x3.mtl
+copySceneKitAssets: Copy suburban/tree-large.obj
+copySceneKitAssets: Copy suburban/building-type-j.obj
+copySceneKitAssets: Copy suburban/building-type-a.mtl
+copySceneKitAssets: Copy suburban/building-type-k.obj
+copySceneKitAssets: Copy suburban/fence-1x4.mtl
+copySceneKitAssets: Copy suburban/building-type-i.obj
+copySceneKitAssets: Copy suburban/building-type-c.mtl
+copySceneKitAssets: Copy suburban/building-type-t.mtl
+copySceneKitAssets: Copy suburban/building-type-u.mtl
+copySceneKitAssets: Copy suburban/building-type-b.mtl
+copySceneKitAssets: Copy suburban/building-type-h.obj
+copySceneKitAssets: Copy suburban/fence-low.obj
+copySceneKitAssets: Copy suburban/path-short.obj
+copySceneKitAssets: Copy suburban/fence-2x2.mtl
+copySceneKitAssets: Copy suburban/planter.mtl
+copySceneKitAssets: Copy suburban/fence-2x3.mtl
+copySceneKitAssets: Copy suburban/path-stones-short.obj
+copySceneKitAssets: Copy suburban/fence.obj
+copySceneKitAssets: Copy suburban/driveway-short.obj
+copySceneKitAssets: Copy suburban/path-long.obj
+copySceneKitAssets: Copy suburban/path-stones-short.mtl
+copySceneKitAssets: Copy suburban/fence-2x2.obj
+copySceneKitAssets: Copy suburban/planter.obj
+copySceneKitAssets: Copy suburban/fence-2x3.obj
+copySceneKitAssets: Copy suburban/fence.mtl
+copySceneKitAssets: Copy suburban/path-long.mtl
+copySceneKitAssets: Copy suburban/driveway-short.mtl
+copySceneKitAssets: Copy suburban/building-type-r.obj
+copySceneKitAssets: Copy suburban/building-type-e.obj
+copySceneKitAssets: Copy suburban/building-type-o.mtl
+copySceneKitAssets: Copy suburban/driveway-long.mtl
+copySceneKitAssets: Copy suburban/fence-3x2.obj
+copySceneKitAssets: Copy suburban/fence-3x3.obj
+copySceneKitAssets: Copy suburban/building-type-n.mtl
+copySceneKitAssets: Copy suburban/building-type-d.obj
+copySceneKitAssets: Copy suburban/building-type-s.obj
+copySceneKitAssets: Copy suburban/path-stones-long.obj
+copySceneKitAssets: Copy suburban/tree-small.mtl
+copySceneKitAssets: Copy suburban/building-type-q.obj
+copySceneKitAssets: Copy suburban/building-type-f.obj
+copySceneKitAssets: Copy suburban/building-type-l.mtl
+copySceneKitAssets: Copy suburban/fence-1x3.obj
+copySceneKitAssets: Copy suburban/path-stones-messy.mtl
+copySceneKitAssets: Copy suburban/fence-1x2.obj
+copySceneKitAssets: Copy suburban/building-type-m.mtl
+copySceneKitAssets: Copy suburban/building-type-g.obj
+copySceneKitAssets: Copy suburban/building-type-p.obj
+copySceneKitAssets: Copy suburban/building-type-c.obj
+copySceneKitAssets: Copy suburban/building-type-t.obj
+copySceneKitAssets: Copy suburban/building-type-i.mtl
+copySceneKitAssets: Copy suburban/path-short.mtl
+copySceneKitAssets: Copy suburban/fence-low.mtl
+copySceneKitAssets: Copy suburban/building-type-h.mtl
+copySceneKitAssets: Copy suburban/building-type-u.obj
+copySceneKitAssets: Copy suburban/building-type-b.obj
+copySceneKitAssets: Copy suburban/building-type-j.mtl
+copySceneKitAssets: Copy suburban/tree-large.mtl
+copySceneKitAssets: Copy suburban/fence-1x4.obj
+copySceneKitAssets: Copy suburban/building-type-k.mtl
+copySceneKitAssets: Copy suburban/building-type-a.obj
+copySceneKitAssets: Running scntool on /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos/TinyWorld.app/art.scnassets/character/elf.dae
+
+CompileAssetCatalogVariant thinned /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos/TinyWorld.app /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/Assets.xcassets (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    /Applications/Xcode_26.6.app/Contents/Developer/usr/bin/actool /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/Assets.xcassets --compile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_dependencies_thinned --output-partial-info-plist /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_generated_info.plist_thinned --app-icon AppIcon --compress-pngs --enable-on-demand-resources YES --development-region en --target-device iphone --target-device ipad --minimum-deployment-target 16.0 --platform iphoneos
+error: filename "TinyWorldApp.swift" used twice: '/Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/TinyWorldApp.swift' and '/Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/App/TinyWorldApp.swift'
+note: filenames are used to distinguish private declarations with the same name
+
+SwiftDriver TinyWorld normal arm64 com.apple.xcode.tools.swift.compiler (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    builtin-SwiftDriver -- /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name TinyWorld -O -whole-module-optimization @/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld.SwiftFileList -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -target arm64-apple-ios16.0 -g -module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 5 -I /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos -F /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos -c -num-threads 3 -Xcc -ivfsstatcache -Xcc /Users/runner/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.5-23F81a-688ef53f1462e2c8f657fdc38a81448fee66e23052a0157c865c76b268046726.sdkstatcache -output-file-map /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld_const_extract_protocols.json -Xcc -iquote -Xcc /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-generated-files.hmap -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-own-target-headers.hmap -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-all-target-headers.hmap -Xcc -iquote -Xcc /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-project-headers.hmap -Xcc -I/Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos/include -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/DerivedSources-normal/arm64 -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/DerivedSources/arm64 -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/DerivedSources -emit-objc-header -emit-objc-header-path /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld-Swift.h -working-directory /Users/runner/work/TinyWorld/TinyWorld/TinyWorld -no-emit-module-separately-wmo
+error: Filename "TinyWorldApp.swift" used twice: '/Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/TinyWorldApp.swift' and '/Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/App/TinyWorldApp.swift' (in target 'TinyWorld' from project 'TinyWorld')
+note: Filenames are used to distinguish private declarations with the same name (in target 'TinyWorld' from project 'TinyWorld')
+
+** BUILD FAILED **
+
+
+The following build commands failed:
+	SwiftDriver TinyWorld normal arm64 com.apple.xcode.tools.swift.compiler (in target 'TinyWorld' from project 'TinyWorld')
+	Building project TinyWorld with scheme TinyWorld and configuration Release
+(2 failures)
