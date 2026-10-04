@@ -25,6 +25,7 @@ jobs:
 
       - name: Build unsigned IPA
         run: |
+          set -o pipefail
           xcodebuild -project TinyWorld.xcodeproj \
             -scheme TinyWorld \
             -sdk iphoneos \
@@ -33,7 +34,12 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
-            clean build
+            clean build > build_log.txt 2>&1 || {
+              echo "==== BUILD FAILED ===="
+              cat build_log.txt
+              exit 1
+            }
+          
           
           # Convert app to ipa
           mkdir -p Payload
