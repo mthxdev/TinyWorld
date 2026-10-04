@@ -6,9 +6,9 @@ class BuildingBuilder {
     func buildHouse(variant: Int) -> SCNNode {
         // suburban a building-type-a.obj jusqu'a building-type-u.obj
         // a, b, c, d, e = 97, 98, 99, 100, 101
-        let charA = Character("a").asciiValue!
-        let safeVariant = variant % 10
-        let letter = String(Character(UnicodeScalar(charA + UInt8(safeVariant))))
+        let chars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        let safeVariant = abs(variant) % 10
+        let letter = chars[safeVariant]
         let modelName = "building-type-\(letter)"
         
         let node = AssetManager.shared.getModel(named: modelName, folder: "suburban")
@@ -26,8 +26,6 @@ class BuildingBuilder {
         let barn = AssetManager.shared.getModel(named: "building-type-k", folder: "suburban")
         barn.scale = SCNVector3(1.5, 1.5, 1.5)
         
-        // Ajouter un wagon
-        let wagon = AssetManager.shared.getModel(named: "tree-large", folder: "suburban") // placeholder for wagon if not found, wait, no wagon in suburban. There is in villagePack. 
         // We have planters and fences in suburban.
         let planter = AssetManager.shared.getModel(named: "planter", folder: "suburban")
         planter.position = SCNVector3(2.0, 0, 0)
