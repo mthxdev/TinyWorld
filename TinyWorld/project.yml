@@ -22,6 +22,7 @@ targets:
           - UIInterfaceOrientationLandscapeRight
     settings:
       base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: "AppIcon"
         DEVELOPMENT_TEAM: "" # A renseigner pour le vrai build SideStore si necessaire
         SWIFT_VERSION: 5.0
         CODE_SIGN_IDENTITY: "Apple Development"
