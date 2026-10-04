@@ -36,14 +36,8 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             clean build > build_log.txt 2>&1 || {
               echo "==== BUILD FAILED ===="
-              git config --global user.name 'github-actions'
-              git config --global user.email 'github-actions@github.com'
-              git add build_log.txt
-              git commit -m "Upload build log [skip ci]"
-              git push
               exit 1
             }
-          
           
           # Convert app to ipa
           mkdir -p Payload
@@ -56,6 +50,13 @@ jobs:
           lipo -info Payload/TinyWorld.app/TinyWorld || true
           echo "======================"
         working-directory: TinyWorld
+
+      - name: Upload Build Log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: TinyWorld/build_log.txt
 
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v4
