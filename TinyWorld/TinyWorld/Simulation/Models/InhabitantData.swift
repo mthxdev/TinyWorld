@@ -24,9 +24,15 @@ struct InhabitantData: Identifiable, Codable {
     var speed: Float
     var waitTimer: Float
     
-    // Préférences de routine
+    // Preferences
     var wakeUpTime: Float
     var sleepTime: Float
-    var homeZoneIndex: Int
-    var workZoneIndex: Int
+    var homeZoneId: Int
+    var workZoneId: Int
+    
+    // Appearance
+    let colorR: Float
+    let colorG: Float
+    let colorB: Float
+    let hasHat: Bool
 }

@@ -34,7 +34,7 @@ class ActivitySystem {
         }
     }
     
-    private func determineActivity(for inhabitant: InhabitantData, time: Float) -> Activity {
+    func determineActivity(for inhabitant: InhabitantData, time: Float) -> Activity {
         if time < inhabitant.wakeUpTime || time > inhabitant.sleepTime {
             return .sleeping
         } else if time >= inhabitant.wakeUpTime && time < (inhabitant.wakeUpTime + 1.5) {
@@ -51,16 +51,26 @@ class ActivitySystem {
         }
     }
     
-    private func getZone(for activity: Activity, inhabitant: InhabitantData, world: WorldData) -> Zone? {
+    func getZone(for activity: Activity, inhabitant: InhabitantData, world: WorldData) -> Zone? {
+        let activeZones = world.zones.filter { $0.isBuilt }
+        
         switch activity {
         case .sleeping, .resting:
-            return world.zones.first { $0.id == inhabitant.homeZoneIndex }
+            return activeZones.first { $0.id == inhabitant.homeZoneId }
         case .working:
-            return world.zones.first { $0.id == inhabitant.workZoneIndex }
+            return activeZones.first { $0.id == inhabitant.workZoneId }
         case .eating:
-            return world.zones.first { $0.type == .food }
+            // S'il n'y a pas de zone de nourriture construite, on rentre a la maison
+            if let foodZone = activeZones.first(where: { $0.type == .food }) {
+                return foodZone
+            }
+            return activeZones.first { $0.id == inhabitant.homeZoneId }
         case .wandering:
-            return world.zones.first { $0.type == .park }
+            // S'il n'y a pas de parc, on erre pres de la maison
+            if let parkZone = activeZones.first(where: { $0.type == .park }) {
+                return parkZone
+            }
+            return activeZones.first { $0.id == inhabitant.homeZoneId }
         }
     }
 }

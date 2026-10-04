@@ -6,14 +6,14 @@ class GameScene: SCNScene {
     private var inhabitantNodes: [UUID: InhabitantNode] = [:]
     
     override init() {
-        self.cameraController = CameraController(scene: SCNScene()) // sera reaffecte ci-dessous
+        self.cameraController = CameraController(scene: SCNScene()) // sera reaffecte
         super.init()
         
-        // Initialisation de la camera et du monde visuel
         self.cameraController.pivotNode.removeFromParentNode()
         self.rootNode.addChildNode(cameraController.pivotNode)
         
-        self.environmentNode = EnvironmentNode(world: WorldData())
+        // Initialiser avec un EnvironmentNode vide (seulement sol et lumiere)
+        self.environmentNode = EnvironmentNode()
         self.rootNode.addChildNode(environmentNode)
     }
     
@@ -22,8 +22,8 @@ class GameScene: SCNScene {
     }
     
     func sync(with worldData: WorldData) {
-        // 1. Mettre a jour le cycle jour/nuit
-        environmentNode.updateTimeOfDay(worldData.timeOfDay)
+        // Synchroniser le temps et les batiments (evolution)
+        environmentNode.sync(with: worldData)
         
         let isDay = worldData.timeOfDay > 6 && worldData.timeOfDay < 18
         let targetColor = isDay ? UIColor(red: 0.5, green: 0.8, blue: 0.9, alpha: 1.0) : UIColor(red: 0.05, green: 0.1, blue: 0.2, alpha: 1.0)
@@ -45,13 +45,11 @@ class GameScene: SCNScene {
             self.background.contents = targetColor
         }
         
-        // 2. Mettre a jour (ou creer) les noeuds habitants
+        // Synchroniser les habitants
         for inhabitantData in worldData.inhabitants {
             if let node = inhabitantNodes[inhabitantData.id] {
-                // Existe deja, on met a jour
                 node.sync(with: inhabitantData)
             } else {
-                // Nouveau
                 let newNode = InhabitantNode(id: inhabitantData.id)
                 newNode.sync(with: inhabitantData)
                 self.rootNode.addChildNode(newNode)

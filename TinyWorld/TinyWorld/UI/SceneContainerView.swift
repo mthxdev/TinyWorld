@@ -48,7 +48,7 @@ struct SceneContainerView: UIViewRepresentable {
         let view = SCNView()
         view.scene = scene
         view.allowsCameraControl = false
-        view.showsStatistics = true
+        view.showsStatistics = false
         view.backgroundColor = UIColor(white: 0.1, alpha: 1.0)
         view.antialiasingMode = .multisampling4X
         

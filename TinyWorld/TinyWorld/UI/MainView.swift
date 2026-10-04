@@ -19,7 +19,6 @@ struct MainView: View {
                 }
                 .onChange(of: scenePhase) { newPhase in
                     if newPhase == .active {
-                        // Relancer ou rafraichir si besoin
                         simulationEngine.start()
                     } else if newPhase == .background || newPhase == .inactive {
                         simulationEngine.save()
@@ -28,7 +27,7 @@ struct MainView: View {
 
             // HUD minimal (Overlay)
             VStack {
-                HStack {
+                HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Tiny World")
                             .font(.headline)
@@ -37,6 +36,10 @@ struct MainView: View {
                         let minute = Int((simulationEngine.world.timeOfDay - Float(hour)) * 60)
                         Text(String(format: "%02d:%02d", hour, minute))
                             .font(.subheadline)
+                        
+                        Text("\(simulationEngine.world.inhabitants.count) habitants")
+                            .font(.caption)
+                            .foregroundColor(.gray)
                     }
                     .foregroundColor(.white)
                     .padding()

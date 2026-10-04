@@ -9,9 +9,11 @@ class SimulationEngine: ObservableObject {
     
     private let movementSystem = MovementSystem()
     private let activitySystem = ActivitySystem()
+    private let evolutionSystem = EvolutionSystem()
     
-    // Taux de conversion : 20 ticks = 1 heure in-game. (1 tick = 0.1s réelle, donc 1h in-game = 2s réelles).
-    private let ticksPerHour: Float = 20.0
+    // Echelle : 1 seconde reelle = 0.02 heure in-game (50 secondes reelles = 1 heure in-game).
+    // Un jour complet (24h) dure donc 1200 secondes (20 minutes).
+    private let timeScale: Float = 0.02
     
     init() {
         if let savedWorld = SaveManager.shared.load() {
@@ -45,22 +47,13 @@ class SimulationEngine: ObservableObject {
         let now = Date()
         let elapsedRealSeconds = now.timeIntervalSince(world.lastSavedDate)
         
-        // On cap le rattrapage à 12 heures réelles pour ne pas freeze le jeu à l'ouverture
-        let cappedElapsed = min(elapsedRealSeconds, 12 * 3600) 
+        // On cap le rattrapage à 24 heures réelles
+        let cappedElapsed = min(elapsedRealSeconds, 24 * 3600) 
         
         if cappedElapsed > 1 {
-            // 1 seconde réelle = 10 ticks.
-            let missedTicks = Int(cappedElapsed * 10)
-            
-            // Pour des raisons de perfs, si l'absence est très longue, on simule par plus grands pas
-            let maxSimulationSteps = 500
-            let stepDeltaTime = Float(missedTicks) * 0.1 / Float(maxSimulationSteps)
-            let actualSteps = min(missedTicks, maxSimulationSteps)
-            let actualDelta = (missedTicks > maxSimulationSteps) ? stepDeltaTime : 0.1
-            
-            for _ in 0..<actualSteps {
-                updateSystems(deltaTime: actualDelta)
-            }
+            var tempWorld = world
+            evolutionSystem.catchUp(world: &tempWorld, offlineSeconds: cappedElapsed)
+            world = tempWorld
         }
         
         world.lastSavedDate = now
@@ -71,13 +64,13 @@ class SimulationEngine: ObservableObject {
     }
     
     private func updateSystems(deltaTime: Float) {
-        // Temps: 0.05 par deltaTime de 0.1 -> 0.5 par seconde.
-        // Donc 24.0 prend 48 secondes réelles.
-        world.timeOfDay += (0.05 * (deltaTime / 0.1))
+        // Temps
+        let timeToAdd = timeScale * deltaTime // 0.02 * 0.1 = 0.002
+        world.timeOfDay += timeToAdd
         if world.timeOfDay >= 24.0 { world.timeOfDay = 0.0 }
         
-        // Délégation de la logique
         var tempWorld = world
+        evolutionSystem.update(world: &tempWorld, deltaTime: deltaTime)
         activitySystem.update(world: &tempWorld, deltaTime: deltaTime)
         movementSystem.update(world: &tempWorld, deltaTime: deltaTime)
         world = tempWorld

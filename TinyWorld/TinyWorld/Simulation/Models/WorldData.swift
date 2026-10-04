@@ -10,9 +10,10 @@ enum ZoneType: String, Codable {
 struct Zone: Codable {
     let id: Int
     let type: ZoneType
-    let centerX: Float
-    let centerZ: Float
-    let radius: Float
+    var centerX: Float
+    var centerZ: Float
+    var radius: Float
+    var isBuilt: Bool
 }
 
 struct WorldData: Codable {
@@ -22,41 +23,59 @@ struct WorldData: Codable {
     var zones: [Zone]
     var lastSavedDate: Date
     
-    init(size: Float = 30.0, timeOfDay: Float = 6.0) {
+    var developmentScore: Float
+    var milestoneIndex: Int
+    
+    init(size: Float = 40.0, timeOfDay: Float = 6.0) {
         self.size = size
         self.timeOfDay = timeOfDay
         self.lastSavedDate = Date()
+        self.developmentScore = 0
+        self.milestoneIndex = 0
         
-        // Création des zones basiques
+        // Plan global du village (isBuilt indique s'ils sont deja presents)
         self.zones = [
-            Zone(id: 0, type: .home, centerX: -8.0, centerZ: -8.0, radius: 4.0),
-            Zone(id: 1, type: .home, centerX: 8.0, centerZ: -8.0, radius: 4.0),
-            Zone(id: 2, type: .home, centerX: -8.0, centerZ: 8.0, radius: 4.0),
-            Zone(id: 3, type: .work, centerX: 0.0, centerZ: 0.0, radius: 5.0),
-            Zone(id: 4, type: .food, centerX: 8.0, centerZ: 8.0, radius: 3.0),
-            Zone(id: 5, type: .park, centerX: 0.0, centerZ: -10.0, radius: 4.0)
+            Zone(id: 0, type: .home, centerX: -6.0, centerZ: -6.0, radius: 3.0, isBuilt: true),
+            Zone(id: 1, type: .work, centerX: 0.0, centerZ: 8.0, radius: 4.0, isBuilt: true),
+            Zone(id: 2, type: .home, centerX: 6.0, centerZ: -6.0, radius: 3.0, isBuilt: false),
+            Zone(id: 3, type: .park, centerX: 0.0, centerZ: -10.0, radius: 5.0, isBuilt: false),
+            Zone(id: 4, type: .home, centerX: -12.0, centerZ: 0.0, radius: 3.0, isBuilt: false),
+            Zone(id: 5, type: .food, centerX: 10.0, centerZ: 6.0, radius: 3.0, isBuilt: false),
+            Zone(id: 6, type: .home, centerX: 12.0, centerZ: 0.0, radius: 3.0, isBuilt: false)
         ]
         
-        let possibleNames = ["Arthur", "Béatrice", "Charles", "Diane", "Émile", "Flora", "Gaston", "Hélène", "Igor", "Juliette", "Léon", "Margot", "Noah", "Olivia", "Paul", "Rose"]
+        self.inhabitants = []
+        // On commence avec 3 habitants
+        addInhabitants(count: 3, toHome: 0, work: 1)
+    }
+    
+    mutating func addInhabitants(count: Int, toHome homeId: Int, work workId: Int) {
+        let possibleNames = ["Arthur", "Béatrice", "Charles", "Diane", "Émile", "Flora", "Gaston", "Hélène", "Igor", "Juliette", "Léon", "Margot", "Noah", "Olivia", "Paul", "Rose", "Lucas", "Emma", "Hugo", "Alice"]
         
-        // Initialisation de 12 habitants
-        self.inhabitants = (0..<12).map { i in
-            InhabitantData(
+        for _ in 0..<count {
+            let color = (r: Float.random(in: 0.2...0.9), g: Float.random(in: 0.2...0.9), b: Float.random(in: 0.2...0.9))
+            
+            let newInhabitant = InhabitantData(
                 id: UUID(),
-                name: possibleNames[i % possibleNames.count],
-                positionX: Float.random(in: -size/2...size/2),
-                positionZ: Float.random(in: -size/2...size/2),
+                name: possibleNames.randomElement() ?? "Inconnu",
+                positionX: Float.random(in: -5...5),
+                positionZ: Float.random(in: -5...5),
                 activity: .sleeping,
                 isMoving: false,
                 destinationX: nil,
                 destinationZ: nil,
-                speed: Float.random(in: 0.4...0.7),
+                speed: Float.random(in: 0.35...0.6),
                 waitTimer: 0.0,
                 wakeUpTime: Float.random(in: 6.0...8.0),
                 sleepTime: Float.random(in: 21.0...23.5),
-                homeZoneIndex: i % 3, // Répartis dans les 3 maisons
-                workZoneIndex: 3
+                homeZoneId: homeId,
+                workZoneId: workId,
+                colorR: color.r,
+                colorG: color.g,
+                colorB: color.b,
+                hasHat: Bool.random()
             )
+            self.inhabitants.append(newInhabitant)
         }
     }
 }
