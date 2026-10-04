@@ -57,7 +57,7 @@ class InhabitantNode: SCNNode {
             let angle = atan2(dx, dz)
             
             // Rotation fluide
-            let actionRotate = SCNAction.rotateTo(x: 0, y: CGFloat(angle), z: 0, duration: 0.1, shortestUnitArc: true)
+            let actionRotate = SCNAction.rotateTo(x: 0, y: CGFloat(angle), z: 0, duration: 0.1)
             self.runAction(actionRotate)
             
             self.position = targetPosition

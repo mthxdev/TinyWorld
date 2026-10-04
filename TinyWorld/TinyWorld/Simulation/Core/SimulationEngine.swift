@@ -29,6 +29,8 @@ class SimulationEngine: ObservableObject {
         if world.timeOfDay >= 24.0 { world.timeOfDay = 0.0 }
         
         // Délégation de la logique de déplacement
-        movementSystem.update(world: &world, deltaTime: deltaTime)
+        var tempWorld = world
+        movementSystem.update(world: &tempWorld, deltaTime: deltaTime)
+        world = tempWorld
     }
 }
