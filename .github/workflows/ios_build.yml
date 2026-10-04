@@ -39,6 +39,12 @@ jobs:
           mkdir -p Payload
           mv build/Release-iphoneos/TinyWorld.app Payload/
           zip -r TinyWorld.ipa Payload
+          
+          echo "==== IPA CONTENTS ===="
+          unzip -l TinyWorld.ipa
+          echo "==== MACH-O INFO ===="
+          lipo -info Payload/TinyWorld.app/TinyWorld || true
+          echo "======================"
         working-directory: TinyWorld
 
       - name: Upload IPA Artifact
