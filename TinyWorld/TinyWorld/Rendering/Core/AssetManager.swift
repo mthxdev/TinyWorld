@@ -9,7 +9,6 @@ class AssetManager {
     var characterScene: SCNScene?
     
     init() {
-        characterScene = SCNScene(named: "art.scnassets/character/elf.dae")
     }
     
     func getModel(named name: String, folder: String) -> SCNNode {
@@ -18,8 +17,20 @@ class AssetManager {
             return cached.clone()
         }
         
-        guard let scene = SCNScene(named: "art.scnassets/\(key).obj") else {
-            print("WARNING: Could not load \(key).obj")
+        let extensions = ["obj", "fbx", "scn", "dae"]
+        var loadedScene: SCNScene? = nil
+        var finalExt = ""
+        
+        for ext in extensions {
+            if let scene = SCNScene(named: "art.scnassets/\(key).\(ext)") {
+                loadedScene = scene
+                finalExt = ext
+                break
+            }
+        }
+        
+        guard let scene = loadedScene else {
+            print("WARNING: Could not load \(key) with any known extension")
             let fallback = SCNNode(geometry: SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0))
             fallback.geometry?.firstMaterial?.diffuse.contents = UIColor.red
             return fallback
@@ -30,15 +41,32 @@ class AssetManager {
             node.addChildNode(child.clone())
         }
         
-        // Optimiser
-        let flattened = node.flattenedClone()
-        flattened.name = name
-        flattened.castsShadow = true
-        for child in flattened.childNodes {
-            child.castsShadow = true
+        // Copy animations if it's an FBX or DAE
+        if finalExt == "fbx" || finalExt == "dae" || finalExt == "scn" {
+            for animKey in scene.rootNode.animationKeys {
+                if let player = scene.rootNode.animationPlayer(forKey: animKey) {
+                    node.addAnimationPlayer(player, forKey: animKey)
+                }
+            }
         }
-        cache[key] = flattened
-        return flattened.clone()
+        
+        // Only flatten OBJ files. FBX characters have skeletons and multiple nodes that MUST NOT be flattened!
+        if finalExt == "obj" {
+            let flattened = node.flattenedClone()
+            flattened.name = name
+            flattened.castsShadow = true
+            cache[key] = flattened
+            return flattened.clone()
+        } else {
+            node.name = name
+            node.castsShadow = true
+            // Cast shadows for all children
+            node.enumerateChildNodes { (child, _) in
+                child.castsShadow = true
+            }
+            cache[key] = node
+            return node.clone()
+        }
     }
     
     func getCharacter() -> SCNNode? {
