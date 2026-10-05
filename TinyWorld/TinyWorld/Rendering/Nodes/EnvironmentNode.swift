@@ -125,6 +125,23 @@ class EnvironmentNode: SCNNode {
             prop.eulerAngles.y = Float.random(in: 0...(2 * Float.pi))
             terrainWrapper.addChildNode(prop)
         }
+        
+        // Cozy campfire in the center
+        let campfire = AssetManager.shared.getModel(named: "campfire_stones", folder: "nature")
+        campfire.position = SCNVector3(0, TerrainBuilder.getHeight(at: 0, z: 0) + 0.05, 0)
+        terrainWrapper.addChildNode(campfire)
+        
+        // Point light for the campfire (orange warm light)
+        let campLight = SCNLight()
+        campLight.type = .omni
+        campLight.color = UIColor(red: 1.0, green: 0.6, blue: 0.2, alpha: 1.0)
+        campLight.intensity = 800
+        campLight.attenuationStartDistance = 0.5
+        campLight.attenuationEndDistance = 6.0
+        let campLightNode = SCNNode()
+        campLightNode.light = campLight
+        campLightNode.position = SCNVector3(0, 0.5, 0)
+        campfire.addChildNode(campLightNode)
     }
     
     func sync(with worldData: WorldData) {
@@ -170,11 +187,44 @@ class EnvironmentNode: SCNNode {
         wrapper.position = SCNVector3(zone.centerX, py, zone.centerZ)
         
         // Base de la parcelle
-        let plotGeo = SCNBox(width: CGFloat(zone.radius * 2.0), height: 0.1, length: CGFloat(zone.radius * 2.0), chamferRadius: 0.2)
-        plotGeo.firstMaterial?.diffuse.contents = UIColor(red: 0.7, green: 0.65, blue: 0.5, alpha: 1.0)
+        let plotGeo = SCNBox(width: CGFloat(zone.radius * 2.0), height: 0.1, length: CGFloat(zone.radius * 2.0), chamferRadius: 0.1)
+        plotGeo.firstMaterial?.diffuse.contents = UIColor(red: 0.5, green: 0.45, blue: 0.35, alpha: 1.0)
         let plot = SCNNode(geometry: plotGeo)
         plot.position.y = 0.05
         wrapper.addChildNode(plot)
+        
+        // Clotures autour de la parcelle
+        if zone.type == .home || zone.type == .farm {
+            let r = Float(zone.radius) - 0.2
+            let fenceSteps = Int(r * 2.0 / 0.8) // approx 0.8 width per fence
+            if fenceSteps > 1 {
+                for i in 0...fenceSteps {
+                    let offset = -r + (Float(i) / Float(fenceSteps)) * (r * 2.0)
+                    // Front and Back
+                    let fenceF = AssetManager.shared.getModel(named: "fence_simple", folder: "nature")
+                    fenceF.position = SCNVector3(offset, 0.1, r)
+                    wrapper.addChildNode(fenceF)
+                    
+                    if i != fenceSteps / 2 { // leave a gap in the back
+                        let fenceB = AssetManager.shared.getModel(named: "fence_simple", folder: "nature")
+                        fenceB.position = SCNVector3(offset, 0.1, -r)
+                        wrapper.addChildNode(fenceB)
+                    }
+                    
+                    // Left and Right
+                    let fenceL = AssetManager.shared.getModel(named: "fence_simple", folder: "nature")
+                    fenceL.position = SCNVector3(-r, 0.1, offset)
+                    fenceL.eulerAngles.y = Float.pi / 2
+                    wrapper.addChildNode(fenceL)
+                    
+                    let fenceR = AssetManager.shared.getModel(named: "fence_simple", folder: "nature")
+                    fenceR.position = SCNVector3(r, 0.1, offset)
+                    fenceR.eulerAngles.y = Float.pi / 2
+                    wrapper.addChildNode(fenceR)
+                }
+            }
+        }
+
         
         var building: SCNNode?
         
