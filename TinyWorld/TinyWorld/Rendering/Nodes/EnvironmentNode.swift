@@ -60,38 +60,70 @@ class EnvironmentNode: SCNNode {
     private func setupTerrain() {
         self.addChildNode(terrainWrapper)
         
-        // Sol de base stylise avec bruit (les textures procedurables ont ete supprimees, utilisons une couleur unie vibrante)
-        let groundGeo = SCNBox(width: 30, height: 1.0, length: 30, chamferRadius: 0.5)
-        let groundMat = SCNMaterial()
-        groundMat.diffuse.contents = UIColor(red: 0.35, green: 0.65, blue: 0.25, alpha: 1.0)
-        groundGeo.firstMaterial = groundMat
-        let ground = SCNNode(geometry: groundGeo)
-        ground.position = SCNVector3(0, -0.5, 0)
-        ground.name = "ground"
-        ground.castsShadow = false
-        terrainWrapper.addChildNode(ground)
+        // Custom Hilly Terrain
+        let terrain = TerrainBuilder.createTerrain(width: 40.0, depth: 40.0, subdivisions: 40)
+        terrain.name = "ground"
+        terrainWrapper.addChildNode(terrain)
         
-        // Ajouter du vrai decor Kenney Nature Kit
-        for _ in 0...15 {
-            let tree = AssetManager.shared.getModel(named: "tree_oak", folder: "nature")
-            let x = Float.random(in: -14...14)
-            let z = Float.random(in: -14...14)
-            // Eviter le centre
-            if abs(x) < 4 && abs(z) < 4 { continue }
-            tree.position = SCNVector3(x, 0, z)
+        // Scatter vegetation and details
+        let treeModels = ["tree_oak", "tree_pineDefaultA", "tree_default", "tree_fat"]
+        let rockModels = ["rock_largeA", "rock_smallA", "stone_smallA", "stone_largeA"]
+        let plantModels = ["plant_bushDetailed", "plant_bushLarge", "plant_bushSmall", "flower_purpleA", "flower_redA", "flower_yellowA", "mushroom_red", "mushroom_tan"]
+        let propModels = ["log", "stump_old", "grass_leafs"]
+        
+        // Trees
+        for _ in 0...60 {
+            let modelName = treeModels.randomElement()!
+            let tree = AssetManager.shared.getModel(named: modelName, folder: "nature")
+            let px = Float.random(in: -18...18)
+            let pz = Float.random(in: -18...18)
+            let py = TerrainBuilder.getHeight(at: px, z: pz)
+            if abs(px) < 6 && abs(pz) < 6 { continue } // Keep center clear
+            tree.position = SCNVector3(px, py, pz)
             tree.eulerAngles.y = Float.random(in: 0...(2 * Float.pi))
-            tree.scale = SCNVector3(1.5, 1.5, 1.5)
+            let s = Float.random(in: 1.0...1.6)
+            tree.scale = SCNVector3(s, s, s)
             terrainWrapper.addChildNode(tree)
         }
         
-        for _ in 0...10 {
-            let rock = AssetManager.shared.getModel(named: "rock", folder: "nature")
-            let x = Float.random(in: -12...12)
-            let z = Float.random(in: -12...12)
-            if abs(x) < 4 && abs(z) < 4 { continue }
-            rock.position = SCNVector3(x, 0, z)
+        // Rocks
+        for _ in 0...30 {
+            let modelName = rockModels.randomElement()!
+            let rock = AssetManager.shared.getModel(named: modelName, folder: "nature")
+            let px = Float.random(in: -18...18)
+            let pz = Float.random(in: -18...18)
+            let py = TerrainBuilder.getHeight(at: px, z: pz)
+            rock.position = SCNVector3(px, py, pz)
             rock.eulerAngles.y = Float.random(in: 0...(2 * Float.pi))
+            let s = Float.random(in: 0.5...1.2)
+            rock.scale = SCNVector3(s, s, s)
             terrainWrapper.addChildNode(rock)
+        }
+        
+        // Plants & Flowers
+        for _ in 0...100 {
+            let modelName = plantModels.randomElement()!
+            let plant = AssetManager.shared.getModel(named: modelName, folder: "nature")
+            let px = Float.random(in: -18...18)
+            let pz = Float.random(in: -18...18)
+            let py = TerrainBuilder.getHeight(at: px, z: pz)
+            plant.position = SCNVector3(px, py, pz)
+            plant.eulerAngles.y = Float.random(in: 0...(2 * Float.pi))
+            let s = Float.random(in: 0.8...1.5)
+            plant.scale = SCNVector3(s, s, s)
+            terrainWrapper.addChildNode(plant)
+        }
+        
+        // Props
+        for _ in 0...15 {
+            let modelName = propModels.randomElement()!
+            let prop = AssetManager.shared.getModel(named: modelName, folder: "nature")
+            let px = Float.random(in: -18...18)
+            let pz = Float.random(in: -18...18)
+            let py = TerrainBuilder.getHeight(at: px, z: pz)
+            prop.position = SCNVector3(px, py, pz)
+            prop.eulerAngles.y = Float.random(in: 0...(2 * Float.pi))
+            terrainWrapper.addChildNode(prop)
         }
     }
     
@@ -134,7 +166,8 @@ class EnvironmentNode: SCNNode {
     private func createBuiltZoneNode(zone: Zone) -> SCNNode {
         let wrapper = SCNNode()
         wrapper.name = "built_wrapper"
-        wrapper.position = SCNVector3(zone.centerX, 0, zone.centerZ)
+        let py = TerrainBuilder.getHeight(at: zone.centerX, z: zone.centerZ)
+        wrapper.position = SCNVector3(zone.centerX, py, zone.centerZ)
         
         // Base de la parcelle
         let plotGeo = SCNBox(width: CGFloat(zone.radius * 2.0), height: 0.1, length: CGFloat(zone.radius * 2.0), chamferRadius: 0.2)
@@ -174,8 +207,8 @@ class EnvironmentNode: SCNNode {
         }
         
         // Creer le chemin vers le centre du village (origine) avec des pierres (path-stones-short.obj)
-        let start = SCNVector3(zone.centerX, 0.05, zone.centerZ)
-        let end = SCNVector3(0, 0.05, 0)
+        let start = SCNVector3(zone.centerX, py + 0.05, zone.centerZ)
+        let end = SCNVector3(0, TerrainBuilder.getHeight(at: 0, z: 0) + 0.05, 0)
         let dx = end.x - start.x
         let dz = end.z - start.z
         let distance = hypot(Float(dx), Float(dz))
@@ -184,10 +217,13 @@ class EnvironmentNode: SCNNode {
         if steps > 1 {
             for i in 1..<steps {
                 let ratio = Float(i) / Float(steps)
+                let px = start.x + Float(dx) * ratio
+                let pz = start.z + Float(dz) * ratio
                 let pathStone = AssetManager.shared.getModel(named: "path-stones-short", folder: "suburban")
-                pathStone.position = SCNVector3(start.x + Float(dx) * ratio, 0.06, start.z + Float(dz) * ratio)
+                pathStone.position = SCNVector3(px, TerrainBuilder.getHeight(at: px, z: pz) + 0.02, pz)
                 pathStone.eulerAngles.y = Float.random(in: 0...Float.pi)
-                wrapper.addChildNode(pathStone)
+                // We add to self instead of wrapper to position paths in world space
+                self.addChildNode(pathStone)
             }
         }
         
@@ -196,7 +232,8 @@ class EnvironmentNode: SCNNode {
     
     private func createUnbuiltZoneNode(zone: Zone) -> SCNNode {
         let wrapper = SCNNode()
-        wrapper.position = SCNVector3(zone.centerX, 0, zone.centerZ)
+        let py = TerrainBuilder.getHeight(at: zone.centerX, z: zone.centerZ)
+        wrapper.position = SCNVector3(zone.centerX, py, zone.centerZ)
         
         // Un panneau de construction
         let sign = AssetManager.shared.getModel(named: "fence", folder: "suburban")

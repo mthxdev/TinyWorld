@@ -9,6 +9,8 @@ class InhabitantNode: SCNNode {
     
     // Character setup
     private var characterNode: SCNNode?
+    private var isWalking = false
+    private var animTime: TimeInterval = 0
     
     init(id: UUID) {
         self.inhabitantId = id
@@ -22,70 +24,67 @@ class InhabitantNode: SCNNode {
     }
     
     private func setupAnatomy() {
-        if let char = AssetManager.shared.getCharacter() {
-            // L'elfe est parfois tres grand selon l'export (souvent 100x plus grand ou 100x plus petit)
-            // Adapter l'echelle pour qu'il fasse environ 0.8 unites de haut
-            char.scale = SCNVector3(0.015, 0.015, 0.015) 
-            char.position = SCNVector3(0, 0, 0)
-            
-            // Appliquer une rotation pour le mettre face a Z positif si necessaire
-            char.eulerAngles.y = Float.pi // Ajuster selon l'orientation de base de l'elfe
-            
-            self.characterNode = char
-            self.addChildNode(char)
-            
-            self.childNodes.forEach { castShadowsRecursively(node: $0) }
+        let char = CharacterBuilder.createHumanoid(hash: inhabitantId.hashValue)
+        self.characterNode = char
+        self.addChildNode(char)
+        
+        let action = SCNAction.customAction(duration: .greatestFiniteMagnitude) { [weak self] node, time in
+            self?.updateAnimation(time: time)
         }
+        self.runAction(action)
     }
     
-    private func castShadowsRecursively(node: SCNNode) {
-        node.castsShadow = true
-        node.childNodes.forEach { castShadowsRecursively(node: $0) }
-    }
-    
-    private func applyAppearance(from data: InhabitantData) {
-        guard let char = characterNode else { return }
-        // Personnalisation des materiaux de l'elfe
-        var hash = data.id.hashValue
-        let skinTones: [UIColor] = [
-            UIColor(red: 1.0, green: 0.8, blue: 0.6, alpha: 1.0),
-            UIColor(red: 0.9, green: 0.7, blue: 0.5, alpha: 1.0),
-            UIColor(red: 0.6, green: 0.4, blue: 0.2, alpha: 1.0)
-        ]
-        let skinColor = skinTones[abs(hash) % skinTones.count]
+    private func updateAnimation(time: CGFloat) {
+        guard let hips = characterNode?.childNode(withName: "hips", recursively: true),
+              let torso = characterNode?.childNode(withName: "torso", recursively: true),
+              let shoulderL = characterNode?.childNode(withName: "shoulderL", recursively: true),
+              let shoulderR = characterNode?.childNode(withName: "shoulderR", recursively: true),
+              let hipL = characterNode?.childNode(withName: "hipL", recursively: true),
+              let hipR = characterNode?.childNode(withName: "hipR", recursively: true) else { return }
         
-        let shirtColor = UIColor(red: CGFloat(data.colorR), green: CGFloat(data.colorG), blue: CGFloat(data.colorB), alpha: 1.0)
-        
-        // Trouver les meshes pour les teinter (tres simple avec SceneKit material.multiply)
-        char.enumerateChildNodes { (node, _) in
-            if let geo = node.geometry {
-                if geo.name?.lowercased().contains("face") == true || geo.name?.lowercased().contains("body") == true {
-                    geo.firstMaterial?.multiply.contents = skinColor
-                } else if geo.name?.lowercased().contains("hair") == true {
-                    geo.firstMaterial?.multiply.contents = shirtColor
-                } else {
-                    geo.firstMaterial?.multiply.contents = shirtColor
-                }
-            }
+        if isWalking {
+            animTime += 0.15
+            let speed: Float = 1.0
+            
+            // Walk cycle
+            hipL.eulerAngles.x = sin(Float(animTime) * speed) * 0.8
+            hipR.eulerAngles.x = -sin(Float(animTime) * speed) * 0.8
+            
+            shoulderL.eulerAngles.x = -sin(Float(animTime) * speed) * 0.6
+            shoulderR.eulerAngles.x = sin(Float(animTime) * speed) * 0.6
+            
+            hips.position.y = 0.45 + abs(sin(Float(animTime) * speed)) * 0.05
+            torso.eulerAngles.y = sin(Float(animTime) * speed) * 0.1
+            
+        } else {
+            animTime += 0.05
+            // Idle cycle (breathing)
+            hipL.eulerAngles.x = 0
+            hipR.eulerAngles.x = 0
+            shoulderL.eulerAngles.x = 0
+            shoulderR.eulerAngles.x = 0
+            
+            hips.position.y = 0.45
+            torso.position.y = 0.2 + sin(Float(animTime)) * 0.015
+            torso.eulerAngles.y = 0
         }
     }
     
     func sync(with data: InhabitantData) {
         if !isInitialized {
-            applyAppearance(from: data)
-            // Lancer l'animation Idle par defaut
-            playAnimation(name: "idle")
             isInitialized = true
         }
         
+        let py = TerrainBuilder.getHeight(at: data.positionX, z: data.positionZ)
+        
         let isSleeping = data.activity == .sleeping
-        let targetY: Float = isSleeping ? 0.2 : 0.0
+        let targetY: Float = py + (isSleeping ? 0.2 : 0.0)
         let targetPosition = SCNVector3(data.positionX, targetY, data.positionZ)
         let currentPos = lastSyncPosition ?? self.position
         
         let dx = targetPosition.x - currentPos.x
         let dz = targetPosition.z - currentPos.z
-        let distance = (dx*dx + dz*dz).squareRoot()
+        let distance = hypot(Float(dx), Float(dz))
         
         if distance > 0.001 {
             if !isSleeping {
@@ -97,20 +96,16 @@ class InhabitantNode: SCNNode {
             let actionMove = SCNAction.move(to: targetPosition, duration: 0.1)
             self.runAction(actionMove, forKey: "smoothMove")
             self.lastSyncPosition = targetPosition
+            self.isWalking = true
+        } else {
+            self.isWalking = false
         }
         
-        // Gestion des etats d'animation
         if data.activity == .sleeping {
             self.eulerAngles.x = -Float.pi / 2
-            self.position.y = 0.1
+            self.isWalking = false
         } else {
             self.eulerAngles.x = 0
-            self.position.y = 0.0
         }
-    }
-    
-    // L'elfe est importe avec ses animations DAE par defaut (qui s'executent souvent en boucle)
-    private func playAnimation(name: String) {
-        // Optionnel : si le fichier DAE possede plusieurs animations nommees
     }
 }
