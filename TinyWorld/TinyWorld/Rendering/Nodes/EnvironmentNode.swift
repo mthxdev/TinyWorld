@@ -186,12 +186,7 @@ class EnvironmentNode: SCNNode {
         let py = TerrainBuilder.getHeight(at: zone.centerX, z: zone.centerZ)
         wrapper.position = SCNVector3(zone.centerX, py, zone.centerZ)
         
-        // Base de la parcelle
-        let plotGeo = SCNBox(width: CGFloat(zone.radius * 2.0), height: 0.1, length: CGFloat(zone.radius * 2.0), chamferRadius: 0.1)
-        plotGeo.firstMaterial?.diffuse.contents = UIColor(red: 0.5, green: 0.45, blue: 0.35, alpha: 1.0)
-        let plot = SCNNode(geometry: plotGeo)
-        plot.position.y = 0.05
-        wrapper.addChildNode(plot)
+        // Base de la parcelle (supprimée pour ne pas avoir de primitives)
         
         // Clotures autour de la parcelle
         if zone.type == .home || zone.type == .farm {

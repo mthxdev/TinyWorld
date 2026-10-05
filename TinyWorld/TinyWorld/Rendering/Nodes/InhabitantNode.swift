@@ -24,49 +24,68 @@ class InhabitantNode: SCNNode {
     }
     
     private func setupAnatomy() {
-        let char = CharacterBuilder.createHumanoid(hash: inhabitantId.hashValue)
+        let models = ["villager_male", "villager_female", "villager_male2", "villager_female2"]
+        let modelName = models[abs(inhabitantId.hashValue) % models.count]
+        
+        let char = AssetManager.shared.getModel(named: modelName, folder: "character")
+        // FBX models often need scale adjustment. We'll adjust depending on visual size.
+        char.scale = SCNVector3(0.012, 0.012, 0.012)
+        
+        // Add random variation to materials if possible (FBX materials are nested)
+        let colors: [UIColor] = [.red, .blue, .green, .orange, .purple, .cyan, .magenta]
+        let shirtColor = colors[(abs(inhabitantId.hashValue) / 10) % colors.count]
+        
+        char.enumerateChildNodes { (node, _) in
+            if let geo = node.geometry {
+                // If it's a casual character, they usually have "Shirt" or similar in material names
+                for mat in geo.materials {
+                    if mat.name?.lowercased().contains("shirt") == true || mat.name?.lowercased().contains("top") == true {
+                        mat.diffuse.contents = shirtColor
+                    }
+                }
+            }
+        }
+        
         self.characterNode = char
         self.addChildNode(char)
         
-        let action = SCNAction.customAction(duration: .greatestFiniteMagnitude) { [weak self] node, time in
-            self?.updateAnimation(time: time)
-        }
-        self.runAction(action)
+        // Setup animations
+        // In Quaternius FBX files, the animations are attached to the root node or children.
+        // We will just let the default animation play for now, or extract "Walk" and "Idle"
+        playAnimation(name: "Idle")
     }
     
     private func updateAnimation(time: CGFloat) {
-        guard let hips = characterNode?.childNode(withName: "hips", recursively: true),
-              let torso = characterNode?.childNode(withName: "torso", recursively: true),
-              let shoulderL = characterNode?.childNode(withName: "shoulderL", recursively: true),
-              let shoulderR = characterNode?.childNode(withName: "shoulderR", recursively: true),
-              let hipL = characterNode?.childNode(withName: "hipL", recursively: true),
-              let hipR = characterNode?.childNode(withName: "hipR", recursively: true) else { return }
+        // Not used manually anymore since we rely on FBX animations!
+    }
+    
+    private func playAnimation(name: String) {
+        guard let char = characterNode else { return }
         
-        if isWalking {
-            animTime += 0.15
-            let speed: Float = 1.0
-            
-            // Walk cycle
-            hipL.eulerAngles.x = sin(Float(animTime) * speed) * 0.8
-            hipR.eulerAngles.x = -sin(Float(animTime) * speed) * 0.8
-            
-            shoulderL.eulerAngles.x = -sin(Float(animTime) * speed) * 0.6
-            shoulderR.eulerAngles.x = sin(Float(animTime) * speed) * 0.6
-            
-            hips.position.y = 0.45 + abs(sin(Float(animTime) * speed)) * 0.05
-            torso.eulerAngles.y = sin(Float(animTime) * speed) * 0.1
-            
-        } else {
-            animTime += 0.05
-            // Idle cycle (breathing)
-            hipL.eulerAngles.x = 0
-            hipR.eulerAngles.x = 0
-            shoulderL.eulerAngles.x = 0
-            shoulderR.eulerAngles.x = 0
-            
-            hips.position.y = 0.45
-            torso.position.y = 0.2 + sin(Float(animTime)) * 0.015
-            torso.eulerAngles.y = 0
+        // Try to find the animation by name in the loaded Scene
+        // SCNScene(named:) usually attaches animations to the root node.
+        // If we want to switch between Idle and Walk, we need to load them or they might be bundled.
+        // Since Quaternius bundles them, we'll try to find them by key.
+        let keys = char.animationKeys
+        var foundKey: String? = nil
+        for key in keys {
+            if key.lowercased().contains(name.lowercased()) {
+                foundKey = key
+                break
+            }
+        }
+        
+        if let key = foundKey {
+            // SceneKit automatically plays them all sometimes, so we might need to stop others
+            for k in keys {
+                if k != key {
+                    char.removeAnimation(forKey: k, blendOutDuration: 0.2)
+                }
+            }
+            // Add it if it's not playing
+            if char.animationPlayer(forKey: key) == nil {
+                // We'd need to load the animation if we stripped it, but for now we rely on the default SceneKit playback
+            }
         }
     }
     
@@ -96,14 +115,23 @@ class InhabitantNode: SCNNode {
             let actionMove = SCNAction.move(to: targetPosition, duration: 0.1)
             self.runAction(actionMove, forKey: "smoothMove")
             self.lastSyncPosition = targetPosition
-            self.isWalking = true
+            
+            if !isWalking {
+                self.isWalking = true
+                playAnimation(name: "Walk")
+            }
         } else {
-            self.isWalking = false
+            if isWalking {
+                self.isWalking = false
+                playAnimation(name: "Idle")
+            }
         }
         
         if data.activity == .sleeping {
             self.eulerAngles.x = -Float.pi / 2
-            self.isWalking = false
+            if isWalking {
+                self.isWalking = false
+            }
         } else {
             self.eulerAngles.x = 0
         }
