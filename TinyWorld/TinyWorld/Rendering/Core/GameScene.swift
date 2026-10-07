@@ -16,6 +16,11 @@ class GameScene: SCNScene {
         // Initialiser avec un EnvironmentNode vide (seulement sol et lumiere)
         self.environmentNode = EnvironmentNode()
         self.rootNode.addChildNode(environmentNode)
+        
+        // Configuration de la brume pour la profondeur
+        self.fogStartDistance = 20.0
+        self.fogEndDistance = 45.0
+        self.fogDensityExponent = 1.5
     }
     
     required init?(coder: NSCoder) {
@@ -30,29 +35,32 @@ class GameScene: SCNScene {
         
         if time >= 6 && time < 9 { // Aube -> Jour
             let t = CGFloat((time - 6) / 3)
-            let dawn = UIColor(red: 0.8, green: 0.5, blue: 0.4, alpha: 1.0)
-            let day = UIColor(red: 0.4, green: 0.7, blue: 0.9, alpha: 1.0)
+            let dawn = UIColor(red: 0.85, green: 0.65, blue: 0.5, alpha: 1.0)
+            let day = UIColor(red: 0.45, green: 0.75, blue: 0.95, alpha: 1.0)
             targetColor = interpolateColor(from: dawn, to: day, progress: t)
         } else if time >= 9 && time < 16 { // Jour
-            targetColor = UIColor(red: 0.4, green: 0.7, blue: 0.9, alpha: 1.0)
+            targetColor = UIColor(red: 0.45, green: 0.75, blue: 0.95, alpha: 1.0)
         } else if time >= 16 && time < 19 { // Jour -> Crepuscule
             let t = CGFloat((time - 16) / 3)
-            let day = UIColor(red: 0.4, green: 0.7, blue: 0.9, alpha: 1.0)
-            let dusk = UIColor(red: 0.6, green: 0.3, blue: 0.5, alpha: 1.0)
+            let day = UIColor(red: 0.45, green: 0.75, blue: 0.95, alpha: 1.0)
+            let dusk = UIColor(red: 0.8, green: 0.45, blue: 0.3, alpha: 1.0)
             targetColor = interpolateColor(from: day, to: dusk, progress: t)
         } else if time >= 19 && time < 21 { // Crepuscule -> Nuit
             let t = CGFloat((time - 19) / 2)
-            let dusk = UIColor(red: 0.6, green: 0.3, blue: 0.5, alpha: 1.0)
-            let night = UIColor(red: 0.05, green: 0.05, blue: 0.15, alpha: 1.0)
+            let dusk = UIColor(red: 0.8, green: 0.45, blue: 0.3, alpha: 1.0)
+            let night = UIColor(red: 0.1, green: 0.15, blue: 0.25, alpha: 1.0)
             targetColor = interpolateColor(from: dusk, to: night, progress: t)
         } else { // Nuit
-            targetColor = UIColor(red: 0.05, green: 0.05, blue: 0.15, alpha: 1.0)
+            targetColor = UIColor(red: 0.1, green: 0.15, blue: 0.25, alpha: 1.0)
         }
         
         if let currentColor = self.background.contents as? UIColor {
-            self.background.contents = interpolateColor(from: currentColor, to: targetColor, progress: 0.1)
+            let newColor = interpolateColor(from: currentColor, to: targetColor, progress: 0.1)
+            self.background.contents = newColor
+            self.fogColor = newColor
         } else {
             self.background.contents = targetColor
+            self.fogColor = targetColor
         }
         
         // Synchroniser les habitants

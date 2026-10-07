@@ -27,13 +27,13 @@ class EnvironmentNode: SCNNode {
         dLight.castsShadow = true
         dLight.shadowMode = .forward
         dLight.shadowSampleCount = 8
-        dLight.shadowRadius = 4.0
-        dLight.shadowColor = UIColor.black.withAlphaComponent(0.45)
+        dLight.shadowRadius = 8.0 // Plus flou et naturel
+        dLight.shadowColor = UIColor.black.withAlphaComponent(0.25) // Plus clair pour ne pas faire de noir pur
         dLight.orthographicScale = 25.0 // Concentré sur le village
         dLight.shadowMapSize = CGSize(width: 2048, height: 2048)
-        dLight.intensity = 1000
+        dLight.intensity = 800
         directionalLightNode.light = dLight
-        directionalLightNode.eulerAngles = SCNVector3(x: -Float.pi / 3, y: Float.pi / 4, z: 0)
+        directionalLightNode.eulerAngles = SCNVector3(x: -Float.pi / 3.5, y: Float.pi / 4, z: 0) // Soleil légèrement plus bas pour de belles ombres longues
         addChildNode(directionalLightNode)
         
         // Lumière ambiante
@@ -134,13 +134,17 @@ class EnvironmentNode: SCNNode {
         // Point light for the campfire (orange warm light)
         let campLight = SCNLight()
         campLight.type = .omni
-        campLight.color = UIColor(red: 1.0, green: 0.6, blue: 0.2, alpha: 1.0)
-        campLight.intensity = 800
+        campLight.color = UIColor(red: 1.0, green: 0.65, blue: 0.3, alpha: 1.0)
+        campLight.intensity = 250 // Réduit pour éviter la surexposition
         campLight.attenuationStartDistance = 0.5
-        campLight.attenuationEndDistance = 6.0
+        campLight.attenuationEndDistance = 3.5 // Réduit le rayon
+        
+        // Soft fallback for shadows to not burn
+        campLight.castsShadow = false
+        
         let campLightNode = SCNNode()
         campLightNode.light = campLight
-        campLightNode.position = SCNVector3(0, 0.5, 0)
+        campLightNode.position = SCNVector3(0, 0.3, 0)
         campfire.addChildNode(campLightNode)
     }
     
@@ -297,33 +301,35 @@ class EnvironmentNode: SCNNode {
     }
     
     private func updateLightingTime(time: Float) {
-        var intensity: CGFloat = 1000
-        var ambientIntensity: CGFloat = 300
+        var intensity: CGFloat = 800
+        var ambientIntensity: CGFloat = 700
         var lightColor = UIColor.white
-        var ambientColor = UIColor(white: 0.9, alpha: 1.0)
+        var ambientColor = UIColor(red: 0.95, green: 0.95, blue: 1.0, alpha: 1.0)
         
         if time >= 6 && time <= 9 {
             // Matin
             let t = CGFloat((time - 6) / 3)
-            intensity = 200 + (800 * t)
-            ambientIntensity = 100 + (200 * t)
-            lightColor = UIColor(red: 1.0, green: 0.8 + 0.2*t, blue: 0.6 + 0.4*t, alpha: 1.0)
+            intensity = 200 + (600 * t)
+            ambientIntensity = 300 + (400 * t)
+            lightColor = UIColor(red: 1.0, green: 0.85 + 0.15*t, blue: 0.7 + 0.3*t, alpha: 1.0)
+            ambientColor = UIColor(red: 0.9 + 0.05*t, green: 0.8 + 0.15*t, blue: 0.9 + 0.1*t, alpha: 1.0)
         } else if time > 9 && time <= 16 {
             // Jour
-            intensity = 1000
-            ambientIntensity = 300
+            intensity = 800
+            ambientIntensity = 700
         } else if time > 16 && time <= 19 {
             // Soir
             let t = CGFloat((time - 16) / 3)
-            intensity = 1000 - (800 * t)
-            ambientIntensity = 300 - (200 * t)
-            lightColor = UIColor(red: 1.0, green: 0.9 - 0.3*t, blue: 1.0 - 0.6*t, alpha: 1.0)
+            intensity = 800 - (600 * t)
+            ambientIntensity = 700 - (400 * t)
+            lightColor = UIColor(red: 1.0, green: 0.95 - 0.2*t, blue: 1.0 - 0.4*t, alpha: 1.0)
+            ambientColor = UIColor(red: 0.95 - 0.1*t, green: 0.95 - 0.2*t, blue: 1.0 - 0.1*t, alpha: 1.0)
         } else {
-            // Nuit
-            intensity = 200
-            ambientIntensity = 100
-            lightColor = UIColor(red: 0.3, green: 0.4, blue: 0.8, alpha: 1.0)
-            ambientColor = UIColor(red: 0.2, green: 0.2, blue: 0.4, alpha: 1.0)
+            // Nuit (douce et lisible)
+            intensity = 150
+            ambientIntensity = 350
+            lightColor = UIColor(red: 0.4, green: 0.5, blue: 0.9, alpha: 1.0)
+            ambientColor = UIColor(red: 0.3, green: 0.35, blue: 0.55, alpha: 1.0)
         }
         
         directionalLightNode.light?.intensity = intensity

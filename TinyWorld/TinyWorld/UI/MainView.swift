@@ -80,6 +80,7 @@ struct MainView: View {
                             .padding()
                         }
                     }
+                    .opacity(0.0) // UI Masquée temporairement pour évaluer le rendu
                 }
             } else {
                 // Ecran de chargement elegant
