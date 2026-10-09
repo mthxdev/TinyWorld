@@ -52,6 +52,25 @@ class AssetManager {
         
         // Only flatten OBJ files. FBX characters have skeletons and multiple nodes that MUST NOT be flattened!
         if finalExt == "obj" {
+            // Upgrade materials to PBR for stylized realistic look
+            node.enumerateChildNodes { (child, _) in
+                if let geo = child.geometry {
+                    for mat in geo.materials {
+                        mat.lightingModel = .physicallyBased
+                        mat.roughness.contents = NSNumber(value: 0.85) // Matte, cozy finish
+                        mat.metalness.contents = NSNumber(value: 0.0)
+                        
+                        // Si le matériau a une couleur, on booste légèrement la vivacité
+                        if let color = mat.diffuse.contents as? UIColor {
+                            var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+                            if color.getHue(&h, saturation: &s, brightness: &b, alpha: &a) {
+                                mat.diffuse.contents = UIColor(hue: h, saturation: min(1.0, s * 1.2), brightness: min(1.0, b * 1.1), alpha: a)
+                            }
+                        }
+                    }
+                }
+            }
+            
             let flattened = node.flattenedClone()
             flattened.name = name
             flattened.castsShadow = true

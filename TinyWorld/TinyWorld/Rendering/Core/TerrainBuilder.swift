@@ -159,7 +159,7 @@ class TerrainBuilder {
         // DIRT LAYER
         var dirtVertices = vertices
         for i in 0..<dirtVertices.count {
-            dirtVertices[i].y += 0.02 // Elevate slightly
+            dirtVertices[i].y += 0.005 // Minimal elevation
         }
         let srcDirtPos = SCNGeometrySource(vertices: dirtVertices)
         let dirtGeo = SCNGeometry(sources: [srcDirtPos, srcNorm, srcUV, srcDirtColor], elements: [element])
@@ -176,10 +176,12 @@ class TerrainBuilder {
         dirtMat.roughness.wrapT = .repeat
         dirtMat.isDoubleSided = false
         dirtMat.blendMode = .alpha
+        dirtMat.writesToDepthBuffer = false // PREVENT Z-FIGHTING (Fix "deux grandes zones de couleurs")
         dirtGeo.materials = [dirtMat]
         
         let dirtNode = SCNNode(geometry: dirtGeo)
         dirtNode.castsShadow = false
+        dirtNode.renderingOrder = 10 // Render after grass
         root.addChildNode(dirtNode)
         
         // Base of the island (dirt cylinder)

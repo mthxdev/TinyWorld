@@ -13,11 +13,6 @@ class BuildingBuilder {
         
         let node = AssetManager.shared.getModel(named: modelName, folder: "suburban")
         
-        // Add a fence around it
-        let fence = AssetManager.shared.getModel(named: "fence", folder: "suburban")
-        fence.position = SCNVector3(1.5, 0, 1.5)
-        node.addChildNode(fence)
-        
         return node
     }
     

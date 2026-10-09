@@ -21,6 +21,10 @@ class GameScene: SCNScene {
         self.fogStartDistance = 20.0
         self.fogEndDistance = 45.0
         self.fogDensityExponent = 1.5
+        
+        // Environnement HDRI pour le rendu PBR (Reflets et lumière ambiante réalistes)
+        self.lightingEnvironment.contents = "art.scnassets/textures/sky.exr"
+        self.lightingEnvironment.intensity = 1.0
     }
     
     required init?(coder: NSCoder) {
@@ -62,6 +66,19 @@ class GameScene: SCNScene {
             self.background.contents = targetColor
             self.fogColor = targetColor
         }
+        
+        // Ajuster l'intensité de l'HDRI selon l'heure
+        var envIntensity: CGFloat = 1.0
+        if time >= 6 && time < 9 {
+            envIntensity = 0.3 + 0.7 * CGFloat((time - 6) / 3)
+        } else if time >= 9 && time < 16 {
+            envIntensity = 1.0
+        } else if time >= 16 && time < 19 {
+            envIntensity = 1.0 - 0.7 * CGFloat((time - 16) / 3)
+        } else {
+            envIntensity = 0.1 // Nuit très douce
+        }
+        self.lightingEnvironment.intensity = envIntensity
         
         // Synchroniser les habitants
         for inhabitantData in worldData.inhabitants {
