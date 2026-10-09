@@ -27,31 +27,32 @@ class EnvironmentNode: SCNNode {
         dLight.castsShadow = true
         dLight.shadowMode = .forward
         dLight.shadowSampleCount = 8
-        dLight.shadowRadius = 8.0 // Plus flou et naturel
-        dLight.shadowColor = UIColor.black.withAlphaComponent(0.25) // Plus clair pour ne pas faire de noir pur
-        dLight.orthographicScale = 25.0 // Concentré sur le village
+        dLight.shadowRadius = 6.0 // Flou naturel
+        dLight.shadowColor = UIColor.black.withAlphaComponent(0.20) // Ombres douces et lisibles
+        dLight.orthographicScale = 45.0 // Couvre l'ensemble de l'île (32m) sans coupure d'ombre
         dLight.shadowMapSize = CGSize(width: 2048, height: 2048)
-        dLight.intensity = 800
+        dLight.intensity = 850
         directionalLightNode.light = dLight
-        directionalLightNode.eulerAngles = SCNVector3(x: -Float.pi / 3.5, y: Float.pi / 4, z: 0) // Soleil légèrement plus bas pour de belles ombres longues
+        directionalLightNode.position = SCNVector3(0, 15, 0)
+        directionalLightNode.eulerAngles = SCNVector3(x: -Float.pi / 3.5, y: Float.pi / 4, z: 0)
         addChildNode(directionalLightNode)
         
-        // Lumière ambiante
+        // Lumière ambiante chaleureuse
         ambientLightNode = SCNNode()
         let aLight = SCNLight()
         aLight.type = .ambient
-        aLight.intensity = 300
-        aLight.color = UIColor(white: 0.9, alpha: 1.0)
+        aLight.intensity = 600
+        aLight.color = UIColor(white: 0.95, alpha: 1.0)
         ambientLightNode.light = aLight
         addChildNode(ambientLightNode)
         
-        // Fill light (Lumière de débouchage opposée au soleil, sans ombre)
+        // Fill light (Lumière de débouchage opposée au soleil)
         fillLightNode = SCNNode()
         let fLight = SCNLight()
         fLight.type = .directional
-        fLight.intensity = 300
+        fLight.intensity = 350
         fLight.castsShadow = false
-        fLight.color = UIColor(red: 0.8, green: 0.85, blue: 1.0, alpha: 1.0) // Teinte bleutée
+        fLight.color = UIColor(red: 0.85, green: 0.90, blue: 1.0, alpha: 1.0)
         fillLightNode.light = fLight
         fillLightNode.eulerAngles = SCNVector3(x: Float.pi / 4, y: -Float.pi * 0.75, z: 0)
         addChildNode(fillLightNode)
@@ -64,6 +65,8 @@ class EnvironmentNode: SCNNode {
         let terrain = TerrainBuilder.createTerrain(width: 40.0, depth: 40.0, subdivisions: 40)
         terrain.name = "ground"
         terrainWrapper.addChildNode(terrain)
+        
+        setupOcean()
         
         // Composition and Vegetation Spawning (Clustered/Organic)
         let treeModels = ["tree_oak", "tree_pineDefaultA", "tree_default", "tree_fat"]
@@ -129,21 +132,43 @@ class EnvironmentNode: SCNNode {
         campfire.position = SCNVector3(0, TerrainBuilder.getHeight(at: 0, z: 0) + 0.05, 0)
         terrainWrapper.addChildNode(campfire)
         
-        // Point light for the campfire (orange warm light)
+        // Point light for the campfire (orange warm ambient light)
         let campLight = SCNLight()
         campLight.type = .omni
         campLight.color = UIColor(red: 1.0, green: 0.65, blue: 0.3, alpha: 1.0)
-        campLight.intensity = 250 // Réduit pour éviter la surexposition
+        campLight.intensity = 180 // Douce lueur locale
         campLight.attenuationStartDistance = 0.5
-        campLight.attenuationEndDistance = 3.5 // Réduit le rayon
-        
-        // Soft fallback for shadows to not burn
+        campLight.attenuationEndDistance = 3.2 // Rayon doux
         campLight.castsShadow = false
         
         let campLightNode = SCNNode()
         campLightNode.light = campLight
         campLightNode.position = SCNVector3(0, 0.3, 0)
         campfire.addChildNode(campLightNode)
+    }
+    
+    private func setupOcean() {
+        // Grand océan turquoise stylisé entourant l'île
+        let waterGeo = SCNCylinder(radius: 65.0, height: 0.2)
+        let waterMat = SCNMaterial()
+        waterMat.lightingModel = .physicallyBased
+        waterMat.diffuse.contents = UIColor(red: 0.12, green: 0.58, blue: 0.76, alpha: 0.90)
+        waterMat.roughness.contents = NSNumber(value: 0.10) // Surface d'eau très lisse et réfléchissante
+        waterMat.metalness.contents = NSNumber(value: 0.05)
+        waterMat.specular.contents = UIColor(white: 0.95, alpha: 1.0)
+        waterMat.isDoubleSided = false
+        waterGeo.materials = [waterMat]
+        
+        let waterNode = SCNNode(geometry: waterGeo)
+        waterNode.name = "ocean"
+        waterNode.position = SCNVector3(0, -0.32, 0)
+        terrainWrapper.addChildNode(waterNode)
+        
+        // Légère onde / respiration aquatique naturelle
+        let moveUp = SCNAction.moveBy(x: 0, y: 0.03, z: 0, duration: 3.0)
+        moveUp.timingMode = .easeInEaseOut
+        let moveDown = moveUp.reversed()
+        waterNode.runAction(SCNAction.repeatForever(SCNAction.sequence([moveUp, moveDown])))
     }
     
     func sync(with worldData: WorldData) {
@@ -299,35 +324,37 @@ class EnvironmentNode: SCNNode {
     }
     
     private func updateLightingTime(time: Float) {
-        var intensity: CGFloat = 800
-        var ambientIntensity: CGFloat = 700
+        var intensity: CGFloat = 850
+        var ambientIntensity: CGFloat = 600
         var lightColor = UIColor.white
-        var ambientColor = UIColor(red: 0.95, green: 0.95, blue: 1.0, alpha: 1.0)
+        var ambientColor = UIColor(red: 0.92, green: 0.94, blue: 0.98, alpha: 1.0)
         
         if time >= 6 && time <= 9 {
-            // Matin
+            // Matin doré et chaleureux
             let t = CGFloat((time - 6) / 3)
-            intensity = 200 + (600 * t)
-            ambientIntensity = 300 + (400 * t)
-            lightColor = UIColor(red: 1.0, green: 0.85 + 0.15*t, blue: 0.7 + 0.3*t, alpha: 1.0)
-            ambientColor = UIColor(red: 0.9 + 0.05*t, green: 0.8 + 0.15*t, blue: 0.9 + 0.1*t, alpha: 1.0)
+            intensity = 450 + (400 * t)
+            ambientIntensity = 450 + (150 * t)
+            lightColor = UIColor(red: 1.0, green: 0.90 + 0.08*t, blue: 0.78 + 0.20*t, alpha: 1.0)
+            ambientColor = UIColor(red: 0.95, green: 0.90, blue: 0.85, alpha: 1.0)
         } else if time > 9 && time <= 16 {
-            // Jour
-            intensity = 800
-            ambientIntensity = 700
+            // Jour lumineux et clair
+            intensity = 850
+            ambientIntensity = 600
+            lightColor = UIColor(red: 1.0, green: 0.98, blue: 0.95, alpha: 1.0)
+            ambientColor = UIColor(red: 0.92, green: 0.95, blue: 1.0, alpha: 1.0)
         } else if time > 16 && time <= 19 {
-            // Soir
+            // Soir / Crépuscule chaleureux
             let t = CGFloat((time - 16) / 3)
-            intensity = 800 - (600 * t)
-            ambientIntensity = 700 - (400 * t)
-            lightColor = UIColor(red: 1.0, green: 0.95 - 0.2*t, blue: 1.0 - 0.4*t, alpha: 1.0)
-            ambientColor = UIColor(red: 0.95 - 0.1*t, green: 0.95 - 0.2*t, blue: 1.0 - 0.1*t, alpha: 1.0)
+            intensity = 850 - (400 * t)
+            ambientIntensity = 600 - (180 * t)
+            lightColor = UIColor(red: 1.0, green: 0.82 - 0.20*t, blue: 0.65 - 0.25*t, alpha: 1.0)
+            ambientColor = UIColor(red: 0.95 - 0.15*t, green: 0.85 - 0.25*t, blue: 0.80 - 0.10*t, alpha: 1.0)
         } else {
-            // Nuit (douce et lisible)
+            // Nuit douce, lisible et bleutée
             intensity = 150
-            ambientIntensity = 350
-            lightColor = UIColor(red: 0.4, green: 0.5, blue: 0.9, alpha: 1.0)
-            ambientColor = UIColor(red: 0.3, green: 0.35, blue: 0.55, alpha: 1.0)
+            ambientIntensity = 380
+            lightColor = UIColor(red: 0.45, green: 0.55, blue: 0.90, alpha: 1.0)
+            ambientColor = UIColor(red: 0.25, green: 0.32, blue: 0.52, alpha: 1.0)
         }
         
         directionalLightNode.light?.intensity = intensity
@@ -337,8 +364,10 @@ class EnvironmentNode: SCNNode {
         
         if time >= 6 && time <= 19 {
             let dayProgress = (time - 6) / Float(13.0)
-            let angleX = Float.pi - (Float.pi * dayProgress)
-            directionalLightNode.eulerAngles = SCNVector3(x: -angleX, y: Float.pi/4, z: 0)
+            // Arc solaire naturel et flatteur (32° à 65° au-dessus de l'horizon)
+            let elevation = Float.pi / 5.2 + sin(dayProgress * Float.pi) * (Float.pi / 2.8)
+            let azimuth = Float.pi / 4.0 + (dayProgress - 0.5) * (Float.pi / 3.0)
+            directionalLightNode.eulerAngles = SCNVector3(x: -elevation, y: azimuth, z: 0)
         }
     }
 }

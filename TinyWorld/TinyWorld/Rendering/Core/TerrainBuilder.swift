@@ -6,50 +6,38 @@ class TerrainBuilder {
     
     static func getHeight(at px: Float, z pz: Float) -> Float {
         // Organic rolling hills
-        let h1 = sin(px * 0.2 + 1.5) * cos(pz * 0.25) * 0.8
-        let h2 = sin(px * 0.4) * sin(pz * 0.3 + 2.0) * 0.3
-        let h3 = cos(px * 0.8) * cos(pz * 0.7) * 0.1
+        let h1 = sin(px * 0.2 + 1.5) * cos(pz * 0.25) * 0.75
+        let h2 = sin(px * 0.4) * sin(pz * 0.3 + 2.0) * 0.25
+        let h3 = cos(px * 0.8) * cos(pz * 0.7) * 0.08
         
         var height = h1 + h2 + h3
         
         let dist = hypot(px, pz)
-        if dist < 6.0 {
-            height *= (dist / 6.0)
+        // Center plaza is kept relatively flat and welcoming for village life
+        if dist < 5.0 {
+            height *= max(0.25, (dist / 5.0))
         }
         
-        if dist > islandRadius - 3.0 {
-            let drop = (dist - (islandRadius - 3.0)) * 0.5
-            height -= drop * drop
+        // Gentle descent towards the shoreline and the sea
+        if dist > 12.5 {
+            let drop = (dist - 12.5) * 0.38
+            height -= drop
+        }
+        
+        // Underwater slope at the outer perimeter
+        if dist > islandRadius - 0.5 {
+            let edgeDrop = (dist - (islandRadius - 0.5)) * 1.2
+            height -= edgeDrop * edgeDrop
         }
         
         return height
-    }
-
-    static func getPathIntensity(at px: Float, z pz: Float) -> Float {
-        // Center plaza is pure dirt
-        let dist = hypot(px, pz)
-        if dist < 4.0 {
-            let fade = max(0.0, 1.0 - (dist - 2.5)/1.5)
-            return fade
-        }
-        
-        // Organic dirt patches scattered across the grass
-        let n1 = sin(px * 0.7) * cos(pz * 0.5)
-        let n2 = cos(px * 1.3 + 2.0) * sin(pz * 1.1)
-        var intensity = (n1 + n2) * 0.5
-        
-        // Only keep the peaks of the noise so we get patches of dirt
-        intensity = (intensity - 0.3) * 2.5
-        
-        return min(1.0, max(0.0, intensity))
     }
 
     static func createTerrain(width: Float, depth: Float, subdivisions: Int) -> SCNNode {
         let root = SCNNode()
         root.name = "terrain_root"
         
-        // Ensure minimum resolution for a beautiful mesh
-        let actualSubdivisions = max(subdivisions, 120)
+        let actualSubdivisions = max(subdivisions, 100)
         let size: Float = 32.0
         let dx = size / Float(actualSubdivisions)
         
@@ -60,8 +48,6 @@ class TerrainBuilder {
         var normals: [SCNVector3] = []
         var uvs: [CGPoint] = []
         var indices: [Int32] = []
-        var grassColors: [Float] = [] // RGBA
-        var dirtColors: [Float] = [] // RGBA
         
         for z in 0...actualSubdivisions {
             for x in 0...actualSubdivisions {
@@ -69,35 +55,34 @@ class TerrainBuilder {
                 let pz = offsetZ + Float(z) * dx
                 
                 let dist = hypot(px, pz)
-                if dist > islandRadius + 1.0 {
-                    vertices.append(SCNVector3(px, -10.0, pz))
-                    uvs.append(CGPoint(x: CGFloat(px), y: CGFloat(pz)))
+                if dist > islandRadius + 0.6 {
+                    // Outer points drop safely underwater
+                    vertices.append(SCNVector3(px, -2.5, pz))
+                    let u = CGFloat((px - offsetX) / size)
+                    let v = CGFloat((pz - offsetZ) / size)
+                    uvs.append(CGPoint(x: u, y: v))
                     normals.append(SCNVector3(0, 1, 0))
-                    grassColors.append(contentsOf: [1,1,1,0])
-                    dirtColors.append(contentsOf: [1,1,1,0])
                     continue
                 }
                 
                 let py = getHeight(at: px, z: pz)
                 vertices.append(SCNVector3(px, py, pz))
-                // Scale UVs so texture doesn't stretch too much
-                uvs.append(CGPoint(x: CGFloat(px * 0.5), y: CGFloat(pz * 0.5)))
                 
-                let intensity = getPathIntensity(at: px, z: pz)
+                // UVs map directly 1:1 onto our rich 2048x2048 island PBR texture
+                let u = CGFloat((px - offsetX) / size)
+                let v = CGFloat((pz - offsetZ) / size)
+                uvs.append(CGPoint(x: u, y: v))
                 
-                grassColors.append(contentsOf: [1, 1, 1, 1])
-                // Dirt color alpha blends
-                dirtColors.append(contentsOf: [1, 1, 1, intensity])
-                
-                let eps: Float = 0.1
+                // Normal calculation via finite differences
+                let eps: Float = 0.15
                 let hR = getHeight(at: px + eps, z: pz)
                 let hL = getHeight(at: px - eps, z: pz)
                 let hU = getHeight(at: px, z: pz + eps)
                 let hD = getHeight(at: px, z: pz - eps)
                 
-                let nx = hL - hR
+                let nx = (hL - hR)
                 let ny = 2.0 * eps
-                let nz = hD - hU
+                let nz = (hD - hU)
                 let len = sqrt(nx*nx + ny*ny + nz*nz)
                 
                 normals.append(SCNVector3(nx/len, ny/len, nz/len))
@@ -113,7 +98,7 @@ class TerrainBuilder {
                 
                 let px = offsetX + Float(x) * dx
                 let pz = offsetZ + Float(z) * dx
-                if hypot(px, pz) > islandRadius { continue }
+                if hypot(px, pz) > islandRadius + 0.3 { continue }
                 
                 indices.append(topLeft)
                 indices.append(bottomLeft)
@@ -128,79 +113,33 @@ class TerrainBuilder {
         let srcPos = SCNGeometrySource(vertices: vertices)
         let srcNorm = SCNGeometrySource(normals: normals)
         let srcUV = SCNGeometrySource(textureCoordinates: uvs)
-        
-        let grassColorData = Data(bytes: grassColors, count: grassColors.count * MemoryLayout<Float>.size)
-        let srcGrassColor = SCNGeometrySource(data: grassColorData, semantic: .color, vectorCount: grassColors.count / 4, usesFloatComponents: true, componentsPerVector: 4, bytesPerComponent: MemoryLayout<Float>.size, dataOffset: 0, dataStride: MemoryLayout<Float>.size * 4)
-        
-        let dirtColorData = Data(bytes: dirtColors, count: dirtColors.count * MemoryLayout<Float>.size)
-        let srcDirtColor = SCNGeometrySource(data: dirtColorData, semantic: .color, vectorCount: dirtColors.count / 4, usesFloatComponents: true, componentsPerVector: 4, bytesPerComponent: MemoryLayout<Float>.size, dataOffset: 0, dataStride: MemoryLayout<Float>.size * 4)
-        
         let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
         
-        // GRASS LAYER
-        let grassGeo = SCNGeometry(sources: [srcPos, srcNorm, srcUV, srcGrassColor], elements: [element])
-        let grassMat = SCNMaterial()
-        grassMat.lightingModel = .physicallyBased
-        grassMat.diffuse.contents = "art.scnassets/textures/leafy_grass/diffuse.jpg"
-        grassMat.normal.contents = "art.scnassets/textures/leafy_grass/normal.jpg"
-        grassMat.roughness.contents = "art.scnassets/textures/leafy_grass/roughness.jpg"
-        grassMat.diffuse.wrapS = .repeat
-        grassMat.diffuse.wrapT = .repeat
-        grassMat.normal.wrapS = .repeat
-        grassMat.normal.wrapT = .repeat
-        grassMat.roughness.wrapS = .repeat
-        grassMat.roughness.wrapT = .repeat
-        grassGeo.materials = [grassMat]
+        // UNIFIED SOLID TERRAIN (No duplicate layers, NO Z-fighting, NO angle color shifts!)
+        let terrainGeo = SCNGeometry(sources: [srcPos, srcNorm, srcUV], elements: [element])
+        let terrainMat = SCNMaterial()
+        terrainMat.lightingModel = .physicallyBased
+        terrainMat.diffuse.contents = "art.scnassets/textures/island_diffuse.jpg"
+        terrainMat.normal.contents = "art.scnassets/textures/island_normal.jpg"
+        terrainMat.roughness.contents = "art.scnassets/textures/island_roughness.jpg"
+        terrainMat.isDoubleSided = false
+        terrainGeo.materials = [terrainMat]
         
-        let grassNode = SCNNode(geometry: grassGeo)
-        grassNode.castsShadow = true
-        root.addChildNode(grassNode)
+        let terrainNode = SCNNode(geometry: terrainGeo)
+        terrainNode.castsShadow = true
+        root.addChildNode(terrainNode)
         
-        // DIRT LAYER
-        var dirtVertices = vertices
-        for i in 0..<dirtVertices.count {
-            dirtVertices[i].y += 0.005 // Minimal elevation
-        }
-        let srcDirtPos = SCNGeometrySource(vertices: dirtVertices)
-        let dirtGeo = SCNGeometry(sources: [srcDirtPos, srcNorm, srcUV, srcDirtColor], elements: [element])
-        let dirtMat = SCNMaterial()
-        dirtMat.lightingModel = .physicallyBased
-        dirtMat.diffuse.contents = "art.scnassets/textures/dirt/diffuse.jpg"
-        dirtMat.normal.contents = "art.scnassets/textures/dirt/normal.jpg"
-        dirtMat.roughness.contents = "art.scnassets/textures/dirt/roughness.jpg"
-        dirtMat.diffuse.wrapS = .repeat
-        dirtMat.diffuse.wrapT = .repeat
-        dirtMat.normal.wrapS = .repeat
-        dirtMat.normal.wrapT = .repeat
-        dirtMat.roughness.wrapS = .repeat
-        dirtMat.roughness.wrapT = .repeat
-        dirtMat.isDoubleSided = false
-        dirtMat.blendMode = .alpha
-        dirtMat.writesToDepthBuffer = false // PREVENT Z-FIGHTING (Fix "deux grandes zones de couleurs")
-        dirtGeo.materials = [dirtMat]
-        
-        let dirtNode = SCNNode(geometry: dirtGeo)
-        dirtNode.castsShadow = false
-        dirtNode.renderingOrder = 10 // Render after grass
-        root.addChildNode(dirtNode)
-        
-        // Base of the island (dirt cylinder)
-        let baseGeo = SCNCylinder(radius: CGFloat(islandRadius - 0.5), height: 4.0)
+        // Underwater Cliff Base (Sitting safely underwater beneath y = -0.35)
+        let baseGeo = SCNCylinder(radius: CGFloat(islandRadius - 0.2), height: 3.0)
         let baseMat = SCNMaterial()
         baseMat.lightingModel = .physicallyBased
-        baseMat.diffuse.contents = "art.scnassets/textures/dirt/diffuse.jpg"
-        baseMat.normal.contents = "art.scnassets/textures/dirt/normal.jpg"
-        baseMat.roughness.contents = "art.scnassets/textures/dirt/roughness.jpg"
-        baseMat.diffuse.wrapS = .repeat
-        baseMat.diffuse.wrapT = .repeat
-        // Tiling adjustments for base cylinder
-        baseMat.diffuse.contentsTransform = SCNMatrix4MakeScale(8, 2, 1)
+        baseMat.diffuse.contents = UIColor(red: 0.35, green: 0.30, blue: 0.25, alpha: 1.0)
+        baseMat.roughness.contents = NSNumber(value: 0.9)
         baseGeo.materials = [baseMat]
         let baseNode = SCNNode(geometry: baseGeo)
-        baseNode.position = SCNVector3(0, -2.0 - 0.5, 0)
+        baseNode.position = SCNVector3(0, -1.8, 0)
         root.addChildNode(baseNode)
         
         return root
     }
 }
-

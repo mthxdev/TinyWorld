@@ -17,10 +17,10 @@ class GameScene: SCNScene {
         self.environmentNode = EnvironmentNode()
         self.rootNode.addChildNode(environmentNode)
         
-        // Configuration de la brume pour la profondeur
-        self.fogStartDistance = 20.0
-        self.fogEndDistance = 45.0
-        self.fogDensityExponent = 1.5
+        // Configuration de la brume lointaine (horizon uniquement, ne décolore JAMAIS l'île!)
+        self.fogStartDistance = 55.0
+        self.fogEndDistance = 90.0
+        self.fogDensityExponent = 1.0
         
         // Environnement HDRI pour le rendu PBR (Reflets et lumière ambiante réalistes)
         self.lightingEnvironment.contents = "art.scnassets/textures/sky.exr"
@@ -37,25 +37,25 @@ class GameScene: SCNScene {
         let time = worldData.timeOfDay
         var targetColor = UIColor.black
         
-        if time >= 6 && time < 9 { // Aube -> Jour
+        if time >= 6 && time < 9 { // Aube -> Jour (Chaud et doré, pas beige terne)
             let t = CGFloat((time - 6) / 3)
-            let dawn = UIColor(red: 0.85, green: 0.65, blue: 0.5, alpha: 1.0)
-            let day = UIColor(red: 0.45, green: 0.75, blue: 0.95, alpha: 1.0)
+            let dawn = UIColor(red: 0.95, green: 0.80, blue: 0.65, alpha: 1.0)
+            let day = UIColor(red: 0.42, green: 0.72, blue: 0.94, alpha: 1.0)
             targetColor = interpolateColor(from: dawn, to: day, progress: t)
-        } else if time >= 9 && time < 16 { // Jour
-            targetColor = UIColor(red: 0.45, green: 0.75, blue: 0.95, alpha: 1.0)
+        } else if time >= 9 && time < 16 { // Jour (Ciel d'azur stylisé limpide)
+            targetColor = UIColor(red: 0.42, green: 0.72, blue: 0.94, alpha: 1.0)
         } else if time >= 16 && time < 19 { // Jour -> Crepuscule
             let t = CGFloat((time - 16) / 3)
-            let day = UIColor(red: 0.45, green: 0.75, blue: 0.95, alpha: 1.0)
-            let dusk = UIColor(red: 0.8, green: 0.45, blue: 0.3, alpha: 1.0)
+            let day = UIColor(red: 0.42, green: 0.72, blue: 0.94, alpha: 1.0)
+            let dusk = UIColor(red: 0.90, green: 0.54, blue: 0.40, alpha: 1.0)
             targetColor = interpolateColor(from: day, to: dusk, progress: t)
         } else if time >= 19 && time < 21 { // Crepuscule -> Nuit
             let t = CGFloat((time - 19) / 2)
-            let dusk = UIColor(red: 0.8, green: 0.45, blue: 0.3, alpha: 1.0)
-            let night = UIColor(red: 0.1, green: 0.15, blue: 0.25, alpha: 1.0)
+            let dusk = UIColor(red: 0.90, green: 0.54, blue: 0.40, alpha: 1.0)
+            let night = UIColor(red: 0.06, green: 0.10, blue: 0.22, alpha: 1.0)
             targetColor = interpolateColor(from: dusk, to: night, progress: t)
-        } else { // Nuit
-            targetColor = UIColor(red: 0.1, green: 0.15, blue: 0.25, alpha: 1.0)
+        } else { // Nuit (Bleu nuit profond et doux)
+            targetColor = UIColor(red: 0.06, green: 0.10, blue: 0.22, alpha: 1.0)
         }
         
         if let currentColor = self.background.contents as? UIColor {
