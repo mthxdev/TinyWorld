@@ -3,6 +3,15 @@ import math
 import numpy as np
 from PIL import Image
 
+def organic_noise(size, cells, seed):
+    """Create a deterministic, softly varying field without directional bands."""
+    rng = np.random.default_rng(seed)
+    low_size = max(2, cells + 1)
+    low = rng.random((low_size, low_size), dtype=np.float32)
+    field = Image.fromarray(np.clip(low * 255.0, 0, 255).astype(np.uint8))
+    field = field.resize((size, size), Image.Resampling.BICUBIC)
+    return np.asarray(field, dtype=np.float32) / 255.0
+
 def generate_textures():
     size = 2048
     print(f"Generating {size}x{size} island textures...")
@@ -67,10 +76,10 @@ def generate_textures():
         path_mask = np.maximum(path_mask, zone_clearing)
 
     total_dirt_mask = np.maximum(plaza_mask, path_mask)
-    # Add soft organic fractal break-up to the dirt mask edges
-    noise_freq1 = np.sin(x * 3.5) * np.cos(z * 3.5) * 0.1
-    noise_freq2 = np.sin(x * 7.0 + 1.2) * np.cos(z * 7.0 + 0.8) * 0.05
-    total_dirt_mask = np.clip(total_dirt_mask + noise_freq1 + noise_freq2, 0.0, 1.0)
+    # Add a soft, irregular breakup to dirt edges without directional repetition.
+    edge_variation = organic_noise(size, cells=48, seed=4401)
+    edge_variation = (edge_variation - 0.5) * 0.18
+    total_dirt_mask = np.clip(total_dirt_mask + edge_variation, 0.0, 1.0)
 
     # 3. Shoreline Mask
     # Transition to beach sand from radius 13.0 to 15.8
@@ -92,11 +101,12 @@ def generate_textures():
     for c in range(3):
         grass_color[:, :, c] = grass_shaded[c] * (1.0 - h_weight) + grass_sunlit[c] * h_weight
 
-    # Add procedural grass micro-pattern (clover tufts & stylized color patches)
-    tuft_pat = (np.sin(x * 12.0) * np.cos(z * 12.0) +
-                np.sin(x * 24.0 + 1.5) * np.sin(z * 24.0 + 2.1) * 0.5)
+    # Add broad, irregular grass variation. Independent fields avoid a visible grid
+    # and keep the albedo pattern separate from the normal-map relief.
+    grass_variation = organic_noise(size, cells=28, seed=1401)
+    grass_variation = (grass_variation - 0.5) * 2.0
     for c in range(3):
-        grass_color[:, :, c] += tuft_pat * 8.0
+        grass_color[:, :, c] += grass_variation * 7.0
 
     # 5. Warm Golden Earth & Dirt Path Palette
     # Base earth: #C89965 (200, 153, 101)
@@ -104,7 +114,7 @@ def generate_textures():
     # Warm gravel accents: #B07E4C (176, 126, 76)
     dirt_base = np.array([205.0, 160.0, 108.0], dtype=np.float32)
     dirt_light = np.array([226.0, 185.0, 135.0], dtype=np.float32)
-    dirt_gravel = (np.sin(x * 30.0) * np.cos(z * 30.0) * 0.5 + 0.5)
+    dirt_gravel = organic_noise(size, cells=64, seed=2401)
 
     dirt_color = np.zeros((size, size, 3), dtype=np.float32)
     for c in range(3):
@@ -137,9 +147,11 @@ def generate_textures():
 
     final_diffuse = np.clip(final_diffuse, 0.0, 255.0).astype(np.uint8)
 
-    # 8. Generate Crisp Stylized Normal Map
-    # Sobel / finite difference on height and micro-texture
-    micro_relief = (grass_color[:, :, 1] / 255.0) * (1.0 - total_dirt_mask) * 0.4
+    # 8. Generate a soft normal map from terrain height and an independent,
+    # low-frequency relief field. It must not repeat the albedo pattern.
+    relief_variation = organic_noise(size, cells=16, seed=3401)
+    relief_variation = (relief_variation - 0.5) * 0.08
+    micro_relief = relief_variation * (1.0 - total_dirt_mask)
     total_surface = height * 0.2 + micro_relief
     
     # Calculate gradients
@@ -171,9 +183,17 @@ def generate_textures():
     out_dir = "TinyWorld/TinyWorld/art.scnassets/textures"
     os.makedirs(out_dir, exist_ok=True)
 
-    Image.fromarray(final_diffuse).save(os.path.join(out_dir, "island_diffuse.jpg"), quality=95)
-    Image.fromarray(normal_map).save(os.path.join(out_dir, "island_normal.jpg"), quality=95)
-    Image.fromarray(roughness_map).save(os.path.join(out_dir, "island_roughness.jpg"), quality=95)
+    # Keep the existing JPG names because TerrainBuilder references them directly.
+    # High quality minimizes compression artifacts without changing the runtime paths.
+    Image.fromarray(final_diffuse).save(
+        os.path.join(out_dir, "island_diffuse.jpg"), quality=100, subsampling=0
+    )
+    Image.fromarray(normal_map).save(
+        os.path.join(out_dir, "island_normal.jpg"), quality=100, subsampling=0
+    )
+    Image.fromarray(roughness_map).save(
+        os.path.join(out_dir, "island_roughness.jpg"), quality=100, subsampling=0
+    )
 
     print("Successfully generated island_diffuse.jpg, island_normal.jpg, island_roughness.jpg!")
 
