@@ -16,14 +16,16 @@ class CameraController {
         
         // Caméra inclinée attachée au pivot
         camera = SCNCamera()
-        camera.zNear = 1.0
-        camera.zFar = 120.0
-        camera.fieldOfView = 48.0 // Cadrage équilibré pour que l'île remplisse bien l'écran
+        camera.zNear = 0.5
+        camera.zFar = 150.0
+        camera.fieldOfView = 50.0 // Slightly wider for better island view
+        camera.wantsHDR = true // Enable HDR for better lighting
+        camera.exposureOffset = 0.3 // Slight exposure boost for stylized look
         cameraNode = SCNNode()
         cameraNode.camera = camera
         
         // Inclinaison de ~41 degrés, distance optimisée pour admirer les habitants et bâtiments
-        cameraNode.position = SCNVector3(x: 0, y: 15.0, z: 16.5)
+        cameraNode.position = SCNVector3(x: 0, y: 14.0, z: 15.5)
         cameraNode.eulerAngles = SCNVector3(x: -Float.pi / 4.4, y: 0, z: 0)
         pivotNode.addChildNode(cameraNode)
     }
@@ -32,19 +34,19 @@ class CameraController {
         let translation = gesture.translation(in: gesture.view)
         
         // On translate le pivot sur le sol (X et Z)
-        let panSpeed: Float = 0.04
+        let panSpeed: Float = 0.035
         pivotNode.position.x -= Float(translation.x) * panSpeed
         pivotNode.position.z -= Float(translation.y) * panSpeed
         
         // Garder l'île toujours dans le champ de vision
-        pivotNode.position.x = max(-16.0, min(16.0, pivotNode.position.x))
-        pivotNode.position.z = max(-16.0, min(16.0, pivotNode.position.z))
+        pivotNode.position.x = max(-18.0, min(18.0, pivotNode.position.x))
+        pivotNode.position.z = max(-18.0, min(18.0, pivotNode.position.z))
         
         gesture.setTranslation(.zero, in: gesture.view)
     }
     
     @objc func handlePinch(_ gesture: UIPinchGestureRecognizer) {
-        let zoomSpeed: Float = 2.0
+        let zoomSpeed: Float = 1.8
         if gesture.state == .changed {
             let scale = Float(gesture.scale)
             var fov = camera.fieldOfView
@@ -56,8 +58,8 @@ class CameraController {
                 fov += CGFloat(zoomSpeed)
             }
             
-            // Limites du zoom : gros plan intimiste (24°) jusqu'à vue d'ensemble de l'île (72°)
-            fov = max(24, min(fov, 72))
+            // Limites du zoom : gros plan intimiste (22°) jusqu'à vue d'ensemble de l'île (75°)
+            fov = max(22, min(fov, 75))
             camera.fieldOfView = fov
             
             gesture.scale = 1.0

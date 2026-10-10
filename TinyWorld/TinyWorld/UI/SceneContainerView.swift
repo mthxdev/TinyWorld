@@ -58,13 +58,16 @@ struct SceneContainerView: UIViewRepresentable {
         Coordinator(engine: engine, scene: scene)
     }
     
-    func makeUIView(context: Context) -> SCNView {
+func makeUIView(context: Context) -> SCNView {
         let view = SCNView()
         view.scene = scene
         view.allowsCameraControl = false
         view.showsStatistics = false
         view.backgroundColor = UIColor(white: 0.1, alpha: 1.0)
         view.antialiasingMode = .multisampling4X
+        view.preferredFramesPerSecond = 60
+        // Enable better rendering
+        view.rendersContinuously = true
         
         setupGestures(in: view, context: context)
         return view

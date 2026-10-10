@@ -27,30 +27,30 @@ class EnvironmentNode: SCNNode {
         dLight.castsShadow = true
         dLight.shadowMode = .forward
         dLight.shadowSampleCount = 8
-        dLight.shadowRadius = 6.0 // Flou naturel
-        dLight.shadowColor = UIColor.black.withAlphaComponent(0.20) // Ombres douces et lisibles
+        dLight.shadowRadius = 8.0 // Softer, more natural shadows
+        dLight.shadowColor = UIColor.black.withAlphaComponent(0.25) // Slightly stronger but natural
         dLight.orthographicScale = 45.0 // Couvre l'ensemble de l'île (32m) sans coupure d'ombre
         dLight.shadowMapSize = CGSize(width: 2048, height: 2048)
-        dLight.intensity = 520
+        dLight.intensity = 380 // Reduced from 520 to prevent overexposure
         directionalLightNode.light = dLight
         directionalLightNode.position = SCNVector3(0, 15, 0)
         directionalLightNode.eulerAngles = SCNVector3(x: -Float.pi / 3.5, y: Float.pi / 4, z: 0)
         addChildNode(directionalLightNode)
         
-        // Lumière ambiante chaleureuse
+        // Lumière ambiante chaleureuse - reduced intensity
         ambientLightNode = SCNNode()
         let aLight = SCNLight()
         aLight.type = .ambient
-        aLight.intensity = 300
-        aLight.color = UIColor(white: 0.95, alpha: 1.0)
+        aLight.intensity = 180 // Reduced from 300
+        aLight.color = UIColor(red: 0.98, green: 0.95, blue: 0.90, alpha: 1.0) // Warmer
         ambientLightNode.light = aLight
         addChildNode(ambientLightNode)
         
-        // Fill light (Lumière de débouchage opposée au soleil)
+        // Fill light (Lumière de débouchage opposée au soleil) - reduced
         fillLightNode = SCNNode()
         let fLight = SCNLight()
         fLight.type = .directional
-        fLight.intensity = 120
+        fLight.intensity = 60 // Reduced from 120
         fLight.castsShadow = false
         fLight.color = UIColor(red: 0.85, green: 0.90, blue: 1.0, alpha: 1.0)
         fillLightNode.light = fLight
@@ -69,10 +69,11 @@ class EnvironmentNode: SCNNode {
         setupOcean()
         
         // Composition and Vegetation Spawning (Clustered/Organic)
-        let treeModels = ["tree_oak", "tree_pineDefaultA", "tree_default", "tree_fat"]
-        let rockModels = ["rock_largeA", "rock_smallA", "stone_smallA", "stone_largeA"]
-        let plantModels = ["plant_bushDetailed", "plant_bushLarge", "plant_bushSmall", "flower_purpleA", "flower_redA", "flower_yellowA", "mushroom_red", "mushroom_tan"]
-        let propModels = ["log", "stump_old", "grass_leafs"]
+        // Using more varied tree models from the nature pack
+        let treeModels = ["tree_oak", "tree_pineDefaultA", "tree_default", "tree_fat", "tree_pineRoundA", "tree_pineRoundB", "tree_cone", "tree_plateau", "tree_thin", "tree_detailed"]
+        let rockModels = ["rock_largeA", "rock_largeB", "rock_largeC", "rock_largeD", "rock_largeE", "rock_largeF", "rock_tallA", "rock_tallB", "rock_smallA", "rock_smallB", "rock_smallC", "rock_smallD", "rock_smallE", "rock_smallF", "stone_largeA", "stone_largeB", "stone_largeC", "stone_smallA", "stone_smallB"]
+        let plantModels = ["plant_bushDetailed", "plant_bushLarge", "plant_bushSmall", "plant_bushTriangle", "plant_flatShort", "plant_flatTall", "flower_purpleA", "flower_redA", "flower_yellowA", "mushroom_red", "mushroom_tan", "grass_leafs"]
+        let propModels = ["log", "stump_old", "stump_round", "stump_roundDetailed", "stump_square", "stump_squareDetailed"]
         
         // Helper to spawn items
         func spawnItem(models: [String], folder: String, x: Float, z: Float, sMin: Float, sMax: Float) {
@@ -87,44 +88,50 @@ class EnvironmentNode: SCNNode {
             terrainWrapper.addChildNode(node)
         }
         
-        // Create 5-8 "Groves" or clumps of nature
-        let numGroves = Int.random(in: 5...8)
+        // Create 6-10 "Groves" or clumps of nature - more for richer environment
+        let numGroves = Int.random(in: 6...10)
         for _ in 0..<numGroves {
             let cx = Float.random(in: -14...14)
             let cz = Float.random(in: -14...14)
             if hypot(cx, cz) < 6.0 { continue } // Avoid center plaza
             
-            // Trees in this grove
-            for _ in 0...Int.random(in: 3...7) {
-                let ox = Float.random(in: -3...3)
-                let oz = Float.random(in: -3...3)
-                spawnItem(models: treeModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: 1.0, sMax: 1.6)
+            // Trees in this grove - varied sizes and types
+            let treeCount = Int.random(in: 4...9)
+            for _ in 0..<treeCount {
+                let ox = Float.random(in: -3.5...3.5)
+                let oz = Float.random(in: -3.5...3.5)
+                spawnItem(models: treeModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: 0.9, sMax: 1.7)
             }
-            // Rocks around the grove
-            for _ in 0...Int.random(in: 1...4) {
-                let ox = Float.random(in: -2...2)
-                let oz = Float.random(in: -2...2)
-                spawnItem(models: rockModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: 0.6, sMax: 1.2)
+            // Rocks around the grove - more variety
+            let rockCount = Int.random(in: 2...6)
+            for _ in 0..<rockCount {
+                let ox = Float.random(in: -2.5...2.5)
+                let oz = Float.random(in: -2.5...2.5)
+                spawnItem(models: rockModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: 0.5, sMax: 1.3)
             }
-            // Plants and flowers
-            for _ in 0...Int.random(in: 5...12) {
-                let ox = Float.random(in: -4...4)
-                let oz = Float.random(in: -4...4)
-                spawnItem(models: plantModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: 0.8, sMax: 1.4)
+            // Plants and flowers - denser
+            let plantCount = Int.random(in: 8...18)
+            for _ in 0..<plantCount {
+                let ox = Float.random(in: -4.5...4.5)
+                let oz = Float.random(in: -4.5...4.5)
+                spawnItem(models: plantModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: 0.7, sMax: 1.5)
             }
-            // Props (logs, stumps)
-            if Float.random(in: 0...1) > 0.5 {
-                let ox = Float.random(in: -2...2)
-                let oz = Float.random(in: -2...2)
-                spawnItem(models: propModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: 0.8, sMax: 1.2)
+            // Props (logs, stumps) - more frequent
+            if Float.random(in: 0...1) > 0.4 {
+                let propCount = Int.random(in: 1...3)
+                for _ in 0..<propCount {
+                    let ox = Float.random(in: -2...2)
+                    let oz = Float.random(in: -2...2)
+                    spawnItem(models: propModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: 0.7, sMax: 1.3)
+                }
             }
         }
         
-        // Light global scatter for a few isolated elements
-        for _ in 0...15 {
-            spawnItem(models: treeModels, folder: "nature", x: Float.random(in: -16...16), z: Float.random(in: -16...16), sMin: 0.8, sMax: 1.4)
-            spawnItem(models: rockModels, folder: "nature", x: Float.random(in: -16...16), z: Float.random(in: -16...16), sMin: 0.5, sMax: 1.0)
-            spawnItem(models: plantModels, folder: "nature", x: Float.random(in: -16...16), z: Float.random(in: -16...16), sMin: 0.8, sMax: 1.2)
+        // Light global scatter for isolated elements - more for natural feel
+        for _ in 0...25 {
+            spawnItem(models: treeModels, folder: "nature", x: Float.random(in: -16...16), z: Float.random(in: -16...16), sMin: 0.7, sMax: 1.5)
+            spawnItem(models: rockModels, folder: "nature", x: Float.random(in: -16...16), z: Float.random(in: -16...16), sMin: 0.4, sMax: 1.1)
+            spawnItem(models: plantModels, folder: "nature", x: Float.random(in: -16...16), z: Float.random(in: -16...16), sMin: 0.6, sMax: 1.3)
         }
         
         // Cozy campfire in the center
@@ -136,7 +143,7 @@ class EnvironmentNode: SCNNode {
         let campLight = SCNLight()
         campLight.type = .omni
         campLight.color = UIColor(red: 1.0, green: 0.65, blue: 0.3, alpha: 1.0)
-        campLight.intensity = 70 // Douce lueur locale
+        campLight.intensity = 40 // Reduced from 70 to match new lighting balance
         campLight.attenuationStartDistance = 0.5
         campLight.attenuationEndDistance = 3.2 // Rayon doux
         campLight.castsShadow = false
@@ -153,14 +160,17 @@ class EnvironmentNode: SCNNode {
         let waterGeo = SCNPlane(width: 130.0, height: 130.0)
         let waterMat = SCNMaterial()
         waterMat.lightingModel = .physicallyBased
-        waterMat.diffuse.contents = UIColor(red: 0.10, green: 0.48, blue: 0.66, alpha: 1.0)
-        waterMat.roughness.contents = NSNumber(value: 0.22) // Reflets doux, sans scintillement excessif
-        waterMat.metalness.contents = NSNumber(value: 0.05)
-        waterMat.specular.contents = UIColor(white: 0.75, alpha: 1.0)
-        waterMat.transparency = 1.0
+        // Base water color - deeper blue-green for stylized look
+        waterMat.diffuse.contents = UIColor(red: 0.08, green: 0.35, blue: 0.55, alpha: 1.0)
+        waterMat.roughness.contents = NSNumber(value: 0.1) // Very smooth for nice reflections
+        waterMat.metalness.contents = NSNumber(value: 0.98) // High metalness for water-like reflection
+        waterMat.specular.contents = UIColor(white: 0.9, alpha: 1.0)
+        // Semi-transparent to see underwater base slightly, but mostly reflective
+        waterMat.transparency = 0.85
+        waterMat.transparencyMode = .aOne
         waterMat.writesToDepthBuffer = true
         waterMat.readsFromDepthBuffer = true
-        waterMat.isDoubleSided = false
+        waterMat.isDoubleSided = true // Allow viewing from below
         waterMat.diffuse.magnificationFilter = .linear
         waterMat.diffuse.minificationFilter = .linear
         waterGeo.materials = [waterMat]
@@ -335,35 +345,35 @@ class EnvironmentNode: SCNNode {
     }
     
     private func updateLightingTime(time: Float) {
-        var intensity: CGFloat = 520
-        var ambientIntensity: CGFloat = 300
+        var intensity: CGFloat = 380
+        var ambientIntensity: CGFloat = 180
         var lightColor = UIColor.white
-        var ambientColor = UIColor(red: 0.92, green: 0.94, blue: 0.98, alpha: 1.0)
+        var ambientColor = UIColor(red: 0.98, green: 0.95, blue: 0.90, alpha: 1.0)
         
         if time >= 6 && time <= 9 {
             // Matin doré et chaleureux
             let t = CGFloat((time - 6) / 3)
-            intensity = 340 + (180 * t)
-            ambientIntensity = 240 + (60 * t)
+            intensity = 250 + (130 * t)
+            ambientIntensity = 140 + (40 * t)
             lightColor = UIColor(red: 1.0, green: 0.90 + 0.08*t, blue: 0.78 + 0.20*t, alpha: 1.0)
-            ambientColor = UIColor(red: 0.95, green: 0.90, blue: 0.85, alpha: 1.0)
+            ambientColor = UIColor(red: 0.98, green: 0.93, blue: 0.88, alpha: 1.0)
         } else if time > 9 && time <= 16 {
             // Jour lumineux et clair
-            intensity = 520
-            ambientIntensity = 300
+            intensity = 380
+            ambientIntensity = 180
             lightColor = UIColor(red: 1.0, green: 0.98, blue: 0.95, alpha: 1.0)
-            ambientColor = UIColor(red: 0.92, green: 0.95, blue: 1.0, alpha: 1.0)
+            ambientColor = UIColor(red: 0.98, green: 0.95, blue: 0.90, alpha: 1.0)
         } else if time > 16 && time <= 19 {
             // Soir / Crépuscule chaleureux
             let t = CGFloat((time - 16) / 3)
-            intensity = 520 - (260 * t)
-            ambientIntensity = 300 - (90 * t)
+            intensity = 380 - (190 * t)
+            ambientIntensity = 180 - (50 * t)
             lightColor = UIColor(red: 1.0, green: 0.82 - 0.20*t, blue: 0.65 - 0.25*t, alpha: 1.0)
-            ambientColor = UIColor(red: 0.95 - 0.15*t, green: 0.85 - 0.25*t, blue: 0.80 - 0.10*t, alpha: 1.0)
+            ambientColor = UIColor(red: 0.98 - 0.15*t, green: 0.90 - 0.25*t, blue: 0.85 - 0.10*t, alpha: 1.0)
         } else {
             // Nuit douce, lisible et bleutée
-            intensity = 110
-            ambientIntensity = 220
+            intensity = 80
+            ambientIntensity = 120
             lightColor = UIColor(red: 0.45, green: 0.55, blue: 0.90, alpha: 1.0)
             ambientColor = UIColor(red: 0.25, green: 0.32, blue: 0.52, alpha: 1.0)
         }

@@ -122,12 +122,19 @@ class TerrainBuilder {
         terrainMat.diffuse.contents = "art.scnassets/textures/island_diffuse.jpg"
         terrainMat.normal.contents = "art.scnassets/textures/island_normal.png"
         terrainMat.roughness.contents = "art.scnassets/textures/island_roughness.png"
+        // Better PBR settings for stylized terrain
+        terrainMat.metalness.contents = NSNumber(value: 0.0)
+        terrainMat.roughness.intensity = 0.85
+        terrainMat.normal.intensity = 0.7 // Reduce normal map intensity to avoid artificial bumps
         terrainMat.diffuse.magnificationFilter = .linear
         terrainMat.diffuse.minificationFilter = .linear
+        terrainMat.diffuse.mipFilter = .linear
         terrainMat.normal.magnificationFilter = .linear
         terrainMat.normal.minificationFilter = .linear
+        terrainMat.normal.mipFilter = .linear
         terrainMat.roughness.magnificationFilter = .linear
         terrainMat.roughness.minificationFilter = .linear
+        terrainMat.roughness.mipFilter = .linear
         terrainMat.isDoubleSided = false
         terrainGeo.materials = [terrainMat]
         
@@ -135,19 +142,23 @@ class TerrainBuilder {
         terrainNode.castsShadow = true
         root.addChildNode(terrainNode)
         
-        // Underwater rock base: tapered and fully below the opaque water surface.
+        // Underwater rock base: fully submerged below water surface.
+        // Water level is at y = -0.32, so base must stay below that.
         let baseGeo = SCNCone(
             topRadius: CGFloat(islandRadius - 1.2),
             bottomRadius: CGFloat(islandRadius - 0.2),
-            height: 3.0
+            height: 1.5
         )
         let baseMat = SCNMaterial()
         baseMat.lightingModel = .physicallyBased
-        baseMat.diffuse.contents = UIColor(red: 0.35, green: 0.30, blue: 0.25, alpha: 1.0)
-        baseMat.roughness.contents = NSNumber(value: 0.9)
+        // Darker, cooler underwater rock color - less brown, more slate/grey
+        baseMat.diffuse.contents = UIColor(red: 0.18, green: 0.22, blue: 0.26, alpha: 1.0)
+        baseMat.roughness.contents = NSNumber(value: 0.95)
+        baseMat.metalness.contents = NSNumber(value: 0.0)
         baseGeo.materials = [baseMat]
         let baseNode = SCNNode(geometry: baseGeo)
-        baseNode.position = SCNVector3(0, -1.85, 0)
+        // Position so top of cone is at y = -0.8 (well below water at -0.32)
+        baseNode.position = SCNVector3(0, -1.55, 0)
         root.addChildNode(baseNode)
         
         return root

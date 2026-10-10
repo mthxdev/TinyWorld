@@ -6,7 +6,7 @@ class GameScene: SCNScene {
     private var environmentNode: EnvironmentNode!
     private var inhabitantNodes: [UUID: InhabitantNode] = [:]
     
-    override init() {
+override init() {
         self.cameraController = CameraController(scene: SCNScene()) // sera reaffecte
         super.init()
         
@@ -18,15 +18,18 @@ class GameScene: SCNScene {
         self.rootNode.addChildNode(environmentNode)
         
         // Configuration de la brume lointaine (horizon uniquement, ne décolore JAMAIS l'île!)
-        self.fogStartDistance = 55.0
-        self.fogEndDistance = 90.0
-        self.fogDensityExponent = 1.0
+        self.fogStartDistance = 60.0
+        self.fogEndDistance = 100.0
+        self.fogDensityExponent = 1.2
+        
+        // Enable HDR for better PBR rendering
+        self.background.contents = UIColor(red: 0.42, green: 0.72, blue: 0.94, alpha: 1.0)
         
         // Environnement HDRI pour le rendu PBR (Reflets et lumière ambiante réalistes)
         self.lightingEnvironment.contents = "art.scnassets/textures/sky.exr"
         // L'HDRI reste utile aux reflets PBR, mais ne doit pas blanchir le centre
         // lorsqu'il se cumule avec les lumières de l'environnement.
-        self.lightingEnvironment.intensity = 0.55
+        self.lightingEnvironment.intensity = 0.35
     }
     
     required init?(coder: NSCoder) {
@@ -70,15 +73,15 @@ class GameScene: SCNScene {
         }
         
         // Ajuster l'intensité de l'HDRI selon l'heure
-        var envIntensity: CGFloat = 0.55
+        var envIntensity: CGFloat = 0.35
         if time >= 6 && time < 9 {
-            envIntensity = 0.22 + 0.33 * CGFloat((time - 6) / 3)
+            envIntensity = 0.15 + 0.2 * CGFloat((time - 6) / 3)
         } else if time >= 9 && time < 16 {
-            envIntensity = 0.55
+            envIntensity = 0.35
         } else if time >= 16 && time < 19 {
-            envIntensity = 0.55 - 0.38 * CGFloat((time - 16) / 3)
+            envIntensity = 0.35 - 0.25 * CGFloat((time - 16) / 3)
         } else {
-            envIntensity = 0.08 // Nuit très douce
+            envIntensity = 0.05 // Nuit très douce
         }
         self.lightingEnvironment.intensity = envIntensity
         
