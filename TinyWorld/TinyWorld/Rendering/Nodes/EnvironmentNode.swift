@@ -542,7 +542,8 @@ private func createBuiltZoneNode(zone: Zone) -> SCNNode {
         var building: SCNNode?
         
         // Use zone ID and type for deterministic but varied building selection
-        let variantSeed = zone.id * 1000 + zone.type.rawValue * 100
+        let typeHash = zone.type == .home ? 0 : zone.type == .work ? 1 : zone.type == .food ? 2 : zone.type == .farm ? 3 : zone.type == .forest ? 4 : 5
+        let variantSeed = zone.id * 1000 + typeHash * 100
         
         switch zone.type {
         case .home:
