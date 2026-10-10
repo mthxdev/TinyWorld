@@ -95,14 +95,55 @@ class AssetManager {
                             }
                         } else if folder == "suburban" {
                             // Buildings and suburban props: matte, slightly colorful
-                            mat.roughness.contents = NSNumber(value: 0.8)
-                            mat.metalness.contents = NSNumber(value: 0.0)
+                            mat.roughness.contents = NSNumber(value: 0.78)
+                            mat.metalness.contents = NSNumber(value: 0.02)
                             
                             // Boost color vibrancy slightly for stylized look
                             if let color = mat.diffuse.contents as? UIColor {
                                 var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
                                 if color.getHue(&h, saturation: &s, brightness: &b, alpha: &a) {
-                                    mat.diffuse.contents = UIColor(hue: h, saturation: min(1.0, s * 1.15), brightness: min(1.0, b * 1.08), alpha: a)
+                                    mat.diffuse.contents = UIColor(hue: h, saturation: min(1.0, s * 1.12), brightness: min(1.0, b * 1.06), alpha: a)
+                                }
+                            }
+                            
+                            // Differentiate roof vs walls vs details by material name
+                            let matName = mat.name?.lowercased() ?? ""
+                            if matName.contains("roof") || matName.contains("tuile") || matName.contains("tile") {
+                                // Roofs: slightly rougher, warmer
+                                mat.roughness.contents = NSNumber(value: 0.85)
+                                if let color = mat.diffuse.contents as? UIColor {
+                                    var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+                                    if color.getHue(&h, saturation: &s, brightness: &b, alpha: &a) {
+                                        // Shift roof hue toward terracotta/brown
+                                        mat.diffuse.contents = UIColor(hue: 0.06, saturation: min(1.0, s * 1.2), brightness: min(1.0, b * 0.9), alpha: a)
+                                    }
+                                }
+                            } else if matName.contains("wall") || matName.contains("facade") || matName.contains("exterior") {
+                                // Walls: cleaner, slightly smoother
+                                mat.roughness.contents = NSNumber(value: 0.72)
+                            } else if matName.contains("window") || matName.contains("glass") || matName.contains("vitrage") {
+                                // Windows: reflective, smooth
+                                mat.roughness.contents = NSNumber(value: 0.1)
+                                mat.metalness.contents = NSNumber(value: 0.9)
+                                mat.transparency = 0.3
+                                mat.transparencyMode = .aOne
+                            } else if matName.contains("door") || matName.contains("porte") {
+                                // Doors: warm wood
+                                mat.roughness.contents = NSNumber(value: 0.75)
+                                if let color = mat.diffuse.contents as? UIColor {
+                                    var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+                                    if color.getHue(&h, saturation: &s, brightness: &b, alpha: &a) {
+                                        mat.diffuse.contents = UIColor(hue: 0.08, saturation: min(1.0, s * 1.3), brightness: min(1.0, b * 0.85), alpha: a)
+                                    }
+                                }
+                            } else if matName.contains("trim") || matName.contains("frame") || matName.contains("corner") {
+                                // Trim/frames: slightly lighter
+                                mat.roughness.contents = NSNumber(value: 0.8)
+                                if let color = mat.diffuse.contents as? UIColor {
+                                    var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+                                    if color.getHue(&h, saturation: &s, brightness: &b, alpha: &a) {
+                                        mat.diffuse.contents = UIColor(hue: h, saturation: max(0.0, s * 0.7), brightness: min(1.0, b * 1.15), alpha: a)
+                                    }
                                 }
                             }
                         } else {

@@ -26,36 +26,47 @@ class EnvironmentNode: SCNNode {
         dLight.type = .directional
         dLight.castsShadow = true
         dLight.shadowMode = .forward
-        dLight.shadowSampleCount = 8
-        dLight.shadowRadius = 8.0 // Softer, more natural shadows
-        dLight.shadowColor = UIColor.black.withAlphaComponent(0.25) // Slightly stronger but natural
-        dLight.orthographicScale = 45.0 // Couvre l'ensemble de l'île (32m) sans coupure d'ombre
+        dLight.shadowSampleCount = 12
+        dLight.shadowRadius = 10.0 // Softer, more natural shadows
+        dLight.shadowColor = UIColor.black.withAlphaComponent(0.22) // Natural shadow density
+        dLight.orthographicScale = 48.0 // Couvre l'ensemble de l'île (32m) sans coupure d'ombre
         dLight.shadowMapSize = CGSize(width: 2048, height: 2048)
-        dLight.intensity = 380 // Reduced from 520 to prevent overexposure
+        dLight.intensity = 420 // Balanced for good contrast without overexposure
         directionalLightNode.light = dLight
         directionalLightNode.position = SCNVector3(0, 15, 0)
         directionalLightNode.eulerAngles = SCNVector3(x: -Float.pi / 3.5, y: Float.pi / 4, z: 0)
         addChildNode(directionalLightNode)
         
-        // Lumière ambiante chaleureuse - reduced intensity
+        // Lumière ambiante chaleureuse - soft fill
         ambientLightNode = SCNNode()
         let aLight = SCNLight()
         aLight.type = .ambient
-        aLight.intensity = 180 // Reduced from 300
-        aLight.color = UIColor(red: 0.98, green: 0.95, blue: 0.90, alpha: 1.0) // Warmer
+        aLight.intensity = 140
+        aLight.color = UIColor(red: 1.0, green: 0.97, blue: 0.92, alpha: 1.0) // Warm cream
         ambientLightNode.light = aLight
         addChildNode(ambientLightNode)
         
-        // Fill light (Lumière de débouchage opposée au soleil) - reduced
+        // Fill light (Lumière de débouchage opposée au soleil) - cool blue tint
         fillLightNode = SCNNode()
         let fLight = SCNLight()
         fLight.type = .directional
-        fLight.intensity = 60 // Reduced from 120
+        fLight.intensity = 80
         fLight.castsShadow = false
-        fLight.color = UIColor(red: 0.85, green: 0.90, blue: 1.0, alpha: 1.0)
+        fLight.color = UIColor(red: 0.82, green: 0.88, blue: 1.0, alpha: 1.0)
         fillLightNode.light = fLight
-        fillLightNode.eulerAngles = SCNVector3(x: Float.pi / 4, y: -Float.pi * 0.75, z: 0)
+        fillLightNode.eulerAngles = SCNVector3(x: Float.pi / 3.5, y: -Float.pi * 0.7, z: 0)
         addChildNode(fillLightNode)
+        
+        // Subtle rim light for edge definition
+        let rimLightNode = SCNNode()
+        let rLight = SCNLight()
+        rLight.type = .directional
+        rLight.intensity = 35
+        rLight.castsShadow = false
+        rLight.color = UIColor(red: 1.0, green: 0.95, blue: 0.85, alpha: 1.0)
+        rimLightNode.light = rLight
+        rimLightNode.eulerAngles = SCNVector3(x: Float.pi / 2.5, y: Float.pi, z: 0)
+        addChildNode(rimLightNode)
     }
     
     private func setupTerrain() {
@@ -70,15 +81,15 @@ class EnvironmentNode: SCNNode {
         
         // Composition and Vegetation Spawning (Clustered/Organic)
         // Using more varied tree models from the nature pack
-        let treeModels = ["tree_oak", "tree_pineDefaultA", "tree_default", "tree_fat", "tree_pineRoundA", "tree_pineRoundB", "tree_cone", "tree_plateau", "tree_thin", "tree_detailed"]
-        let rockModels = ["rock_largeA", "rock_largeB", "rock_largeC", "rock_largeD", "rock_largeE", "rock_largeF", "rock_tallA", "rock_tallB", "rock_smallA", "rock_smallB", "rock_smallC", "rock_smallD", "rock_smallE", "rock_smallF", "stone_largeA", "stone_largeB", "stone_largeC", "stone_smallA", "stone_smallB"]
-        let plantModels = ["plant_bushDetailed", "plant_bushLarge", "plant_bushSmall", "plant_bushTriangle", "plant_flatShort", "plant_flatTall", "flower_purpleA", "flower_redA", "flower_yellowA", "mushroom_red", "mushroom_tan", "grass_leafs"]
-        let propModels = ["log", "stump_old", "stump_round", "stump_roundDetailed", "stump_square", "stump_squareDetailed"]
+        let treeModels = ["tree_oak", "tree_pineDefaultA", "tree_default", "tree_fat", "tree_pineRoundA", "tree_pineRoundB", "tree_cone", "tree_plateau", "tree_thin", "tree_detailed", "tree_pineTallA", "tree_pineTallB", "tree_tall", "tree_simple"]
+        let rockModels = ["rock_largeA", "rock_largeB", "rock_largeC", "rock_largeD", "rock_largeE", "rock_largeF", "rock_tallA", "rock_tallB", "rock_smallA", "rock_smallB", "rock_smallC", "rock_smallD", "rock_smallE", "rock_smallF", "stone_largeA", "stone_largeB", "stone_largeC", "stone_smallA", "stone_smallB", "stone_smallC"]
+        let plantModels = ["plant_bushDetailed", "plant_bushLarge", "plant_bushSmall", "plant_bushTriangle", "plant_flatShort", "plant_flatTall", "flower_purpleA", "flower_redA", "flower_yellowA", "mushroom_red", "mushroom_tan", "grass_leafs", "plant_bushDetailed", "plant_bushLarge"]
+        let propModels = ["log", "stump_old", "stump_round", "stump_roundDetailed", "stump_square", "stump_squareDetailed", "stump_oldTall"]
         
         // Helper to spawn items
         func spawnItem(models: [String], folder: String, x: Float, z: Float, sMin: Float, sMax: Float) {
-            if hypot(x, z) > TerrainBuilder.islandRadius - 1.0 { return }
-            if abs(x) < 5 && abs(z) < 5 { return } // Keep center clear
+            if hypot(x, z) > TerrainBuilder.islandRadius - 1.2 { return }
+            if abs(x) < 4.5 && abs(z) < 4.5 { return } // Keep center clear for campfire and plaza
             let modelName = models.randomElement()!
             let node = AssetManager.shared.getModel(named: modelName, folder: folder)
             node.position = SCNVector3(x, TerrainBuilder.getHeight(at: x, z: z), z)
@@ -88,50 +99,135 @@ class EnvironmentNode: SCNNode {
             terrainWrapper.addChildNode(node)
         }
         
-        // Create 6-10 "Groves" or clumps of nature - more for richer environment
-        let numGroves = Int.random(in: 6...10)
-        for _ in 0..<numGroves {
-            let cx = Float.random(in: -14...14)
-            let cz = Float.random(in: -14...14)
-            if hypot(cx, cz) < 6.0 { continue } // Avoid center plaza
+        // Create biome zones for more natural distribution
+        // Zone 1: Northwest - dense forest
+        // Zone 2: Northeast - rocky hills with pines
+        // Zone 3: South - open meadow with scattered trees
+        // Zone 4: East - flowering slopes
+        // Zone 5: West - rocky coast
+        
+        let biomeCenters: [(Float, Float, String)] = [
+            (-9.0, -8.0, "forest"),      // Northwest forest
+            (8.0, -7.0, "pine_hills"),   // Northeast pine hills
+            (0.0, 10.0, "meadow"),       // South meadow
+            (-6.0, 9.0, "flowering"),    // East flowering slopes
+            (11.0, 4.0, "rocky_coast"),  // West rocky coast
+            (-3.0, -11.0, "mixed"),      // Southwest mixed
+            (5.0, -10.0, "coastal_pine"), // Southeast coastal pine
+        ]
+        
+        for (cx, cz, biome) in biomeCenters {
+            let radius: Float = Float.random(in: 4.0...6.5)
+            let treeCount, rockCount, plantCount, propCount: Int
+            let treeScale: ClosedRange<Float>
+            let rockScale: ClosedRange<Float>
+            let plantScale: ClosedRange<Float>
             
-            // Trees in this grove - varied sizes and types
-            let treeCount = Int.random(in: 4...9)
+            switch biome {
+            case "forest":
+                treeCount = Int.random(in: 8...14)
+                rockCount = Int.random(in: 3...6)
+                plantCount = Int.random(in: 12...20)
+                propCount = Int.random(in: 2...4)
+                treeScale = 1.0...1.8
+                rockScale = 0.6...1.4
+                plantScale = 0.8...1.6
+            case "pine_hills":
+                treeCount = Int.random(in: 6...12)
+                rockCount = Int.random(in: 6...10)
+                plantCount = Int.random(in: 8...14)
+                propCount = Int.random(in: 1...3)
+                treeScale = 1.1...1.9
+                rockScale = 0.7...1.5
+                plantScale = 0.7...1.4
+            case "meadow":
+                treeCount = Int.random(in: 3...6)
+                rockCount = Int.random(in: 2...5)
+                plantCount = Int.random(in: 15...25)
+                propCount = Int.random(in: 0...2)
+                treeScale = 0.9...1.5
+                rockScale = 0.5...1.2
+                plantScale = 0.9...1.7
+            case "flowering":
+                treeCount = Int.random(in: 4...8)
+                rockCount = Int.random(in: 2...4)
+                plantCount = Int.random(in: 18...30)
+                propCount = Int.random(in: 1...2)
+                treeScale = 0.8...1.4
+                rockScale = 0.5...1.1
+                plantScale = 0.8...1.5
+            case "rocky_coast":
+                treeCount = Int.random(in: 2...5)
+                rockCount = Int.random(in: 8...14)
+                plantCount = Int.random(in: 6...12)
+                propCount = Int.random(in: 2...4)
+                treeScale = 0.7...1.3
+                rockScale = 0.8...1.6
+                plantScale = 0.6...1.3
+            case "mixed":
+                treeCount = Int.random(in: 5...9)
+                rockCount = Int.random(in: 4...8)
+                plantCount = Int.random(in: 10...18)
+                propCount = Int.random(in: 1...3)
+                treeScale = 0.9...1.6
+                rockScale = 0.6...1.4
+                plantScale = 0.7...1.5
+            case "coastal_pine":
+                treeCount = Int.random(in: 4...8)
+                rockCount = Int.random(in: 5...9)
+                plantCount = Int.random(in: 8...15)
+                propCount = Int.random(in: 1...3)
+                treeScale = 0.8...1.5
+                rockScale = 0.7...1.4
+                plantScale = 0.7...1.4
+            default:
+                treeCount = 6
+                rockCount = 4
+                plantCount = 12
+                propCount = 2
+                treeScale = 1.0...1.5
+                rockScale = 0.6...1.3
+                plantScale = 0.8...1.4
+            }
+            
+            // Trees in this biome
             for _ in 0..<treeCount {
-                let ox = Float.random(in: -3.5...3.5)
-                let oz = Float.random(in: -3.5...3.5)
-                spawnItem(models: treeModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: 0.9, sMax: 1.7)
+                let ox = Float.random(in: -radius...radius)
+                let oz = Float.random(in: -radius...radius)
+                if hypot(cx + ox, cz + oz) < 5.0 { continue } // Avoid center
+                spawnItem(models: treeModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: treeScale.lowerBound, sMax: treeScale.upperBound)
             }
-            // Rocks around the grove - more variety
-            let rockCount = Int.random(in: 2...6)
+            // Rocks
             for _ in 0..<rockCount {
-                let ox = Float.random(in: -2.5...2.5)
-                let oz = Float.random(in: -2.5...2.5)
-                spawnItem(models: rockModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: 0.5, sMax: 1.3)
+                let ox = Float.random(in: -radius...radius)
+                let oz = Float.random(in: -radius...radius)
+                if hypot(cx + ox, cz + oz) < 5.0 { continue }
+                spawnItem(models: rockModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: rockScale.lowerBound, sMax: rockScale.upperBound)
             }
-            // Plants and flowers - denser
-            let plantCount = Int.random(in: 8...18)
+            // Plants and flowers
             for _ in 0..<plantCount {
-                let ox = Float.random(in: -4.5...4.5)
-                let oz = Float.random(in: -4.5...4.5)
-                spawnItem(models: plantModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: 0.7, sMax: 1.5)
+                let ox = Float.random(in: -radius...radius)
+                let oz = Float.random(in: -radius...radius)
+                if hypot(cx + ox, cz + oz) < 5.0 { continue }
+                spawnItem(models: plantModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: plantScale.lowerBound, sMax: plantScale.upperBound)
             }
-            // Props (logs, stumps) - more frequent
-            if Float.random(in: 0...1) > 0.4 {
-                let propCount = Int.random(in: 1...3)
-                for _ in 0..<propCount {
-                    let ox = Float.random(in: -2...2)
-                    let oz = Float.random(in: -2...2)
-                    spawnItem(models: propModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: 0.7, sMax: 1.3)
-                }
+            // Props (logs, stumps)
+            for _ in 0..<propCount {
+                let ox = Float.random(in: -radius...radius)
+                let oz = Float.random(in: -radius...radius)
+                if hypot(cx + ox, cz + oz) < 5.0 { continue }
+                spawnItem(models: propModels, folder: "nature", x: cx + ox, z: cz + oz, sMin: 0.7, sMax: 1.3)
             }
         }
         
-        // Light global scatter for isolated elements - more for natural feel
-        for _ in 0...25 {
-            spawnItem(models: treeModels, folder: "nature", x: Float.random(in: -16...16), z: Float.random(in: -16...16), sMin: 0.7, sMax: 1.5)
-            spawnItem(models: rockModels, folder: "nature", x: Float.random(in: -16...16), z: Float.random(in: -16...16), sMin: 0.4, sMax: 1.1)
-            spawnItem(models: plantModels, folder: "nature", x: Float.random(in: -16...16), z: Float.random(in: -16...16), sMin: 0.6, sMax: 1.3)
+        // Light global scatter for isolated elements - fewer, more intentional
+        for _ in 0...15 {
+            let x = Float.random(in: -16...16)
+            let z = Float.random(in: -16...16)
+            if hypot(x, z) < 5.0 || hypot(x, z) > TerrainBuilder.islandRadius - 1.2 { continue }
+            spawnItem(models: treeModels, folder: "nature", x: x, z: z, sMin: 0.7, sMax: 1.4)
+            spawnItem(models: rockModels, folder: "nature", x: x, z: z, sMin: 0.4, sMax: 1.0)
+            spawnItem(models: plantModels, folder: "nature", x: x, z: z, sMin: 0.6, sMax: 1.2)
         }
         
         // Cozy campfire in the center
@@ -139,34 +235,72 @@ class EnvironmentNode: SCNNode {
         campfire.position = SCNVector3(0, TerrainBuilder.getHeight(at: 0, z: 0) + 0.05, 0)
         terrainWrapper.addChildNode(campfire)
         
-        // Point light for the campfire (orange warm ambient light)
+        // Point light for the campfire (orange warm ambient light) - subtle
         let campLight = SCNLight()
         campLight.type = .omni
-        campLight.color = UIColor(red: 1.0, green: 0.65, blue: 0.3, alpha: 1.0)
-        campLight.intensity = 40 // Reduced from 70 to match new lighting balance
-        campLight.attenuationStartDistance = 0.5
-        campLight.attenuationEndDistance = 3.2 // Rayon doux
+        campLight.color = UIColor(red: 1.0, green: 0.55, blue: 0.2, alpha: 1.0)
+        campLight.intensity = 25 // Subtle glow, not overpowering
+        campLight.attenuationStartDistance = 0.3
+        campLight.attenuationEndDistance = 2.5 // Small radius
         campLight.castsShadow = false
         
         let campLightNode = SCNNode()
         campLightNode.light = campLight
-        campLightNode.position = SCNVector3(0, 0.3, 0)
+        campLightNode.position = SCNVector3(0, 0.25, 0)
         campfire.addChildNode(campLightNode)
+        
+        // Add a few fireflies/particles around the campfire for ambient life
+        for _ in 0..<8 {
+            let angle = Float.random(in: 0...(2 * Float.pi))
+            let radius = Float.random(in: 0.8...2.0)
+            let fx = sin(angle) * radius
+            let fz = cos(angle) * radius
+            let fy = TerrainBuilder.getHeight(at: fx, z: fz) + Float.random(in: 0.3...1.2)
+            let firefly = SCNNode(geometry: SCNSphere(radius: 0.02))
+            firefly.position = SCNVector3(fx, fy, fz)
+            let ffMat = SCNMaterial()
+            ffMat.lightingModel = .constant
+            ffMat.emission.contents = UIColor(red: 1.0, green: 0.9, blue: 0.5, alpha: 1.0)
+            firefly.geometry?.materials = [ffMat]
+            terrainWrapper.addChildNode(firefly)
+            
+            // Gentle floating animation
+            let floatUp = SCNAction.moveBy(x: 0, y: 0.15, z: 0, duration: Double.random(in: 2.0...4.0))
+            floatUp.timingMode = .easeInEaseOut
+            let floatDown = floatUp.reversed()
+            firefly.runAction(SCNAction.repeatForever(SCNAction.sequence([floatUp, floatDown])))
+        }
     }
     
     private func setupOcean() {
+        // Ocean floor - extends beyond island to horizon
+        let floorGeo = SCNPlane(width: 200.0, height: 200.0)
+        let floorMat = SCNMaterial()
+        floorMat.lightingModel = .physicallyBased
+        floorMat.diffuse.contents = UIColor(red: 0.08, green: 0.12, blue: 0.16, alpha: 1.0)
+        floorMat.roughness.contents = NSNumber(value: 0.9)
+        floorMat.metalness.contents = NSNumber(value: 0.0)
+        floorMat.diffuse.magnificationFilter = .linear
+        floorMat.diffuse.minificationFilter = .linear
+        floorGeo.materials = [floorMat]
+        
+        let floorNode = SCNNode(geometry: floorGeo)
+        floorNode.position = SCNVector3(0, -5.0, 0)
+        floorNode.eulerAngles.x = -Float.pi / 2
+        terrainWrapper.addChildNode(floorNode)
+        
         // Surface d'océan plane : elle évite le mur vertical d'un cylindre tout en
         // restant assez large pour couvrir l'horizon de la caméra.
         let waterGeo = SCNPlane(width: 130.0, height: 130.0)
         let waterMat = SCNMaterial()
         waterMat.lightingModel = .physicallyBased
         // Base water color - deeper blue-green for stylized look
-        waterMat.diffuse.contents = UIColor(red: 0.08, green: 0.35, blue: 0.55, alpha: 1.0)
-        waterMat.roughness.contents = NSNumber(value: 0.1) // Very smooth for nice reflections
-        waterMat.metalness.contents = NSNumber(value: 0.98) // High metalness for water-like reflection
-        waterMat.specular.contents = UIColor(white: 0.9, alpha: 1.0)
-        // Semi-transparent to see underwater base slightly, but mostly reflective
-        waterMat.transparency = 0.85
+        waterMat.diffuse.contents = UIColor(red: 0.05, green: 0.25, blue: 0.42, alpha: 1.0)
+        waterMat.roughness.contents = NSNumber(value: 0.08) // Very smooth for nice reflections
+        waterMat.metalness.contents = NSNumber(value: 0.95) // High metalness for water-like reflection
+        waterMat.specular.contents = UIColor(white: 0.85, alpha: 1.0)
+        // Semi-transparent to see underwater floor slightly, but mostly reflective
+        waterMat.transparency = 0.75
         waterMat.transparencyMode = .aOne
         waterMat.writesToDepthBuffer = true
         waterMat.readsFromDepthBuffer = true
@@ -177,15 +311,39 @@ class EnvironmentNode: SCNNode {
 
         let waterNode = SCNNode(geometry: waterGeo)
         waterNode.name = "ocean"
-        waterNode.position = SCNVector3(0, -0.32, 0)
+        waterNode.position = SCNVector3(0, -0.25, 0) // Slightly higher for better shoreline
         waterNode.eulerAngles.x = -Float.pi / 2
         terrainWrapper.addChildNode(waterNode)
         
         // Légère onde / respiration aquatique naturelle
-        let moveUp = SCNAction.moveBy(x: 0, y: 0.03, z: 0, duration: 3.0)
+        let moveUp = SCNAction.moveBy(x: 0, y: 0.025, z: 0, duration: 3.5)
         moveUp.timingMode = .easeInEaseOut
         let moveDown = moveUp.reversed()
         waterNode.runAction(SCNAction.repeatForever(SCNAction.sequence([moveUp, moveDown])))
+        
+        // Subtle foam line at shoreline - thin ring at water level
+        let foamGeo = SCNTorus(ringRadius: CGFloat(TerrainBuilder.islandRadius + 0.3), pipeRadius: 0.15)
+        let foamMat = SCNMaterial()
+        foamMat.lightingModel = .physicallyBased
+        foamMat.diffuse.contents = UIColor(red: 0.95, green: 0.95, blue: 0.9, alpha: 0.6)
+        foamMat.roughness.contents = NSNumber(value: 0.9)
+        foamMat.metalness.contents = NSNumber(value: 0.0)
+        foamMat.transparency = 0.6
+        foamMat.transparencyMode = .aOne
+        foamMat.isDoubleSided = true
+        foamGeo.materials = [foamMat]
+        
+        let foamNode = SCNNode(geometry: foamGeo)
+        foamNode.position = SCNVector3(0, -0.25, 0)
+        foamNode.eulerAngles.x = Float.pi / 2
+        terrainWrapper.addChildNode(foamNode)
+        
+        // Gentle foam pulse
+        let foamPulse = SCNAction.scale(to: 1.05, duration: 4.0)
+        foamPulse.timingMode = .easeInEaseOut
+        let foamPulseBack = SCNAction.scale(to: 0.95, duration: 4.0)
+        foamPulseBack.timingMode = .easeInEaseOut
+        foamNode.runAction(SCNAction.repeatForever(SCNAction.sequence([foamPulse, foamPulseBack])))
     }
     
     func sync(with worldData: WorldData) {
@@ -345,37 +503,37 @@ class EnvironmentNode: SCNNode {
     }
     
     private func updateLightingTime(time: Float) {
-        var intensity: CGFloat = 380
-        var ambientIntensity: CGFloat = 180
+        var intensity: CGFloat = 420
+        var ambientIntensity: CGFloat = 140
         var lightColor = UIColor.white
-        var ambientColor = UIColor(red: 0.98, green: 0.95, blue: 0.90, alpha: 1.0)
+        var ambientColor = UIColor(red: 1.0, green: 0.97, blue: 0.92, alpha: 1.0)
         
         if time >= 6 && time <= 9 {
-            // Matin doré et chaleureux
+            // Matin doré et chaleureux - sunrise
             let t = CGFloat((time - 6) / 3)
-            intensity = 250 + (130 * t)
-            ambientIntensity = 140 + (40 * t)
-            lightColor = UIColor(red: 1.0, green: 0.90 + 0.08*t, blue: 0.78 + 0.20*t, alpha: 1.0)
-            ambientColor = UIColor(red: 0.98, green: 0.93, blue: 0.88, alpha: 1.0)
+            intensity = 280 + (140 * t)
+            ambientIntensity = 100 + (40 * t)
+            lightColor = UIColor(red: 1.0, green: 0.85 + 0.12*t, blue: 0.65 + 0.25*t, alpha: 1.0)
+            ambientColor = UIColor(red: 1.0, green: 0.93 + 0.04*t, blue: 0.85 + 0.07*t, alpha: 1.0)
         } else if time > 9 && time <= 16 {
-            // Jour lumineux et clair
-            intensity = 380
-            ambientIntensity = 180
+            // Jour lumineux et clair - midday
+            intensity = 420
+            ambientIntensity = 140
             lightColor = UIColor(red: 1.0, green: 0.98, blue: 0.95, alpha: 1.0)
-            ambientColor = UIColor(red: 0.98, green: 0.95, blue: 0.90, alpha: 1.0)
+            ambientColor = UIColor(red: 1.0, green: 0.97, blue: 0.92, alpha: 1.0)
         } else if time > 16 && time <= 19 {
-            // Soir / Crépuscule chaleureux
+            // Soir / Crépuscule chaleureux - golden hour
             let t = CGFloat((time - 16) / 3)
-            intensity = 380 - (190 * t)
-            ambientIntensity = 180 - (50 * t)
-            lightColor = UIColor(red: 1.0, green: 0.82 - 0.20*t, blue: 0.65 - 0.25*t, alpha: 1.0)
-            ambientColor = UIColor(red: 0.98 - 0.15*t, green: 0.90 - 0.25*t, blue: 0.85 - 0.10*t, alpha: 1.0)
+            intensity = 420 - (220 * t)
+            ambientIntensity = 140 - (40 * t)
+            lightColor = UIColor(red: 1.0, green: 0.85 - 0.20*t, blue: 0.65 - 0.20*t, alpha: 1.0)
+            ambientColor = UIColor(red: 1.0 - 0.05*t, green: 0.95 - 0.12*t, blue: 0.90 - 0.15*t, alpha: 1.0)
         } else {
             // Nuit douce, lisible et bleutée
-            intensity = 80
-            ambientIntensity = 120
-            lightColor = UIColor(red: 0.45, green: 0.55, blue: 0.90, alpha: 1.0)
-            ambientColor = UIColor(red: 0.25, green: 0.32, blue: 0.52, alpha: 1.0)
+            intensity = 60
+            ambientIntensity = 80
+            lightColor = UIColor(red: 0.4, green: 0.5, blue: 0.85, alpha: 1.0)
+            ambientColor = UIColor(red: 0.2, green: 0.25, blue: 0.45, alpha: 1.0)
         }
         
         directionalLightNode.light?.intensity = intensity

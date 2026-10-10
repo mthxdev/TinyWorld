@@ -5,28 +5,31 @@ class TerrainBuilder {
     static let islandRadius: Float = 16.0
     
     static func getHeight(at px: Float, z pz: Float) -> Float {
-        // Organic rolling hills
-        let h1 = sin(px * 0.2 + 1.5) * cos(pz * 0.25) * 0.75
-        let h2 = sin(px * 0.4) * sin(pz * 0.3 + 2.0) * 0.25
-        let h3 = cos(px * 0.8) * cos(pz * 0.7) * 0.08
-        
-        var height = h1 + h2 + h3
-        
         let dist = hypot(px, pz)
-        // Center plaza is kept relatively flat and welcoming for village life
+        
+        // Organic rolling hills with more variation
+        let h1 = sin(px * 0.18 + 1.5) * cos(pz * 0.22) * 1.1
+        let h2 = sin(px * 0.35) * sin(pz * 0.28 + 2.0) * 0.5
+        let h3 = cos(px * 0.7) * cos(pz * 0.65) * 0.15
+        let h4 = sin(px * 0.12 + 0.7) * cos(pz * 0.15 + 1.2) * 0.3
+        
+        var height = h1 + h2 + h3 + h4
+        
+        // Center plaza - gentle mound rather than flat
         if dist < 5.0 {
-            height *= max(0.25, (dist / 5.0))
+            let centerMound = (1.0 - dist / 5.0) * 0.4
+            height = height * max(0.3, (dist / 5.0)) + centerMound
         }
         
-        // Gentle descent towards the shoreline and the sea
-        if dist > 12.5 {
-            let drop = (dist - 12.5) * 0.38
+        // Gentle descent towards the shoreline
+        if dist > 11.5 {
+            let drop = (dist - 11.5) * 0.42
             height -= drop
         }
         
         // Underwater slope at the outer perimeter
         if dist > islandRadius - 0.5 {
-            let edgeDrop = (dist - (islandRadius - 0.5)) * 1.2
+            let edgeDrop = (dist - (islandRadius - 0.5)) * 1.4
             height -= edgeDrop * edgeDrop
         }
         
@@ -125,7 +128,7 @@ class TerrainBuilder {
         // Better PBR settings for stylized terrain
         terrainMat.metalness.contents = NSNumber(value: 0.0)
         terrainMat.roughness.intensity = 0.85
-        terrainMat.normal.intensity = 0.7 // Reduce normal map intensity to avoid artificial bumps
+        terrainMat.normal.intensity = 0.6 // Reduced for more natural look
         terrainMat.diffuse.magnificationFilter = .linear
         terrainMat.diffuse.minificationFilter = .linear
         terrainMat.diffuse.mipFilter = .linear
@@ -144,21 +147,22 @@ class TerrainBuilder {
         
         // Underwater rock base: fully submerged below water surface.
         // Water level is at y = -0.32, so base must stay below that.
+        // Use a flatter cone that follows the island contour better
         let baseGeo = SCNCone(
-            topRadius: CGFloat(islandRadius - 1.2),
-            bottomRadius: CGFloat(islandRadius - 0.2),
-            height: 1.5
+            topRadius: CGFloat(islandRadius - 0.5),
+            bottomRadius: CGFloat(islandRadius + 1.0),
+            height: 2.0
         )
         let baseMat = SCNMaterial()
         baseMat.lightingModel = .physicallyBased
         // Darker, cooler underwater rock color - less brown, more slate/grey
-        baseMat.diffuse.contents = UIColor(red: 0.18, green: 0.22, blue: 0.26, alpha: 1.0)
+        baseMat.diffuse.contents = UIColor(red: 0.12, green: 0.16, blue: 0.20, alpha: 1.0)
         baseMat.roughness.contents = NSNumber(value: 0.95)
         baseMat.metalness.contents = NSNumber(value: 0.0)
         baseGeo.materials = [baseMat]
         let baseNode = SCNNode(geometry: baseGeo)
-        // Position so top of cone is at y = -0.8 (well below water at -0.32)
-        baseNode.position = SCNVector3(0, -1.55, 0)
+        // Position so top of cone is at y = -1.0 (well below water at -0.32)
+        baseNode.position = SCNVector3(0, -2.0, 0)
         root.addChildNode(baseNode)
         
         return root
