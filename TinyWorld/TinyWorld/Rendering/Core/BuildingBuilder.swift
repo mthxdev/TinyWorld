@@ -70,30 +70,33 @@ class BuildingBuilder {
         let scale = Float.random(in: 1.4...1.7)
         barn.scale = SCNVector3(scale, scale, scale)
         
-        // Add foundation
+        // Calculate bounding box for foundation and driveway
+        var buildingWidth: Float = 4.0
+        var buildingDepth: Float = 4.0
         if let geo = barn.geometry {
             let (min, max) = geo.boundingBox
-            let width = max.x - min.x
-            let depth = max.z - min.z
-            let foundationHeight: Float = 0.1
-            
-            let foundationGeo = SCNBox(
-                width: CGFloat(width * scale * 1.1),
-                height: CGFloat(foundationHeight),
-                length: CGFloat(depth * scale * 1.1),
-                chamferRadius: 0.08
-            )
-            let foundationMat = SCNMaterial()
-            foundationMat.lightingModel = .physicallyBased
-            foundationMat.diffuse.contents = UIColor(red: 0.3, green: 0.25, blue: 0.2, alpha: 1.0)
-            foundationMat.roughness.contents = NSNumber(value: 0.95)
-            foundationMat.metalness.contents = NSNumber(value: 0.0)
-            foundationGeo.materials = [foundationMat]
-            
-            let foundationNode = SCNNode(geometry: foundationGeo)
-            foundationNode.position = SCNVector3(0, -foundationHeight / 2, 0)
-            barn.addChildNode(foundationNode)
+            buildingWidth = max.x - min.x
+            buildingDepth = max.z - min.z
         }
+        
+        // Add foundation
+        let foundationHeight: Float = 0.1
+        let foundationGeo = SCNBox(
+            width: CGFloat(buildingWidth * scale * 1.1),
+            height: CGFloat(foundationHeight),
+            length: CGFloat(buildingDepth * scale * 1.1),
+            chamferRadius: 0.08
+        )
+        let foundationMat = SCNMaterial()
+        foundationMat.lightingModel = .physicallyBased
+        foundationMat.diffuse.contents = UIColor(red: 0.3, green: 0.25, blue: 0.2, alpha: 1.0)
+        foundationMat.roughness.contents = NSNumber(value: 0.95)
+        foundationMat.metalness.contents = NSNumber(value: 0.0)
+        foundationGeo.materials = [foundationMat]
+        
+        let foundationNode = SCNNode(geometry: foundationGeo)
+        foundationNode.position = SCNVector3(0, -foundationHeight / 2, 0)
+        barn.addChildNode(foundationNode)
         
         // Add planters and farm details
         let planterCount = Int.random(in: 3...5)
@@ -119,7 +122,7 @@ class BuildingBuilder {
         // Add a driveway/path leading to barn
         let driveType = drivewayTypes.randomElement()!
         let driveway = AssetManager.shared.getModel(named: driveType, folder: "suburban")
-        driveway.position = SCNVector3(0, 0.02, Float(depth * scale * 0.6))
+        driveway.position = SCNVector3(0, 0.02, Float(buildingDepth * scale * 0.6))
         driveway.eulerAngles.y = Float.pi
         barn.addChildNode(driveway)
         
