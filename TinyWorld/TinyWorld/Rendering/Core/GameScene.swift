@@ -24,7 +24,9 @@ class GameScene: SCNScene {
         
         // Environnement HDRI pour le rendu PBR (Reflets et lumière ambiante réalistes)
         self.lightingEnvironment.contents = "art.scnassets/textures/sky.exr"
-        self.lightingEnvironment.intensity = 1.0
+        // L'HDRI reste utile aux reflets PBR, mais ne doit pas blanchir le centre
+        // lorsqu'il se cumule avec les lumières de l'environnement.
+        self.lightingEnvironment.intensity = 0.55
     }
     
     required init?(coder: NSCoder) {
@@ -68,15 +70,15 @@ class GameScene: SCNScene {
         }
         
         // Ajuster l'intensité de l'HDRI selon l'heure
-        var envIntensity: CGFloat = 1.0
+        var envIntensity: CGFloat = 0.55
         if time >= 6 && time < 9 {
-            envIntensity = 0.3 + 0.7 * CGFloat((time - 6) / 3)
+            envIntensity = 0.22 + 0.33 * CGFloat((time - 6) / 3)
         } else if time >= 9 && time < 16 {
-            envIntensity = 1.0
+            envIntensity = 0.55
         } else if time >= 16 && time < 19 {
-            envIntensity = 1.0 - 0.7 * CGFloat((time - 16) / 3)
+            envIntensity = 0.55 - 0.38 * CGFloat((time - 16) / 3)
         } else {
-            envIntensity = 0.1 // Nuit très douce
+            envIntensity = 0.08 // Nuit très douce
         }
         self.lightingEnvironment.intensity = envIntensity
         

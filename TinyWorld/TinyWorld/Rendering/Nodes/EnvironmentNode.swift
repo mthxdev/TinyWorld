@@ -31,7 +31,7 @@ class EnvironmentNode: SCNNode {
         dLight.shadowColor = UIColor.black.withAlphaComponent(0.20) // Ombres douces et lisibles
         dLight.orthographicScale = 45.0 // Couvre l'ensemble de l'île (32m) sans coupure d'ombre
         dLight.shadowMapSize = CGSize(width: 2048, height: 2048)
-        dLight.intensity = 850
+        dLight.intensity = 520
         directionalLightNode.light = dLight
         directionalLightNode.position = SCNVector3(0, 15, 0)
         directionalLightNode.eulerAngles = SCNVector3(x: -Float.pi / 3.5, y: Float.pi / 4, z: 0)
@@ -41,7 +41,7 @@ class EnvironmentNode: SCNNode {
         ambientLightNode = SCNNode()
         let aLight = SCNLight()
         aLight.type = .ambient
-        aLight.intensity = 600
+        aLight.intensity = 300
         aLight.color = UIColor(white: 0.95, alpha: 1.0)
         ambientLightNode.light = aLight
         addChildNode(ambientLightNode)
@@ -50,7 +50,7 @@ class EnvironmentNode: SCNNode {
         fillLightNode = SCNNode()
         let fLight = SCNLight()
         fLight.type = .directional
-        fLight.intensity = 350
+        fLight.intensity = 120
         fLight.castsShadow = false
         fLight.color = UIColor(red: 0.85, green: 0.90, blue: 1.0, alpha: 1.0)
         fillLightNode.light = fLight
@@ -136,7 +136,7 @@ class EnvironmentNode: SCNNode {
         let campLight = SCNLight()
         campLight.type = .omni
         campLight.color = UIColor(red: 1.0, green: 0.65, blue: 0.3, alpha: 1.0)
-        campLight.intensity = 180 // Douce lueur locale
+        campLight.intensity = 70 // Douce lueur locale
         campLight.attenuationStartDistance = 0.5
         campLight.attenuationEndDistance = 3.2 // Rayon doux
         campLight.castsShadow = false
@@ -148,20 +148,22 @@ class EnvironmentNode: SCNNode {
     }
     
     private func setupOcean() {
-        // Grand océan turquoise stylisé entourant l'île
-        let waterGeo = SCNCylinder(radius: 65.0, height: 0.2)
+        // Surface d'océan plane : elle évite le mur vertical d'un cylindre tout en
+        // restant assez large pour couvrir l'horizon de la caméra.
+        let waterGeo = SCNPlane(width: 130.0, height: 130.0)
         let waterMat = SCNMaterial()
         waterMat.lightingModel = .physicallyBased
-        waterMat.diffuse.contents = UIColor(red: 0.12, green: 0.58, blue: 0.76, alpha: 0.90)
-        waterMat.roughness.contents = NSNumber(value: 0.10) // Surface d'eau très lisse et réfléchissante
+        waterMat.diffuse.contents = UIColor(red: 0.10, green: 0.48, blue: 0.66, alpha: 0.94)
+        waterMat.roughness.contents = NSNumber(value: 0.22) // Reflets doux, sans scintillement excessif
         waterMat.metalness.contents = NSNumber(value: 0.05)
-        waterMat.specular.contents = UIColor(white: 0.95, alpha: 1.0)
-        waterMat.isDoubleSided = false
+        waterMat.specular.contents = UIColor(white: 0.75, alpha: 1.0)
+        waterMat.isDoubleSided = true
         waterGeo.materials = [waterMat]
-        
+
         let waterNode = SCNNode(geometry: waterGeo)
         waterNode.name = "ocean"
         waterNode.position = SCNVector3(0, -0.32, 0)
+        waterNode.eulerAngles.x = -Float.pi / 2
         terrainWrapper.addChildNode(waterNode)
         
         // Légère onde / respiration aquatique naturelle
@@ -289,8 +291,12 @@ class EnvironmentNode: SCNNode {
         if steps > 1 {
             for i in 1..<steps {
                 let ratio = Float(i) / Float(steps)
-                let px = start.x + Float(dx) * ratio
-                let pz = start.z + Float(dz) * ratio
+                let meander = sin(ratio * Float.pi * 3.0) * 0.4
+                let segmentLength = max(distance, 0.001)
+                let perpX = -dz / segmentLength
+                let perpZ = dx / segmentLength
+                let px = start.x + Float(dx) * ratio + meander * perpX
+                let pz = start.z + Float(dz) * ratio + meander * perpZ
                 let pathStone = AssetManager.shared.getModel(named: "path-stones-short", folder: "suburban")
                 pathStone.position = SCNVector3(px, TerrainBuilder.getHeight(at: px, z: pz) + 0.02, pz)
                 pathStone.eulerAngles.y = Float.random(in: 0...Float.pi)
@@ -324,35 +330,35 @@ class EnvironmentNode: SCNNode {
     }
     
     private func updateLightingTime(time: Float) {
-        var intensity: CGFloat = 850
-        var ambientIntensity: CGFloat = 600
+        var intensity: CGFloat = 520
+        var ambientIntensity: CGFloat = 300
         var lightColor = UIColor.white
         var ambientColor = UIColor(red: 0.92, green: 0.94, blue: 0.98, alpha: 1.0)
         
         if time >= 6 && time <= 9 {
             // Matin doré et chaleureux
             let t = CGFloat((time - 6) / 3)
-            intensity = 450 + (400 * t)
-            ambientIntensity = 450 + (150 * t)
+            intensity = 340 + (180 * t)
+            ambientIntensity = 240 + (60 * t)
             lightColor = UIColor(red: 1.0, green: 0.90 + 0.08*t, blue: 0.78 + 0.20*t, alpha: 1.0)
             ambientColor = UIColor(red: 0.95, green: 0.90, blue: 0.85, alpha: 1.0)
         } else if time > 9 && time <= 16 {
             // Jour lumineux et clair
-            intensity = 850
-            ambientIntensity = 600
+            intensity = 520
+            ambientIntensity = 300
             lightColor = UIColor(red: 1.0, green: 0.98, blue: 0.95, alpha: 1.0)
             ambientColor = UIColor(red: 0.92, green: 0.95, blue: 1.0, alpha: 1.0)
         } else if time > 16 && time <= 19 {
             // Soir / Crépuscule chaleureux
             let t = CGFloat((time - 16) / 3)
-            intensity = 850 - (400 * t)
-            ambientIntensity = 600 - (180 * t)
+            intensity = 520 - (260 * t)
+            ambientIntensity = 300 - (90 * t)
             lightColor = UIColor(red: 1.0, green: 0.82 - 0.20*t, blue: 0.65 - 0.25*t, alpha: 1.0)
             ambientColor = UIColor(red: 0.95 - 0.15*t, green: 0.85 - 0.25*t, blue: 0.80 - 0.10*t, alpha: 1.0)
         } else {
             // Nuit douce, lisible et bleutée
-            intensity = 150
-            ambientIntensity = 380
+            intensity = 110
+            ambientIntensity = 220
             lightColor = UIColor(red: 0.45, green: 0.55, blue: 0.90, alpha: 1.0)
             ambientColor = UIColor(red: 0.25, green: 0.32, blue: 0.52, alpha: 1.0)
         }
