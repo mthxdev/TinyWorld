@@ -130,7 +130,7 @@ class EnvironmentNode: SCNNode {
             "lily_large", "lily_small", "hanging_moss",
             "plant_bush", "plant_bushDetailed", "plant_bushLarge"
         ]
-        let propModels = [
+        let _propModels = [
             "log", "log_large", "log_stack", "log_stackLarge",
             "stump_old", "stump_oldTall", "stump_round", "stump_roundDetailed",
             "stump_square", "stump_squareDetailed", "stump_squareDetailedWide",
@@ -548,7 +548,7 @@ private func createBuiltZoneNode(zone: Zone) -> SCNNode {
         switch zone.type {
         case .home:
             // Mix of cottages and family homes
-            let houseType: BuildingBuilder.HouseType = (zone.id % 3 == 0) ? .familyHome : .cottage
+            let houseType: HouseType = (zone.id % 3 == 0) ? .familyHome : .cottage
             building = BuildingBuilder.shared.buildSpecificHouse(type: houseType, variant: variantSeed)
         case .work:
             building = BuildingBuilder.shared.buildFactory()
@@ -580,7 +580,7 @@ private func createBuiltZoneNode(zone: Zone) -> SCNNode {
                 wrapper.addChildNode(plant)
             }
         default:
-            building = BuildingBuilder.shared.buildSpecificHouse(type: .cottage, variant: variantSeed)
+            building = BuildingBuilder.shared.buildSpecificHouse(type: HouseType.cottage, variant: variantSeed)
         }
         
         if let b = building {
@@ -757,11 +757,11 @@ private func createBuiltZoneNode(zone: Zone) -> SCNNode {
         ambientLightNode.light?.color = ambientColor
         fillLightNode.light?.intensity = fillIntensity
         fillLightNode.light?.color = fillColor
-        if let rimLight = self.childNodes.first(where: { $0.light?.color == rimColor || $0.light?.intensity == 40 }) {
+        if let rimLight = self.childNodes.first(where: { ($0.light?.color as? UIColor) == rimColor || $0.light?.intensity == 40 }) {
             rimLight.light?.intensity = rimIntensity
             rimLight.light?.color = rimColor
         }
-        if let bounceLight = self.childNodes.first(where: { $0.light?.color == UIColor(red: 0.6, green: 0.7, blue: 0.55, alpha: 1.0) }) {
+        if let bounceLight = self.childNodes.first(where: { ($0.light?.color as? UIColor) == UIColor(red: 0.6, green: 0.7, blue: 0.55, alpha: 1.0) }) {
             bounceLight.light?.intensity = bounceIntensity
         }
         

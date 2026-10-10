@@ -154,7 +154,7 @@ class BuildingBuilder {
             let depth = max.z - min.z
             let baseHeight: Float = 0.05
             
-            let baseGeo = SCNCylinder(radius: CGFloat(max(width, depth) * scale * 0.4), height: CGFloat(baseHeight))
+            let baseGeo = SCNCylinder(radius: CGFloat(Swift.max(width, depth) * scale * 0.4), height: CGFloat(baseHeight))
             let baseMat = SCNMaterial()
             baseMat.lightingModel = .physicallyBased
             baseMat.diffuse.contents = UIColor(red: 0.25, green: 0.2, blue: 0.15, alpha: 1.0)
@@ -281,14 +281,31 @@ class BuildingBuilder {
         let scale = Float.random(in: scaleRange)
         node.scale = SCNVector3(scale, scale, scale)
         
+        // Add foundation
+        if let geo = node.geometry {
+            let (min, max) = geo.boundingBox
+            let width = max.x - min.x
+            let depth = max.z - min.z
+            let foundationHeight: Float = 0.08
+            
+            let foundationGeo = SCNBox(
+                width: CGFloat(width * scale * 1.05),
+                height: CGFloat(foundationHeight),
+                length: CGFloat(depth * scale * 1.05),
+                chamferRadius: 0.05
+            )
+            let foundationMat = SCNMaterial()
+            foundationMat.lightingModel = .physicallyBased
+            foundationMat.diffuse.contents = UIColor(red: 0.35, green: 0.3, blue: 0.25, alpha: 1.0)
+            foundationMat.roughness.contents = NSNumber(value: 0.9)
+            foundationMat.metalness.contents = NSNumber(value: 0.0)
+            foundationGeo.materials = [foundationMat]
+            
+            let foundationNode = SCNNode(geometry: foundationGeo)
+            foundationNode.position = SCNVector3(0, -foundationHeight / 2, 0)
+            node.addChildNode(foundationNode)
+        }
+        
         return node
     }
-}
-
-enum HouseType {
-    case cottage
-    case familyHome
-    case shop
-    case factory
-    case barn
 }
