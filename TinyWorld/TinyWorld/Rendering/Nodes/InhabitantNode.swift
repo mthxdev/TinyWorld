@@ -32,15 +32,70 @@ class InhabitantNode: SCNNode {
         char.scale = SCNVector3(0.012, 0.012, 0.012)
         
         // Add random variation to materials if possible (FBX materials are nested)
-        let colors: [UIColor] = [.red, .blue, .green, .orange, .purple, .cyan, .magenta]
-        let shirtColor = colors[(abs(inhabitantId.hashValue) / 10) % colors.count]
+        let shirtColors: [UIColor] = [
+            UIColor(red: 0.85, green: 0.3, blue: 0.25, alpha: 1.0),   // Red
+            UIColor(red: 0.25, green: 0.55, blue: 0.85, alpha: 1.0),   // Blue
+            UIColor(red: 0.3, green: 0.7, blue: 0.35, alpha: 1.0),     // Green
+            UIColor(red: 0.95, green: 0.6, blue: 0.15, alpha: 1.0),    // Orange
+            UIColor(red: 0.65, green: 0.35, blue: 0.8, alpha: 1.0),    // Purple
+            UIColor(red: 0.2, green: 0.75, blue: 0.8, alpha: 1.0),     // Cyan
+            UIColor(red: 0.85, green: 0.35, blue: 0.65, alpha: 1.0),   // Magenta
+            UIColor(red: 0.9, green: 0.75, blue: 0.2, alpha: 1.0),     // Yellow
+            UIColor(red: 0.4, green: 0.6, blue: 0.5, alpha: 1.0),      // Teal
+            UIColor(red: 0.75, green: 0.5, blue: 0.35, alpha: 1.0),    // Brown
+        ]
+        let shirtColor = shirtColors[(abs(inhabitantId.hashValue) / 10) % shirtColors.count]
+        
+        let pantsColors: [UIColor] = [
+            UIColor(red: 0.2, green: 0.2, blue: 0.3, alpha: 1.0),      // Dark blue
+            UIColor(red: 0.25, green: 0.22, blue: 0.18, alpha: 1.0),   // Brown
+            UIColor(red: 0.18, green: 0.18, blue: 0.22, alpha: 1.0),   // Charcoal
+            UIColor(red: 0.35, green: 0.3, blue: 0.25, alpha: 1.0),    // Tan
+            UIColor(red: 0.15, green: 0.25, blue: 0.2, alpha: 1.0),    // Dark green
+        ]
+        let pantsColor = pantsColors[(abs(inhabitantId.hashValue) / 7) % pantsColors.count]
         
         char.enumerateChildNodes { (node, _) in
             if let geo = node.geometry {
-                // If it's a casual character, they usually have "Shirt" or similar in material names
                 for mat in geo.materials {
-                    if mat.name?.lowercased().contains("shirt") == true || mat.name?.lowercased().contains("top") == true {
+                    let matName = mat.name?.lowercased() ?? ""
+                    if matName.contains("shirt") || matName.contains("top") || matName.contains("torso") || matName.contains("body") {
                         mat.diffuse.contents = shirtColor
+                        mat.roughness.contents = NSNumber(value: 0.85)
+                        mat.metalness.contents = NSNumber(value: 0.0)
+                    } else if matName.contains("pant") || matName.contains("leg") || matName.contains("trouser") || matName.contains("jean") || matName.contains("short") {
+                        mat.diffuse.contents = pantsColor
+                        mat.roughness.contents = NSNumber(value: 0.8)
+                        mat.metalness.contents = NSNumber(value: 0.0)
+                    } else if matName.contains("shoe") || matName.contains("boot") || matName.contains("foot") {
+                        mat.diffuse.contents = UIColor(red: 0.15, green: 0.12, blue: 0.1, alpha: 1.0)
+                        mat.roughness.contents = NSNumber(value: 0.7)
+                        mat.metalness.contents = NSNumber(value: 0.05)
+                    } else if matName.contains("hair") {
+                        let hairColors: [UIColor] = [
+                            UIColor(red: 0.25, green: 0.18, blue: 0.12, alpha: 1.0),   // Dark brown
+                            UIColor(red: 0.4, green: 0.28, blue: 0.18, alpha: 1.0),     // Brown
+                            UIColor(red: 0.55, green: 0.35, blue: 0.2, alpha: 1.0),     // Light brown
+                            UIColor(red: 0.75, green: 0.55, blue: 0.3, alpha: 1.0),     // Blonde
+                            UIColor(red: 0.6, green: 0.25, blue: 0.15, alpha: 1.0),     // Auburn
+                            UIColor(red: 0.15, green: 0.12, blue: 0.1, alpha: 1.0),     // Black
+                        ]
+                        let hairColor = hairColors[(abs(inhabitantId.hashValue) / 13) % hairColors.count]
+                        mat.diffuse.contents = hairColor
+                        mat.roughness.contents = NSNumber(value: 0.75)
+                        mat.metalness.contents = NSNumber(value: 0.0)
+                    } else if matName.contains("skin") || matName.contains("face") || matName.contains("head") || matName.contains("hand") || matName.contains("arm") {
+                        let skinTones: [UIColor] = [
+                            UIColor(red: 0.95, green: 0.8, blue: 0.68, alpha: 1.0),   // Light
+                            UIColor(red: 0.88, green: 0.7, blue: 0.58, alpha: 1.0),   // Medium-light
+                            UIColor(red: 0.78, green: 0.6, blue: 0.48, alpha: 1.0),   // Medium
+                            UIColor(red: 0.65, green: 0.48, blue: 0.38, alpha: 1.0),  // Medium-dark
+                            UIColor(red: 0.52, green: 0.38, blue: 0.28, alpha: 1.0),  // Dark
+                        ]
+                        let skinColor = skinTones[(abs(inhabitantId.hashValue) / 17) % skinTones.count]
+                        mat.diffuse.contents = skinColor
+                        mat.roughness.contents = NSNumber(value: 0.65)
+                        mat.metalness.contents = NSNumber(value: 0.02)
                     }
                 }
             }
@@ -50,8 +105,6 @@ class InhabitantNode: SCNNode {
         self.addChildNode(char)
         
         // Setup animations
-        // In Quaternius FBX files, the animations are attached to the root node or children.
-        // We will just let the default animation play for now, or extract "Walk" and "Idle"
         playAnimation(name: "Idle")
     }
     

@@ -20,16 +20,55 @@ def generate_textures():
     lin = np.linspace(-16.0, 16.0, size, dtype=np.float32)
     x, z = np.meshgrid(lin, lin) # shape (size, size)
     r = np.sqrt(x**2 + z**2)
+    angle = np.arctan2(x, z)
 
     # 1. Base terrain height field for macro color shading
-    # Same hills formula as TerrainBuilder:
-    h1 = np.sin(x * 0.2 + 1.5) * np.cos(z * 0.25) * 0.8
-    h2 = np.sin(x * 0.4) * np.sin(z * 0.3 + 2.0) * 0.3
-    h3 = np.cos(x * 0.8) * np.cos(z * 0.7) * 0.1
-    height = h1 + h2 + h3
+    # Same hills formula as TerrainBuilder (updated with biome features):
+    h1 = np.sin(x * 0.18 + 1.5) * np.cos(z * 0.22) * 1.1
+    h2 = np.sin(x * 0.35) * np.sin(z * 0.28 + 2.0) * 0.5
+    h3 = np.cos(x * 0.7) * np.cos(z * 0.65) * 0.15
+    h4 = np.sin(x * 0.12 + 0.7) * np.cos(z * 0.15 + 1.2) * 0.3
+    h5 = np.sin(x * 0.5 + angle * 0.3) * np.cos(z * 0.45 - angle * 0.2) * 0.25
+    h6 = np.cos(x * 0.28 + 1.8) * np.sin(z * 0.32 + 0.5) * 0.18
+    height = h1 + h2 + h3 + h4 + h5 + h6
 
-    # Normalize height variation to [-1, 1]
-    h_norm = np.clip(height / 1.2, -1.0, 1.0)
+    # Biome-aware terrain shaping (must match TerrainBuilder.getHeight)
+    # Northwest: elevated forested hills
+    nw_mask = ((x < -4.0) & (z < -4.0)).astype(np.float32)
+    nw_dist = np.sqrt((x + 9.0)**2 + (z + 8.0)**2)
+    nw_biome = np.clip(1.0 - nw_dist / 7.0, 0.0, 1.0) * 0.35 * nw_mask
+    
+    # Northeast: rocky elevated terrain
+    ne_mask = ((x > 4.0) & (z < -4.0)).astype(np.float32)
+    ne_dist = np.sqrt((x - 8.0)**2 + (z + 7.0)**2)
+    ne_biome = np.clip(1.0 - ne_dist / 7.0, 0.0, 1.0) * 0.5 * ne_mask
+    
+    # South: gentle meadow depression
+    s_mask = (z > 6.0).astype(np.float32)
+    s_dist = np.sqrt(x**2 + (z - 10.0)**2)
+    s_biome = -np.clip(1.0 - s_dist / 8.0, 0.0, 1.0) * 0.2 * s_mask
+    
+    height += nw_biome + ne_biome + s_biome
+
+    # Center plaza mound
+    center_mound = np.clip(1.0 - r / 5.0, 0.0, 1.0) * 0.4
+    height = np.where(r < 5.0, height * np.maximum(0.3, r / 5.0) + center_mound, height)
+
+    # Gentle descent towards shoreline
+    shore_drop = np.clip((r - 11.5) * 0.42, 0.0, None)
+    height -= shore_drop
+
+    # Beach/sand transition zone (slightly flattened)
+    beach_factor = np.clip(1.0 - (r - 13.0) / 2.5, 0.0, 1.0)
+    beach_zone = ((r > 13.0) & (r < 15.5)).astype(np.float32)
+    height = np.where(beach_zone > 0, height * (0.3 + beach_factor * 0.7) - 0.05, height)
+
+    # Underwater slope
+    edge_drop = np.clip((r - 15.5) * 1.4, 0.0, None)
+    height -= edge_drop * edge_drop
+
+    # Normalize height variation to [-1, 1] for color interpolation
+    h_norm = np.clip(height / 1.5, -1.0, 1.0)
 
     # 2. Paths and Plaza Mask
     # Village center plaza (radius 3.8, feather 1.2)
@@ -88,12 +127,13 @@ def generate_textures():
     outer_drop = np.clip((r - 15.8) / 0.8, 0.0, 1.0)
 
     # 4. Synthesize Lush Stylized Grass Color Palette
-    # Base cozy green: #5E9F34 (94, 159, 52)
-    # Sunlit hilltop green: #75BA3E (117, 186, 62)
-    # Lush valley emerald: #438025 (67, 128, 37)
-    grass_base = np.array([94.0, 159.0, 52.0], dtype=np.float32)
-    grass_sunlit = np.array([122.0, 192.0, 64.0], dtype=np.float32)
-    grass_shaded = np.array([66.0, 126.0, 36.0], dtype=np.float32)
+    # Warmer, more harmonious greens for stylized look
+    # Base meadow green: #6BA34A (107, 163, 74)
+    # Sunlit hilltop: #8FC955 (143, 201, 85)
+    # Shaded valley: #4D8C32 (77, 140, 50)
+    grass_base = np.array([107.0, 163.0, 74.0], dtype=np.float32)
+    grass_sunlit = np.array([143.0, 201.0, 85.0], dtype=np.float32)
+    grass_shaded = np.array([77.0, 140.0, 50.0], dtype=np.float32)
 
     # Height-based grass color interpolation
     h_weight = (h_norm + 1.0) * 0.5 # [0, 1]
@@ -106,14 +146,34 @@ def generate_textures():
     grass_variation = organic_noise(size, cells=28, seed=1401)
     grass_variation = (grass_variation - 0.5) * 2.0
     for c in range(3):
-        grass_color[:, :, c] += grass_variation * 7.0
+        grass_color[:, :, c] += grass_variation * 6.0
+
+    # Biome-specific grass tinting
+    # Northwest forest: slightly cooler, deeper green
+    nw_grass_tint = np.clip(1.0 - nw_dist / 8.0, 0.0, 1.0) * nw_mask
+    grass_color[:, :, 0] -= nw_grass_tint * 8.0   # Less red
+    grass_color[:, :, 1] += nw_grass_tint * 5.0   # More green
+    grass_color[:, :, 2] -= nw_grass_tint * 3.0   # Less blue
+    
+    # Northeast rocky: more muted, olive tones
+    ne_grass_tint = np.clip(1.0 - ne_dist / 8.0, 0.0, 1.0) * ne_mask
+    grass_color[:, :, 0] += ne_grass_tint * 10.0  # More red/brown
+    grass_color[:, :, 1] -= ne_grass_tint * 8.0   # Less green
+    grass_color[:, :, 2] -= ne_grass_tint * 5.0   # Less blue
+    
+    # South meadow: brighter, warmer
+    s_grass_tint = np.clip(1.0 - s_dist / 9.0, 0.0, 1.0) * s_mask
+    grass_color[:, :, 0] += s_grass_tint * 5.0    # Warmer
+    grass_color[:, :, 1] += s_grass_tint * 10.0   # Brighter green
+    grass_color[:, :, 2] -= s_grass_tint * 2.0
 
     # 5. Warm Golden Earth & Dirt Path Palette
-    # Base earth: #C89965 (200, 153, 101)
-    # Light path sand: #DCB382 (220, 179, 130)
-    # Warm gravel accents: #B07E4C (176, 126, 76)
-    dirt_base = np.array([205.0, 160.0, 108.0], dtype=np.float32)
-    dirt_light = np.array([226.0, 185.0, 135.0], dtype=np.float32)
+    # More harmonious earth tones
+    # Base earth: #C49A6C (196, 154, 108)
+    # Light path sand: #D8B58A (216, 181, 138)
+    # Warm gravel accents: #A87C4A (168, 124, 74)
+    dirt_base = np.array([196.0, 154.0, 108.0], dtype=np.float32)
+    dirt_light = np.array([216.0, 181.0, 138.0], dtype=np.float32)
     dirt_gravel = organic_noise(size, cells=64, seed=2401)
 
     dirt_color = np.zeros((size, size, 3), dtype=np.float32)
@@ -121,10 +181,11 @@ def generate_textures():
         dirt_color[:, :, c] = dirt_base[c] + dirt_gravel * (dirt_light[c] - dirt_base[c])
 
     # 6. Golden Beach Sand Shoreline Palette
-    # Beach sand: #E6C58F (230, 197, 143)
-    # Wet shore sand: #CCA66E (204, 166, 110)
-    sand_base = np.array([230.0, 197.0, 143.0], dtype=np.float32)
-    sand_wet = np.array([195.0, 158.0, 105.0], dtype=np.float32)
+    # Warmer, more inviting sand tones
+    # Beach sand: #EDD0A0 (237, 208, 160)
+    # Wet shore sand: #D4B88C (212, 184, 140)
+    sand_base = np.array([237.0, 208.0, 160.0], dtype=np.float32)
+    sand_wet = np.array([212.0, 184.0, 140.0], dtype=np.float32)
     shore_wetness = np.clip((r - 14.8) / 1.0, 0.0, 1.0)
 
     shore_color = np.zeros((size, size, 3), dtype=np.float32)
@@ -140,9 +201,9 @@ def generate_textures():
     intermediate = grass_color * (1.0 - dirt_3d) + dirt_color * dirt_3d
     # Blend with shore
     final_diffuse = intermediate * (1.0 - shore_3d) + shore_color * shore_3d
-    # Submerged cliff edge tint (dark rock under water)
+    # Submerged cliff edge tint (dark cool rock under water)
     drop_3d = np.repeat(outer_drop[:, :, np.newaxis], 3, axis=2)
-    cliff_color = np.array([120.0, 105.0, 80.0], dtype=np.float32)
+    cliff_color = np.array([60.0, 70.0, 85.0], dtype=np.float32)
     final_diffuse = final_diffuse * (1.0 - drop_3d) + cliff_color * drop_3d
 
     final_diffuse = np.clip(final_diffuse, 0.0, 255.0).astype(np.uint8)

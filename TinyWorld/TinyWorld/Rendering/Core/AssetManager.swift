@@ -88,6 +88,21 @@ class AssetManager {
                                 // Wood: rough, warm
                                 mat.roughness.contents = NSNumber(value: 0.85)
                                 mat.metalness.contents = NSNumber(value: 0.0)
+                            } else if mat.name?.lowercased().contains("flower") == true {
+                                // Flowers: slightly glossy petals
+                                mat.roughness.contents = NSNumber(value: 0.7)
+                                mat.metalness.contents = NSNumber(value: 0.0)
+                                mat.isDoubleSided = true
+                            } else if mat.name?.lowercased().contains("mushroom") == true {
+                                // Mushrooms: matte
+                                mat.roughness.contents = NSNumber(value: 0.9)
+                                mat.metalness.contents = NSNumber(value: 0.0)
+                            } else if mat.name?.lowercased().contains("water") == true ||
+                                      mat.name?.lowercased().contains("river") == true ||
+                                      mat.name?.lowercased().contains("lily") == true {
+                                // Water plants: wet look
+                                mat.roughness.contents = NSNumber(value: 0.3)
+                                mat.metalness.contents = NSNumber(value: 0.1)
                             } else {
                                 // Default nature props
                                 mat.roughness.contents = NSNumber(value: 0.85)
@@ -109,23 +124,22 @@ class AssetManager {
                             // Differentiate roof vs walls vs details by material name
                             let matName = mat.name?.lowercased() ?? ""
                             if matName.contains("roof") || matName.contains("tuile") || matName.contains("tile") {
-                                // Roofs: slightly rougher, warmer
+                                // Roofs: slightly rougher, warmer terracotta tones
                                 mat.roughness.contents = NSNumber(value: 0.85)
                                 if let color = mat.diffuse.contents as? UIColor {
                                     var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
                                     if color.getHue(&h, saturation: &s, brightness: &b, alpha: &a) {
-                                        // Shift roof hue toward terracotta/brown
-                                        mat.diffuse.contents = UIColor(hue: 0.06, saturation: min(1.0, s * 1.2), brightness: min(1.0, b * 0.9), alpha: a)
+                                        mat.diffuse.contents = UIColor(hue: 0.055, saturation: min(1.0, s * 1.25), brightness: min(1.0, b * 0.88), alpha: a)
                                     }
                                 }
-                            } else if matName.contains("wall") || matName.contains("facade") || matName.contains("exterior") {
+                            } else if matName.contains("wall") || matName.contains("facade") || matName.contains("exterior") || matName.contains("siding") {
                                 // Walls: cleaner, slightly smoother
                                 mat.roughness.contents = NSNumber(value: 0.72)
-                            } else if matName.contains("window") || matName.contains("glass") || matName.contains("vitrage") {
+                            } else if matName.contains("window") || matName.contains("glass") || matName.contains("vitrage") || matName.contains("glazing") {
                                 // Windows: reflective, smooth
                                 mat.roughness.contents = NSNumber(value: 0.1)
                                 mat.metalness.contents = NSNumber(value: 0.9)
-                                mat.transparency = 0.3
+                                mat.transparency = 0.25
                                 mat.transparencyMode = .aOne
                             } else if matName.contains("door") || matName.contains("porte") {
                                 // Doors: warm wood
@@ -133,10 +147,10 @@ class AssetManager {
                                 if let color = mat.diffuse.contents as? UIColor {
                                     var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
                                     if color.getHue(&h, saturation: &s, brightness: &b, alpha: &a) {
-                                        mat.diffuse.contents = UIColor(hue: 0.08, saturation: min(1.0, s * 1.3), brightness: min(1.0, b * 0.85), alpha: a)
+                                        mat.diffuse.contents = UIColor(hue: 0.075, saturation: min(1.0, s * 1.3), brightness: min(1.0, b * 0.85), alpha: a)
                                     }
                                 }
-                            } else if matName.contains("trim") || matName.contains("frame") || matName.contains("corner") {
+                            } else if matName.contains("trim") || matName.contains("frame") || matName.contains("corner") || matName.contains("fascia") || matName.contains("soffit") {
                                 // Trim/frames: slightly lighter
                                 mat.roughness.contents = NSNumber(value: 0.8)
                                 if let color = mat.diffuse.contents as? UIColor {
@@ -145,7 +159,27 @@ class AssetManager {
                                         mat.diffuse.contents = UIColor(hue: h, saturation: max(0.0, s * 0.7), brightness: min(1.0, b * 1.15), alpha: a)
                                     }
                                 }
+                            } else if matName.contains("fence") {
+                                // Fences: weathered wood
+                                mat.roughness.contents = NSNumber(value: 0.9)
+                                mat.metalness.contents = NSNumber(value: 0.0)
+                            } else if matName.contains("path") || matName.contains("stone") || matName.contains("driveway") {
+                                // Paths: rough stone
+                                mat.roughness.contents = NSNumber(value: 0.88)
+                                mat.metalness.contents = NSNumber(value: 0.0)
+                            } else if matName.contains("planter") || matName.contains("pot") {
+                                // Planters: terracotta/ceramic
+                                mat.roughness.contents = NSNumber(value: 0.65)
+                                mat.metalness.contents = NSNumber(value: 0.05)
+                            } else if matName.contains("foundation") || matName.contains("base") {
+                                // Foundation: dark rough concrete/stone
+                                mat.roughness.contents = NSNumber(value: 0.92)
+                                mat.metalness.contents = NSNumber(value: 0.0)
                             }
+                        } else if folder == "character" {
+                            // Character materials - handled separately in InhabitantNode
+                            mat.roughness.contents = NSNumber(value: 0.7)
+                            mat.metalness.contents = NSNumber(value: 0.05)
                         } else {
                             // Default PBR settings
                             mat.roughness.contents = NSNumber(value: 0.85)

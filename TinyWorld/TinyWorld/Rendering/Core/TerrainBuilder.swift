@@ -6,14 +6,19 @@ class TerrainBuilder {
     
     static func getHeight(at px: Float, z pz: Float) -> Float {
         let dist = hypot(px, pz)
+        let angle = atan2(px, pz)
         
-        // Organic rolling hills with more variation
+        // Base macro hills (4 octaves of fBm)
         let h1 = sin(px * 0.18 + 1.5) * cos(pz * 0.22) * 1.1
         let h2 = sin(px * 0.35) * sin(pz * 0.28 + 2.0) * 0.5
         let h3 = cos(px * 0.7) * cos(pz * 0.65) * 0.15
         let h4 = sin(px * 0.12 + 0.7) * cos(pz * 0.15 + 1.2) * 0.3
         
-        var height = h1 + h2 + h3 + h4
+        // Additional medium-scale variation for natural ridges/valleys
+        let h5 = sin(px * 0.5 + angle * 0.3) * cos(pz * 0.45 - angle * 0.2) * 0.25
+        let h6 = cos(px * 0.28 + 1.8) * sin(pz * 0.32 + 0.5) * 0.18
+        
+        var height = h1 + h2 + h3 + h4 + h5 + h6
         
         // Center plaza - gentle mound rather than flat
         if dist < 5.0 {
@@ -21,10 +26,39 @@ class TerrainBuilder {
             height = height * max(0.3, (dist / 5.0)) + centerMound
         }
         
+        // Biome-aware terrain shaping
+        // Northwest: slightly elevated forested hills
+        if px < -4.0 && pz < -4.0 {
+            let biomeDist = hypot(px + 9.0, pz + 8.0)
+            if biomeDist < 7.0 {
+                height += (1.0 - biomeDist / 7.0) * 0.35
+            }
+        }
+        // Northeast: rocky elevated terrain
+        if px > 4.0 && pz < -4.0 {
+            let biomeDist = hypot(px - 8.0, pz + 7.0)
+            if biomeDist < 7.0 {
+                height += (1.0 - biomeDist / 7.0) * 0.5
+            }
+        }
+        // South: gentle meadow depression
+        if pz > 6.0 {
+            let biomeDist = hypot(px, pz - 10.0)
+            if biomeDist < 8.0 {
+                height -= (1.0 - biomeDist / 8.0) * 0.2
+            }
+        }
+        
         // Gentle descent towards the shoreline
         if dist > 11.5 {
             let drop = (dist - 11.5) * 0.42
             height -= drop
+        }
+        
+        // Beach/sand transition zone (slightly flattened)
+        if dist > 13.0 && dist < 15.5 {
+            let beachFactor = 1.0 - min(1.0, (dist - 13.0) / 2.5)
+            height = height * (0.3 + beachFactor * 0.7) - 0.05
         }
         
         // Underwater slope at the outer perimeter

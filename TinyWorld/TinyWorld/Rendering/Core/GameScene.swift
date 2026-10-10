@@ -18,18 +18,16 @@ class GameScene: SCNScene {
         self.rootNode.addChildNode(environmentNode)
         
         // Configuration de la brume lointaine (horizon uniquement, ne décolore JAMAIS l'île!)
-        self.fogStartDistance = 55.0
-        self.fogEndDistance = 95.0
-        self.fogDensityExponent = 1.1
+        self.fogStartDistance = 65.0
+        self.fogEndDistance = 110.0
+        self.fogDensityExponent = 1.0
         
         // Enable HDR for better PBR rendering
-        self.background.contents = UIColor(red: 0.45, green: 0.7, blue: 0.92, alpha: 1.0)
+        self.background.contents = UIColor(red: 0.5, green: 0.72, blue: 0.94, alpha: 1.0)
         
         // Environnement HDRI pour le rendu PBR (Reflets et lumière ambiante réalistes)
         self.lightingEnvironment.contents = "art.scnassets/textures/sky.exr"
-        // L'HDRI reste utile aux reflets PBR, mais ne doit pas blanchir le centre
-        // lorsqu'il se cumule avec les lumières de l'environnement.
-        self.lightingEnvironment.intensity = 0.45
+        self.lightingEnvironment.intensity = 0.5
     }
     
     required init?(coder: NSCoder) {
@@ -42,29 +40,39 @@ class GameScene: SCNScene {
         let time = worldData.timeOfDay
         var targetColor = UIColor.black
         
-        if time >= 6 && time < 9 { // Aube -> Jour (Chaud et doré, pas beige terne)
-            let t = CGFloat((time - 6) / 3)
-            let dawn = UIColor(red: 0.98, green: 0.82, blue: 0.58, alpha: 1.0)
-            let day = UIColor(red: 0.45, green: 0.7, blue: 0.92, alpha: 1.0)
-            targetColor = interpolateColor(from: dawn, to: day, progress: t)
-        } else if time >= 9 && time < 16 { // Jour (Ciel d'azur stylisé limpide)
-            targetColor = UIColor(red: 0.45, green: 0.7, blue: 0.92, alpha: 1.0)
-        } else if time >= 16 && time < 19 { // Jour -> Crepuscule
-            let t = CGFloat((time - 16) / 3)
-            let day = UIColor(red: 0.45, green: 0.7, blue: 0.92, alpha: 1.0)
-            let dusk = UIColor(red: 0.92, green: 0.55, blue: 0.38, alpha: 1.0)
-            targetColor = interpolateColor(from: day, to: dusk, progress: t)
-        } else if time >= 19 && time < 21 { // Crepuscule -> Nuit
-            let t = CGFloat((time - 19) / 2)
-            let dusk = UIColor(red: 0.92, green: 0.55, blue: 0.38, alpha: 1.0)
-            let night = UIColor(red: 0.08, green: 0.12, blue: 0.25, alpha: 1.0)
-            targetColor = interpolateColor(from: dusk, to: night, progress: t)
-        } else { // Nuit (Bleu nuit profond et doux)
-            targetColor = UIColor(red: 0.08, green: 0.12, blue: 0.25, alpha: 1.0)
+        if time >= 5 && time < 8 { // Pre-dawn to sunrise
+            let t = CGFloat((time - 5) / 3)
+            let preDawn = UIColor(red: 0.18, green: 0.22, blue: 0.4, alpha: 1.0)
+            let sunrise = UIColor(red: 0.98, green: 0.75, blue: 0.5, alpha: 1.0)
+            targetColor = interpolateColor(from: preDawn, to: sunrise, progress: t)
+        } else if time >= 8 && time < 10 { // Morning golden hour
+            let t = CGFloat((time - 8) / 2)
+            let sunrise = UIColor(red: 0.98, green: 0.75, blue: 0.5, alpha: 1.0)
+            let morning = UIColor(red: 0.55, green: 0.75, blue: 0.95, alpha: 1.0)
+            targetColor = interpolateColor(from: sunrise, to: morning, progress: t)
+        } else if time >= 10 && time < 15 { // Midday
+            targetColor = UIColor(red: 0.5, green: 0.72, blue: 0.94, alpha: 1.0)
+        } else if time >= 15 && time < 17 { // Late afternoon
+            let t = CGFloat((time - 15) / 2)
+            let afternoon = UIColor(red: 0.5, green: 0.72, blue: 0.94, alpha: 1.0)
+            let goldenHour = UIColor(red: 0.9, green: 0.65, blue: 0.45, alpha: 1.0)
+            targetColor = interpolateColor(from: afternoon, to: goldenHour, progress: t)
+        } else if time >= 17 && time < 19.5 { // Golden hour to sunset
+            let t = CGFloat((time - 17) / 2.5)
+            let goldenHour = UIColor(red: 0.9, green: 0.65, blue: 0.45, alpha: 1.0)
+            let sunset = UIColor(red: 0.92, green: 0.48, blue: 0.32, alpha: 1.0)
+            targetColor = interpolateColor(from: goldenHour, to: sunset, progress: t)
+        } else if time >= 19.5 && time < 21.5 { // Twilight to night
+            let t = CGFloat((time - 19.5) / 2)
+            let sunset = UIColor(red: 0.92, green: 0.48, blue: 0.32, alpha: 1.0)
+            let night = UIColor(red: 0.06, green: 0.1, blue: 0.22, alpha: 1.0)
+            targetColor = interpolateColor(from: sunset, to: night, progress: t)
+        } else { // Night
+            targetColor = UIColor(red: 0.06, green: 0.1, blue: 0.22, alpha: 1.0)
         }
         
         if let currentColor = self.background.contents as? UIColor {
-            let newColor = interpolateColor(from: currentColor, to: targetColor, progress: 0.08)
+            let newColor = interpolateColor(from: currentColor, to: targetColor, progress: 0.06)
             self.background.contents = newColor
             self.fogColor = newColor
         } else {
@@ -72,16 +80,22 @@ class GameScene: SCNScene {
             self.fogColor = targetColor
         }
         
-        // Ajuster l'intensité de l'HDRI selon l'heure
-        var envIntensity: CGFloat = 0.45
-        if time >= 6 && time < 9 {
-            envIntensity = 0.2 + 0.25 * CGFloat((time - 6) / 3)
-        } else if time >= 9 && time < 16 {
-            envIntensity = 0.45
-        } else if time >= 16 && time < 19 {
-            envIntensity = 0.45 - 0.3 * CGFloat((time - 16) / 3)
+        // Adjust HDRI intensity by time of day
+        var envIntensity: CGFloat = 0.5
+        if time >= 5 && time < 8 {
+            envIntensity = 0.15 + 0.35 * CGFloat((time - 5) / 3)
+        } else if time >= 8 && time < 10 {
+            envIntensity = 0.5
+        } else if time >= 10 && time < 15 {
+            envIntensity = 0.55
+        } else if time >= 15 && time < 17 {
+            envIntensity = 0.55 - 0.15 * CGFloat((time - 15) / 2)
+        } else if time >= 17 && time < 19.5 {
+            envIntensity = 0.4 - 0.3 * CGFloat((time - 17) / 2.5)
+        } else if time >= 19.5 && time < 21.5 {
+            envIntensity = 0.1 - 0.05 * CGFloat((time - 19.5) / 2)
         } else {
-            envIntensity = 0.08 // Nuit très douce
+            envIntensity = 0.05
         }
         self.lightingEnvironment.intensity = envIntensity
         
