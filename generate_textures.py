@@ -183,19 +183,19 @@ def generate_textures():
     out_dir = "TinyWorld/TinyWorld/art.scnassets/textures"
     os.makedirs(out_dir, exist_ok=True)
 
-    # Keep the existing JPG names because TerrainBuilder references them directly.
-    # High quality minimizes compression artifacts without changing the runtime paths.
+    # Keep the diffuse JPG path stable; the data-oriented maps use lossless PNG files.
     Image.fromarray(final_diffuse).save(
         os.path.join(out_dir, "island_diffuse.jpg"), quality=100, subsampling=0
     )
+    # Lossless maps avoid block and chroma artifacts in the normal and roughness channels.
     Image.fromarray(normal_map).save(
-        os.path.join(out_dir, "island_normal.jpg"), quality=100, subsampling=0
+        os.path.join(out_dir, "island_normal.png"), format="PNG", optimize=True
     )
     Image.fromarray(roughness_map).save(
-        os.path.join(out_dir, "island_roughness.jpg"), quality=100, subsampling=0
+        os.path.join(out_dir, "island_roughness.png"), format="PNG", optimize=True
     )
 
-    print("Successfully generated island_diffuse.jpg, island_normal.jpg, island_roughness.jpg!")
+    print("Successfully generated island_diffuse.jpg, island_normal.png, island_roughness.png!")
 
 if __name__ == "__main__":
     generate_textures()

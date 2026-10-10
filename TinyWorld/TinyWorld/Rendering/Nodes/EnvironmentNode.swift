@@ -153,11 +153,16 @@ class EnvironmentNode: SCNNode {
         let waterGeo = SCNPlane(width: 130.0, height: 130.0)
         let waterMat = SCNMaterial()
         waterMat.lightingModel = .physicallyBased
-        waterMat.diffuse.contents = UIColor(red: 0.10, green: 0.48, blue: 0.66, alpha: 0.94)
+        waterMat.diffuse.contents = UIColor(red: 0.10, green: 0.48, blue: 0.66, alpha: 1.0)
         waterMat.roughness.contents = NSNumber(value: 0.22) // Reflets doux, sans scintillement excessif
         waterMat.metalness.contents = NSNumber(value: 0.05)
         waterMat.specular.contents = UIColor(white: 0.75, alpha: 1.0)
-        waterMat.isDoubleSided = true
+        waterMat.transparency = 1.0
+        waterMat.writesToDepthBuffer = true
+        waterMat.readsFromDepthBuffer = true
+        waterMat.isDoubleSided = false
+        waterMat.diffuse.magnificationFilter = .linear
+        waterMat.diffuse.minificationFilter = .linear
         waterGeo.materials = [waterMat]
 
         let waterNode = SCNNode(geometry: waterGeo)

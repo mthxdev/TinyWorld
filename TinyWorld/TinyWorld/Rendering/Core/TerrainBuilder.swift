@@ -120,8 +120,14 @@ class TerrainBuilder {
         let terrainMat = SCNMaterial()
         terrainMat.lightingModel = .physicallyBased
         terrainMat.diffuse.contents = "art.scnassets/textures/island_diffuse.jpg"
-        terrainMat.normal.contents = "art.scnassets/textures/island_normal.jpg"
-        terrainMat.roughness.contents = "art.scnassets/textures/island_roughness.jpg"
+        terrainMat.normal.contents = "art.scnassets/textures/island_normal.png"
+        terrainMat.roughness.contents = "art.scnassets/textures/island_roughness.png"
+        terrainMat.diffuse.magnificationFilter = .linear
+        terrainMat.diffuse.minificationFilter = .linear
+        terrainMat.normal.magnificationFilter = .linear
+        terrainMat.normal.minificationFilter = .linear
+        terrainMat.roughness.magnificationFilter = .linear
+        terrainMat.roughness.minificationFilter = .linear
         terrainMat.isDoubleSided = false
         terrainGeo.materials = [terrainMat]
         
@@ -129,15 +135,19 @@ class TerrainBuilder {
         terrainNode.castsShadow = true
         root.addChildNode(terrainNode)
         
-        // Underwater Cliff Base (Sitting safely underwater beneath y = -0.35)
-        let baseGeo = SCNCylinder(radius: CGFloat(islandRadius - 0.2), height: 3.0)
+        // Underwater rock base: tapered and fully below the opaque water surface.
+        let baseGeo = SCNCone(
+            topRadius: CGFloat(islandRadius - 1.2),
+            bottomRadius: CGFloat(islandRadius - 0.2),
+            height: 3.0
+        )
         let baseMat = SCNMaterial()
         baseMat.lightingModel = .physicallyBased
         baseMat.diffuse.contents = UIColor(red: 0.35, green: 0.30, blue: 0.25, alpha: 1.0)
         baseMat.roughness.contents = NSNumber(value: 0.9)
         baseGeo.materials = [baseMat]
         let baseNode = SCNNode(geometry: baseGeo)
-        baseNode.position = SCNVector3(0, -1.8, 0)
+        baseNode.position = SCNVector3(0, -1.85, 0)
         root.addChildNode(baseNode)
         
         return root
