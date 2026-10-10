@@ -1,15 +1,6 @@
 import SceneKit
 import UIKit
 
-// Forward declaration for HouseType from BuildingBuilder
-enum HouseType {
-    case cottage
-    case familyHome
-    case shop
-    case factory
-    case barn
-}
-
 class EnvironmentNode: SCNNode {
     private var directionalLightNode: SCNNode!
     private var ambientLightNode: SCNNode!
@@ -556,7 +547,7 @@ private func createBuiltZoneNode(zone: Zone) -> SCNNode {
         switch zone.type {
         case .home:
             // Mix of cottages and family homes
-            let houseType: HouseType = (zone.id % 3 == 0) ? .familyHome : .cottage
+            let houseType: BuildingBuilder.HouseType = (zone.id % 3 == 0) ? .familyHome : .cottage
             building = BuildingBuilder.shared.buildSpecificHouse(type: houseType, variant: variantSeed)
         case .work:
             building = BuildingBuilder.shared.buildFactory()

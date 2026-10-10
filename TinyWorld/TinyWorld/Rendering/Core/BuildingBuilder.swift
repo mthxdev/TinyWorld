@@ -1,5 +1,13 @@
 import SceneKit
 
+public enum HouseType {
+    case cottage
+    case familyHome
+    case shop
+    case factory
+    case barn
+}
+
 class BuildingBuilder {
     static let shared = BuildingBuilder()
     
