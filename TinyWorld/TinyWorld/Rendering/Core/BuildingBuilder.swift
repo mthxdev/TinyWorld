@@ -35,7 +35,7 @@ class BuildingBuilder {
         for i in 0..<planterCount {
             let planter = AssetManager.shared.getModel(named: "planter", folder: "suburban")
             let angle = Float(i) / Float(planterCount) * 2 * Float.pi
-            let radius = 2.5
+            let radius: Float = 2.5
             planter.position = SCNVector3(sin(angle) * radius, 0, cos(angle) * radius)
             planter.eulerAngles.y = Float.random(in: 0...(2 * Float.pi))
             barn.addChildNode(planter)
