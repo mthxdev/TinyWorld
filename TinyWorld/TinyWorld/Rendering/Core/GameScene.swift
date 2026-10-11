@@ -18,16 +18,18 @@ class GameScene: SCNScene {
         self.rootNode.addChildNode(environmentNode)
         
         // Configuration de la brume lointaine (horizon uniquement, ne décolore JAMAIS l'île!)
-        self.fogStartDistance = 65.0
-        self.fogEndDistance = 110.0
+        self.fogStartDistance = 70.0
+        self.fogEndDistance = 120.0
         self.fogDensityExponent = 1.0
+        self.fogColor = self.background.contents as? UIColor ?? UIColor(red: 0.5, green: 0.72, blue: 0.94, alpha: 1.0)
         
         // Enable HDR for better PBR rendering
         self.background.contents = UIColor(red: 0.5, green: 0.72, blue: 0.94, alpha: 1.0)
         
         // Environnement HDRI pour le rendu PBR (Reflets et lumière ambiante réalistes)
-        self.lightingEnvironment.contents = "art.scnassets/textures/sky.exr"
-        self.lightingEnvironment.intensity = 0.5
+        // Use procedural sky color instead of missing sky.exr file
+        self.lightingEnvironment.contents = nil
+        self.lightingEnvironment.intensity = 0.6
     }
     
     required init?(coder: NSCoder) {

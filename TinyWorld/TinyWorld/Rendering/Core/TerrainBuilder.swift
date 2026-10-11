@@ -18,12 +18,16 @@ class TerrainBuilder {
         let h5 = sin(px * 0.5 + angle * 0.3) * cos(pz * 0.45 - angle * 0.2) * 0.25
         let h6 = cos(px * 0.28 + 1.8) * sin(pz * 0.32 + 0.5) * 0.18
         
-        var height = h1 + h2 + h3 + h4 + h5 + h6
+        // High-frequency detail for natural texture feel
+        let h7 = sin(px * 1.2 + 0.3) * cos(pz * 1.1 - 0.7) * 0.06
+        let h8 = cos(px * 0.95 + 2.1) * sin(pz * 1.3 + 1.4) * 0.04
+        
+        var height = h1 + h2 + h3 + h4 + h5 + h6 + h7 + h8
         
         // Center plaza - gentle mound rather than flat
         if dist < 5.0 {
-            let centerMound = (1.0 - dist / 5.0) * 0.4
-            height = height * max(0.3, (dist / 5.0)) + centerMound
+            let centerMound = (1.0 - dist / 5.0) * 0.5
+            height = height * max(0.25, (dist / 5.0)) + centerMound
         }
         
         // Biome-aware terrain shaping
@@ -31,39 +35,46 @@ class TerrainBuilder {
         if px < -4.0 && pz < -4.0 {
             let biomeDist = hypot(px + 9.0, pz + 8.0)
             if biomeDist < 7.0 {
-                height += (1.0 - biomeDist / 7.0) * 0.35
+                height += (1.0 - biomeDist / 7.0) * 0.4
             }
         }
         // Northeast: rocky elevated terrain
         if px > 4.0 && pz < -4.0 {
             let biomeDist = hypot(px - 8.0, pz + 7.0)
             if biomeDist < 7.0 {
-                height += (1.0 - biomeDist / 7.0) * 0.5
+                height += (1.0 - biomeDist / 7.0) * 0.55
             }
         }
         // South: gentle meadow depression
         if pz > 6.0 {
             let biomeDist = hypot(px, pz - 10.0)
             if biomeDist < 8.0 {
-                height -= (1.0 - biomeDist / 8.0) * 0.2
+                height -= (1.0 - biomeDist / 8.0) * 0.25
+            }
+        }
+        // West coast: subtle cliff-like elevation
+        if px < -10.0 && abs(pz) < 4.0 {
+            let coastDist = hypot(px + 12.0, pz)
+            if coastDist < 4.0 {
+                height += (1.0 - coastDist / 4.0) * 0.3
             }
         }
         
         // Gentle descent towards the shoreline
-        if dist > 11.5 {
-            let drop = (dist - 11.5) * 0.42
+        if dist > 11.0 {
+            let drop = (dist - 11.0) * 0.45
             height -= drop
         }
         
-        // Beach/sand transition zone (slightly flattened)
-        if dist > 13.0 && dist < 15.5 {
-            let beachFactor = 1.0 - min(1.0, (dist - 13.0) / 2.5)
-            height = height * (0.3 + beachFactor * 0.7) - 0.05
+        // Beach/sand transition zone (slightly flattened, wet sand near water)
+        if dist > 12.8 && dist < 15.5 {
+            let beachFactor = 1.0 - min(1.0, (dist - 12.8) / 2.7)
+            height = height * (0.25 + beachFactor * 0.75) - 0.08
         }
         
         // Underwater slope at the outer perimeter
         if dist > islandRadius - 0.5 {
-            let edgeDrop = (dist - (islandRadius - 0.5)) * 1.4
+            let edgeDrop = (dist - (islandRadius - 0.5)) * 1.6
             height -= edgeDrop * edgeDrop
         }
         
@@ -74,7 +85,7 @@ class TerrainBuilder {
         let root = SCNNode()
         root.name = "terrain_root"
         
-        let actualSubdivisions = max(subdivisions, 100)
+        let actualSubdivisions = max(subdivisions, 120)
         let size: Float = 32.0
         let dx = size / Float(actualSubdivisions)
         
@@ -94,7 +105,7 @@ class TerrainBuilder {
                 let dist = hypot(px, pz)
                 if dist > islandRadius + 0.6 {
                     // Outer points drop safely underwater
-                    vertices.append(SCNVector3(px, -2.5, pz))
+                    vertices.append(SCNVector3(px, -3.0, pz))
                     let u = CGFloat((px - offsetX) / size)
                     let v = CGFloat((pz - offsetZ) / size)
                     uvs.append(CGPoint(x: u, y: v))
@@ -111,7 +122,7 @@ class TerrainBuilder {
                 uvs.append(CGPoint(x: u, y: v))
                 
                 // Normal calculation via finite differences
-                let eps: Float = 0.15
+                let eps: Float = 0.12
                 let hR = getHeight(at: px + eps, z: pz)
                 let hL = getHeight(at: px - eps, z: pz)
                 let hU = getHeight(at: px, z: pz + eps)
@@ -161,8 +172,8 @@ class TerrainBuilder {
         terrainMat.roughness.contents = "art.scnassets/textures/island_roughness.png"
         // Better PBR settings for stylized terrain
         terrainMat.metalness.contents = NSNumber(value: 0.0)
-        terrainMat.roughness.intensity = 0.85
-        terrainMat.normal.intensity = 0.6 // Reduced for more natural look
+        terrainMat.roughness.intensity = 0.9
+        terrainMat.normal.intensity = 0.55 // Reduced for more natural look
         terrainMat.diffuse.magnificationFilter = .linear
         terrainMat.diffuse.minificationFilter = .linear
         terrainMat.diffuse.mipFilter = .linear
@@ -180,23 +191,23 @@ class TerrainBuilder {
         root.addChildNode(terrainNode)
         
         // Underwater rock base: fully submerged below water surface.
-        // Water level is at y = -0.32, so base must stay below that.
+        // Water level is at y = -0.35, so base must stay below that.
         // Use a flatter cone that follows the island contour better
         let baseGeo = SCNCone(
-            topRadius: CGFloat(islandRadius - 0.5),
-            bottomRadius: CGFloat(islandRadius + 1.0),
-            height: 2.0
+            topRadius: CGFloat(islandRadius - 0.3),
+            bottomRadius: CGFloat(islandRadius + 1.2),
+            height: 2.5
         )
         let baseMat = SCNMaterial()
         baseMat.lightingModel = .physicallyBased
         // Darker, cooler underwater rock color - less brown, more slate/grey
-        baseMat.diffuse.contents = UIColor(red: 0.12, green: 0.16, blue: 0.20, alpha: 1.0)
+        baseMat.diffuse.contents = UIColor(red: 0.1, green: 0.13, blue: 0.17, alpha: 1.0)
         baseMat.roughness.contents = NSNumber(value: 0.95)
         baseMat.metalness.contents = NSNumber(value: 0.0)
         baseGeo.materials = [baseMat]
         let baseNode = SCNNode(geometry: baseGeo)
-        // Position so top of cone is at y = -1.0 (well below water at -0.32)
-        baseNode.position = SCNVector3(0, -2.0, 0)
+        // Position so top of cone is at y = -1.2 (well below water at -0.35)
+        baseNode.position = SCNVector3(0, -2.45, 0)
         root.addChildNode(baseNode)
         
         return root
