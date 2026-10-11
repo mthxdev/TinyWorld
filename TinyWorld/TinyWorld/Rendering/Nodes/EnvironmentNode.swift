@@ -556,7 +556,6 @@ private func setupOcean() {
             foamPatch.runAction(SCNAction.repeatForever(SCNAction.sequence([patchPulse, patchPulseBack])))
         }
     }
-    }
     
     func sync(with worldData: WorldData) {
         for zone in worldData.zones {
@@ -797,7 +796,7 @@ private func createBuiltZoneNode(zone: Zone) -> SCNNode {
             lightColor = UIColor(red: 1.0, green: 0.98, blue: 0.95, alpha: 1.0)
             ambientColor = UIColor(red: 1.0, green: 0.96, blue: 0.90, alpha: 1.0)
             fillColor = UIColor(red: 0.80, green: 0.86, blue: 1.0, alpha: 1.0)
-} else if time > 15 && time <= 17 {
+        } else if time > 15 && time <= 17 {
             // Late afternoon - warming up
             let t = CGFloat((time - 15) / 2)
             intensity = 400
