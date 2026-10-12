@@ -50,7 +50,7 @@ class EnvironmentNode: SCNNode {
         fillLightNode = SCNNode()
         let fLight = SCNLight()
         fLight.type = .directional
-        fLight.intensity = 75
+        fLight.intensity = 45
         fLight.castsShadow = false
         fLight.color = UIColor(red: 0.80, green: 0.86, blue: 1.0, alpha: 1.0)
         fillLightNode.light = fLight
@@ -465,7 +465,7 @@ private func setupOcean() {
         
         let floorNode = SCNNode(geometry: floorGeo)
         floorNode.position = SCNVector3(0, -5.0, 0)
-        floorNode.rotation = SCNVector4(0, 1, 0, -Float.pi / 2)
+        floorNode.rotation = SCNVector4(1, 0, 0, -Float.pi / 2)
         terrainWrapper.addChildNode(floorNode)
         
         // Water surface - stylized PBR water with proper color
@@ -477,7 +477,7 @@ private func setupOcean() {
         waterMat.diffuse.contents = UIColor(red: 0.05, green: 0.32, blue: 0.45, alpha: 1.0)
         waterMat.roughness.contents = NSNumber(value: 0.15) // Smooth but not mirror
         waterMat.metalness.contents = NSNumber(value: 0.10) // Low metalness for natural water look
-        waterMat.specular.contents = UIColor(white: 0.35, alpha: 1.0)
+        waterMat.specular.contents = UIColor(white: 0.20, alpha: 1.0)
         waterMat.isDoubleSided = true
         waterMat.diffuse.magnificationFilter = .linear
         waterMat.diffuse.minificationFilter = .linear
@@ -487,7 +487,7 @@ private func setupOcean() {
         waterNode.name = "ocean"
         // Water level at -0.35, slightly below beach to avoid z-fighting
         waterNode.position = SCNVector3(0, -0.35, 0)
-        waterNode.rotation = SCNVector4(0, 1, 0, -Float.pi / 2)
+        waterNode.rotation = SCNVector4(1, 0, 0, -Float.pi / 2)
         terrainWrapper.addChildNode(waterNode)
         
         // Gentle breathing animation - very subtle
