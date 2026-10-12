@@ -172,8 +172,9 @@ class TerrainBuilder {
         terrainMat.roughness.contents = "art.scnassets/textures/island_roughness.png"
         // Better PBR settings for stylized terrain
         terrainMat.metalness.contents = NSNumber(value: 0.0)
-        terrainMat.roughness.intensity = 0.9
-        terrainMat.normal.intensity = 0.55 // Reduced for more natural look
+        terrainMat.roughness.intensity = 0.85
+        terrainMat.normal.intensity = 0.65 // Slightly stronger normal detail
+        terrainMat.specular.contents = UIColor(white: 0.3, alpha: 1.0)
         terrainMat.diffuse.magnificationFilter = .linear
         terrainMat.diffuse.minificationFilter = .linear
         terrainMat.diffuse.mipFilter = .linear
