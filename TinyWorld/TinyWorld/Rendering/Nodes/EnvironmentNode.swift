@@ -88,7 +88,8 @@ class EnvironmentNode: SCNNode {
         terrain.name = "ground"
         terrainWrapper.addChildNode(terrain)
         
-        setupOcean()
+setupOcean()
+        setupPaths()
         
         // Expanded model arrays using all available Kenney Nature Kit assets
         let treeModels = [
@@ -428,6 +429,34 @@ class EnvironmentNode: SCNNode {
         campLightNode.position = SCNVector3(0, 0.25, 0)
         campfire.addChildNode(campLightNode)
         
+        // Add procedural flames for a cozy campfire look
+        let flameMat = SCNMaterial()
+        flameMat.lightingModel = .constant
+        flameMat.diffuse.contents = UIColor(red: 1.0, green: 0.45, blue: 0.1, alpha: 1.0)
+        flameMat.emission.contents = UIColor(red: 1.0, green: 0.5, blue: 0.15, alpha: 1.0)
+        flameMat.isDoubleSided = true
+        
+        for i in 0..<5 {
+            let flameGeo = SCNCone(topRadius: 0.0, bottomRadius: 0.12, height: 0.35)
+            flameGeo.materials = [flameMat]
+            let flameNode = SCNNode(geometry: flameGeo)
+            let offset = Float(i - 2) * 0.06
+            flameNode.position = SCNVector3(offset, 0.18, 0)
+            flameNode.rotation = SCNVector4(0, 0, 1, Float.random(in: -0.15...0.15))
+            flameNode.scale = SCNVector3(Float.random(in: 0.7...1.1), Float.random(in: 0.8...1.2), Float.random(in: 0.7...1.1))
+            campfire.addChildNode(flameNode)
+            
+            // Gentle flicker animation
+            let flicker = SCNAction.scale(to: SCNVector3(
+                flameNode.scale.x * Float.random(in: 0.85...1.1),
+                flameNode.scale.y * Float.random(in: 0.85...1.1),
+                flameNode.scale.z * Float.random(in: 0.85...1.1)
+            ), duration: Double.random(in: 0.3...0.7))
+            flicker.timingMode = .easeInEaseOut
+            let flickerBack = flicker.reversed()
+            flameNode.runAction(SCNAction.repeatForever(SCNAction.sequence([flicker, flickerBack])))
+        }
+        
         // Add a few fireflies/particles around the campfire for ambient life
         for _ in 0..<8 {
             let angle = Float.random(in: 0...(2 * Float.pi))
@@ -451,7 +480,52 @@ class EnvironmentNode: SCNNode {
         }
     }
     
-private func setupOcean() {
+    // MARK: - Procedural Paths
+    private func setupPaths() {
+        // Create dirt paths connecting the center to key zones
+        // Paths are built from small overlapping cylinders for organic look
+        let pathCenters: [(Float, Float)] = [
+            (-9.0, -8.0),   // forest
+            (8.0, -7.0),    // pine hills
+            (0.0, 10.0),    // meadow
+            (-6.0, 9.0),    // flowering
+            (11.0, 4.0),    // rocky coast
+            (-3.0, -11.0),  // mixed
+            (5.0, -10.0),   // coastal pine
+        ]
+        
+        let pathMat = SCNMaterial()
+        pathMat.lightingModel = .physicallyBased
+        pathMat.diffuse.contents =UIColor(red: 0.42, green: 0.33, blue: 0.22, alpha: 1.0)
+        pathMat.roughness.contents = NSNumber(value: 0.95)
+        pathMat.metalness.contents = NSNumber(value: 0.0)
+        
+        for (tx, tz) in pathCenters {
+            // Interpolate path from center to target
+            let steps = 12
+            for i in 0...steps {
+                let t = Float(i) / Float(steps)
+                let px = 0 + (tx - 0) * t
+                let pz = 0 + (tz - 0) * t
+                
+                // Add slight curve for organic feel
+                let curve = sin(t * Float.pi) * 1.5
+                let cx = px + cos(t * 2.0) * curve * 0.3
+                let cz = pz + sin(t * 2.0) * curve * 0.3
+                
+                let py = TerrainBuilder.getHeight(at: cx, z: cz) + 0.02
+                
+                let pathSegment = SCNCylinder(radius: 0.45, height: 0.06)
+                pathSegment.materials = [pathMat]
+                let pathNode = SCNNode(geometry: pathSegment)
+                pathNode.position = SCNVector3(cx, py, cz)
+                pathNode.rotation = SCNVector4(1, 0, 0, -Float.pi / 2)
+                terrainWrapper.addChildNode(pathNode)
+            }
+        }
+    }
+    
+    private func setupOcean() {
         // Ocean floor - extends beyond island to horizon
         let floorGeo = SCNPlane(width: 200.0, height: 200.0)
         let floorMat = SCNMaterial()
@@ -468,16 +542,15 @@ private func setupOcean() {
         floorNode.rotation = SCNVector4(1, 0, 0, -Float.pi / 2)
         terrainWrapper.addChildNode(floorNode)
         
-        // Water surface - stylized PBR water with proper color
-        // Sized to match island + margin, avoiding excessive empty ocean
-        let waterGeo = SCNPlane(width: 70.0, height: 70.0)
+        // Water surface - sized to frame island nicely without dominating
+        let waterGeo = SCNPlane(width: 55.0, height: 55.0)
         let waterMat = SCNMaterial()
         waterMat.lightingModel = .physicallyBased
-        // Base water color - warm tropical teal, not brown
-        waterMat.diffuse.contents = UIColor(red: 0.05, green: 0.32, blue: 0.45, alpha: 1.0)
-        waterMat.roughness.contents = NSNumber(value: 0.15) // Smooth but not mirror
-        waterMat.metalness.contents = NSNumber(value: 0.10) // Low metalness for natural water look
-        waterMat.specular.contents = UIColor(white: 0.20, alpha: 1.0)
+        // Natural teal water - warm and inviting, not dark
+        waterMat.diffuse.contents = UIColor(red: 0.06, green: 0.40, blue: 0.52, alpha: 1.0)
+        waterMat.roughness.contents = NSNumber(value: 0.18)
+        waterMat.metalness.contents = NSNumber(value: 0.08)
+        waterMat.specular.contents = UIColor(white: 0.25, alpha: 1.0)
         waterMat.isDoubleSided = true
         waterMat.diffuse.magnificationFilter = .linear
         waterMat.diffuse.minificationFilter = .linear
@@ -485,7 +558,6 @@ private func setupOcean() {
         
         let waterNode = SCNNode(geometry: waterGeo)
         waterNode.name = "ocean"
-        // Water level at -0.35, slightly below beach to avoid z-fighting
         waterNode.position = SCNVector3(0, -0.35, 0)
         waterNode.rotation = SCNVector4(1, 0, 0, -Float.pi / 2)
         terrainWrapper.addChildNode(waterNode)

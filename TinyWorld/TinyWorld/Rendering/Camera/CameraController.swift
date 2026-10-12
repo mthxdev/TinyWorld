@@ -27,9 +27,9 @@ class CameraController {
         cameraNode = SCNNode()
         cameraNode.camera = camera
         
-// Tilt ~40 degrees, distance optimized for island composition
-        // Camera positioned to frame island with minimal ocean, showing buildings/trees clearly
-        cameraNode.position = SCNVector3(x: 0, y: 14.5, z: 16.5)
+// Camera positioned for optimal island framing - closer, more intimate view
+        // y=12.5 gives better downward angle, z=14.5 keeps island centered in frame
+        cameraNode.position = SCNVector3(x: 0, y: 12.5, z: 14.5)
         cameraNode.rotation = SCNVector4(1, 0, 0, -Float.pi / 4.0)
         pivotNode.addChildNode(cameraNode)
     }
