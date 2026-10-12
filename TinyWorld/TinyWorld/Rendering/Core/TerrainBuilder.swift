@@ -193,8 +193,8 @@ class TerrainBuilder {
         
         // Underwater rock base: fully submerged below water surface.
         // Water level is at y = -0.35, so base must stay below that.
-        // Use a smooth sphere-like base instead of a cone to avoid harsh edge artifacts
-        let baseGeo = SCNSphere(radius: CGFloat(islandRadius + 2.0))
+        // Use a flat-topped cylinder to avoid engulfing the island while providing smooth underwater base
+        let baseGeo = SCNCylinder(radius: CGFloat(islandRadius + 1.5), height: 3.0)
         let baseMat = SCNMaterial()
         baseMat.lightingModel = .physicallyBased
         // Darker, cooler underwater rock color - less brown, more slate/grey
@@ -204,8 +204,8 @@ class TerrainBuilder {
         baseMat.specular.contents = UIColor(white: 0.15, alpha: 1.0)
         baseGeo.materials = [baseMat]
         let baseNode = SCNNode(geometry: baseGeo)
-        // Position so top of sphere sits well below water level at -0.35
-        baseNode.position = SCNVector3(0, -4.0, 0)
+        // Position so top of cylinder is at y = -1.0 (well below water at -0.35)
+        baseNode.position = SCNVector3(0, -2.5, 0)
         baseNode.castsShadow = false
         root.addChildNode(baseNode)
         
