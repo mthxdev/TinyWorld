@@ -545,10 +545,12 @@ private func setupOcean() {
             
             let foamPatch = SCNNode(geometry: foamPatchGeo)
             foamPatch.position = SCNVector3(fx, -0.28, fz)
-            let rotX = simd_quatf(angle: -Float.pi / 2, axis: simd_float3(1, 0, 0))
-            let rotY = simd_quatf(angle: Float.random(in: 0...(2 * Float.pi)), axis: simd_float3(0, 1, 0))
-            foamPatch.rotation = rotX * rotY
-            terrainWrapper.addChildNode(foamPatch)
+            // Use a parent node to combine X and Y rotations
+            let foamContainer = SCNNode()
+            foamContainer.rotation = SCNVector4(0, 1, 0, Float.random(in: 0...(2 * Float.pi)))
+            foamContainer.addChildNode(foamPatch)
+            foamPatch.rotation = SCNVector4(1, 0, 0, -Float.pi / 2)
+            terrainWrapper.addChildNode(foamContainer)
             
             // Gentle individual pulse
             let patchPulse = SCNAction.scale(to: 1.1, duration: Double.random(in: 3...5))
