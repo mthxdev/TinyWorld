@@ -469,19 +469,15 @@ private func setupOcean() {
         terrainWrapper.addChildNode(floorNode)
         
         // Water surface - stylized PBR water with proper color
-        // Slightly larger than island to cover camera view at horizon
-        let waterGeo = SCNPlane(width: 160.0, height: 160.0)
+        // Sized to match island + margin, avoiding excessive empty ocean
+        let waterGeo = SCNPlane(width: 70.0, height: 70.0)
         let waterMat = SCNMaterial()
         waterMat.lightingModel = .physicallyBased
         // Base water color - warm tropical teal, not brown
-        waterMat.diffuse.contents = UIColor(red: 0.04, green: 0.35, blue: 0.50, alpha: 1.0)
-        waterMat.roughness.contents = NSNumber(value: 0.12) // Smooth but not mirror
-        waterMat.metalness.contents = NSNumber(value: 0.15) // Low metalness for natural water look
-        waterMat.specular.contents = UIColor(white: 0.5, alpha: 1.0)
-        waterMat.transparency = 0.75
-        waterMat.transparencyMode = .aOne
-        waterMat.writesToDepthBuffer = true
-        waterMat.readsFromDepthBuffer = true
+        waterMat.diffuse.contents = UIColor(red: 0.05, green: 0.32, blue: 0.45, alpha: 1.0)
+        waterMat.roughness.contents = NSNumber(value: 0.15) // Smooth but not mirror
+        waterMat.metalness.contents = NSNumber(value: 0.10) // Low metalness for natural water look
+        waterMat.specular.contents = UIColor(white: 0.35, alpha: 1.0)
         waterMat.isDoubleSided = true
         waterMat.diffuse.magnificationFilter = .linear
         waterMat.diffuse.minificationFilter = .linear
@@ -500,60 +496,35 @@ private func setupOcean() {
         let moveDown = moveUp.reversed()
         waterNode.runAction(SCNAction.repeatForever(SCNAction.sequence([moveUp, moveDown])))
         
-        // Natural shoreline foam using irregular edge geometry instead of torus rings
-        // This avoids the "gray arcs" artifact from torus geometry
-        let shorelineGeo = SCNPlane(width: 40.0, height: 40.0)
-        let shorelineMat = SCNMaterial()
-        shorelineMat.lightingModel = .physicallyBased
-        shorelineMat.diffuse.contents = UIColor(red: 0.92, green: 0.92, blue: 0.85, alpha: 0.4)
-        shorelineMat.roughness.contents = NSNumber(value: 0.85)
-        shorelineMat.metalness.contents = NSNumber(value: 0.0)
-        shorelineMat.transparency = 0.4
-        shorelineMat.transparencyMode = .aOne
-        shorelineMat.isDoubleSided = true
-        shorelineGeo.materials = [shorelineMat]
-        
-        let shorelineNode = SCNNode(geometry: shorelineGeo)
-        shorelineNode.position = SCNVector3(0, -0.30, 0)
-        shorelineNode.rotation = SCNVector4(0, 1, 0, -Float.pi / 2)
-        terrainWrapper.addChildNode(shorelineNode)
-        
-        // Subtle shoreline pulse
-        let shorePulse = SCNAction.scale(to: 1.02, duration: 8.0)
+        // Subtle shoreline pulse using water plane scale only
+        let shorePulse = SCNAction.scale(to: 1.01, duration: 6.0)
         shorePulse.timingMode = .easeInEaseOut
-        let shorePulseBack = SCNAction.scale(to: 0.98, duration: 8.0)
+        let shorePulseBack = SCNAction.scale(to: 0.99, duration: 6.0)
         shorePulseBack.timingMode = .easeInEaseOut
-        shorelineNode.runAction(SCNAction.repeatForever(SCNAction.sequence([shorePulse, shorePulseBack])))
+        waterNode.runAction(SCNAction.repeatForever(SCNAction.sequence([shorePulse, shorePulseBack])))
         
-        // Add small scattered foam patches near shore for natural wave break look
-        for _ in 0..<10 {
+        // Small scattered foam patches near shore for natural wave break look
+        for _ in 0..<8 {
             let angle = Float.random(in: 0...(2 * Float.pi))
-            let radius = Float.random(in: 13.5...16.0)
+            let radius = Float.random(in: 12.0...15.5)
             let fx = sin(angle) * radius
             let fz = cos(angle) * radius
             
-            let foamPatchGeo = SCNPlane(width: CGFloat.random(in: 0.8...2.5), height: CGFloat.random(in: 0.8...2.5))
+            let foamPatchGeo = SCNPlane(width: CGFloat.random(in: 0.6...2.0), height: CGFloat.random(in: 0.6...2.0))
             let foamPatchMat = SCNMaterial()
-            foamPatchMat.lightingModel = .physicallyBased
-            foamPatchMat.diffuse.contents = UIColor(red: 0.96, green: 0.96, blue: 0.90, alpha: 0.45)
-            foamPatchMat.roughness.contents = NSNumber(value: 0.9)
-            foamPatchMat.metalness.contents = NSNumber(value: 0.0)
-            foamPatchMat.transparency = 0.45
-            foamPatchMat.transparencyMode = .aOne
+            foamPatchMat.lightingModel = .constant
+            foamPatchMat.diffuse.contents =UIColor(red: 0.95, green: 0.95, blue: 0.88, alpha: 0.35)
             foamPatchMat.isDoubleSided = true
             foamPatchGeo.materials = [foamPatchMat]
             
             let foamPatch = SCNNode(geometry: foamPatchGeo)
-            foamPatch.position = SCNVector3(fx, -0.28, fz)
-            // Use a parent node to combine X and Y rotations
-            let foamContainer = SCNNode()
-            foamContainer.rotation = SCNVector4(0, 1, 0, Float.random(in: 0...(2 * Float.pi)))
-            foamContainer.addChildNode(foamPatch)
+            foamPatch.position = SCNVector3(fx, -0.33, fz)
             foamPatch.rotation = SCNVector4(1, 0, 0, -Float.pi / 2)
-            terrainWrapper.addChildNode(foamContainer)
+            foamPatch.scale = SCNVector3(1, 1, 1)
+            terrainWrapper.addChildNode(foamPatch)
             
             // Gentle individual pulse
-            let patchPulse = SCNAction.scale(to: 1.1, duration: Double.random(in: 3...5))
+            let patchPulse = SCNAction.scale(to: 1.15, duration: Double.random(in: 3...5))
             patchPulse.timingMode = .easeInEaseOut
             let patchPulseBack = patchPulse.reversed()
             foamPatch.runAction(SCNAction.repeatForever(SCNAction.sequence([patchPulse, patchPulseBack])))
