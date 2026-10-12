@@ -513,7 +513,7 @@ private func setupOcean() {
             let foamPatchGeo = SCNPlane(width: CGFloat.random(in: 0.6...2.0), height: CGFloat.random(in: 0.6...2.0))
             let foamPatchMat = SCNMaterial()
             foamPatchMat.lightingModel = .constant
-            foamPatchMat.diffuse.contents =UIColor(red: 0.95, green: 0.95, blue: 0.88, alpha: 0.35)
+            foamPatchMat.diffuse.contents = UIColor(red: 0.95, green: 0.95, blue: 0.88, alpha: 0.35)
             foamPatchMat.isDoubleSided = true
             foamPatchGeo.materials = [foamPatchMat]
             
