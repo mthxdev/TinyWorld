@@ -303,58 +303,58 @@ class EnvironmentNode: SCNNode {
             
             switch biome {
             case "forest":
-                treeCount = Int.random(in: 12...18)
-                rockCount = Int.random(in: 5...10)
-                plantCount = Int.random(in: 20...30)
-                propCount = Int.random(in: 4...7)
+                treeCount = Int.random(in: 14...22)
+                rockCount = Int.random(in: 6...12)
+                plantCount = Int.random(in: 25...40)
+                propCount = Int.random(in: 5...10)
                 treeScale = 1.2...2.2
                 rockScale = 0.8...1.6
                 plantScale = 0.9...1.8
             case "pine_hills":
-                treeCount = Int.random(in: 10...16)
-                rockCount = Int.random(in: 10...16)
-                plantCount = Int.random(in: 12...22)
-                propCount = Int.random(in: 3...5)
+                treeCount = Int.random(in: 12...20)
+                rockCount = Int.random(in: 12...20)
+                plantCount = Int.random(in: 15...28)
+                propCount = Int.random(in: 4...7)
                 treeScale = 1.3...2.3
                 rockScale = 0.9...1.8
                 plantScale = 0.8...1.6
             case "meadow":
-                treeCount = Int.random(in: 5...10)
-                rockCount = Int.random(in: 4...8)
-                plantCount = Int.random(in: 25...40)
-                propCount = Int.random(in: 1...4)
+                treeCount = Int.random(in: 6...12)
+                rockCount = Int.random(in: 5...10)
+                plantCount = Int.random(in: 30...50)
+                propCount = Int.random(in: 2...6)
                 treeScale = 1.1...1.8
                 rockScale = 0.6...1.4
                 plantScale = 1.0...2.0
             case "flowering":
-                treeCount = Int.random(in: 6...12)
-                rockCount = Int.random(in: 4...7)
-                plantCount = Int.random(in: 30...45)
-                propCount = Int.random(in: 2...4)
+                treeCount = Int.random(in: 8...14)
+                rockCount = Int.random(in: 5...9)
+                plantCount = Int.random(in: 35...55)
+                propCount = Int.random(in: 3...6)
                 treeScale = 1.0...1.7
                 rockScale = 0.5...1.3
                 plantScale = 0.9...1.7
             case "rocky_coast":
-                treeCount = Int.random(in: 4...8)
-                rockCount = Int.random(in: 15...25)
-                plantCount = Int.random(in: 12...20)
-                propCount = Int.random(in: 4...7)
+                treeCount = Int.random(in: 5...10)
+                rockCount = Int.random(in: 18...30)
+                plantCount = Int.random(in: 15...25)
+                propCount = Int.random(in: 5...9)
                 treeScale = 0.9...1.6
                 rockScale = 1.0...2.0
                 plantScale = 0.7...1.5
             case "mixed":
-                treeCount = Int.random(in: 8...14)
-                rockCount = Int.random(in: 6...12)
-                plantCount = Int.random(in: 18...28)
-                propCount = Int.random(in: 3...5)
+                treeCount = Int.random(in: 10...16)
+                rockCount = Int.random(in: 8...14)
+                plantCount = Int.random(in: 22...34)
+                propCount = Int.random(in: 4...7)
                 treeScale = 1.1...1.9
                 rockScale = 0.8...1.6
                 plantScale = 0.8...1.7
             case "coastal_pine":
-                treeCount = Int.random(in: 6...12)
-                rockCount = Int.random(in: 8...14)
-                plantCount = Int.random(in: 14...22)
-                propCount = Int.random(in: 2...4)
+                treeCount = Int.random(in: 8...14)
+                rockCount = Int.random(in: 10...16)
+                plantCount = Int.random(in: 16...26)
+                propCount = Int.random(in: 3...6)
                 treeScale = 1.0...1.8
                 rockScale = 0.8...1.6
                 plantScale = 0.8...1.6
