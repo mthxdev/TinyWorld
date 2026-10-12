@@ -405,7 +405,7 @@ class BuildingBuilder {
         
         // Add industrial chimney stacks
         for _ in 0..<2 {
-            let chimneyGeo = SCNCylinder(radius: 0.18, height: 2.5 * scale)
+            let chimneyGeo = SCNCylinder(radius: 0.18, height: CGFloat(2.5 * scale))
             let chimneyMat = SCNMaterial()
             chimneyMat.lightingModel = .physicallyBased
             chimneyMat.diffuse.contents = UIColor(red: 0.4, green: 0.35, blue: 0.35, alpha: 1.0)

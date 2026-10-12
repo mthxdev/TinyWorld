@@ -465,7 +465,7 @@ private func setupOcean() {
         
         let floorNode = SCNNode(geometry: floorGeo)
         floorNode.position = SCNVector3(0, -5.0, 0)
-        floorNode(rotatedBy: -Float.pi / 2)
+        floorNode.eulerDegrees = SCNVector3(-Float.pi / 2, 0, 0)
         terrainWrapper.addChildNode(floorNode)
         
         // Water surface - stylized PBR water with proper color
@@ -491,7 +491,7 @@ private func setupOcean() {
         waterNode.name = "ocean"
         // Water level at -0.35, slightly below beach to avoid z-fighting
         waterNode.position = SCNVector3(0, -0.35, 0)
-        waterNode(rotatedBy: -Float.pi / 2)
+        waterNode.eulerDegrees = SCNVector3(-Float.pi / 2, 0, 0)
         terrainWrapper.addChildNode(waterNode)
         
         // Gentle breathing animation - very subtle
@@ -515,7 +515,7 @@ private func setupOcean() {
         
         let shorelineNode = SCNNode(geometry: shorelineGeo)
         shorelineNode.position = SCNVector3(0, -0.30, 0)
-        shorelineNode(rotatedBy: -Float.pi / 2)
+        shorelineNode.eulerDegrees = SCNVector3(-Float.pi / 2, 0, 0)
         terrainWrapper.addChildNode(shorelineNode)
         
         // Subtle shoreline pulse
@@ -545,8 +545,7 @@ private func setupOcean() {
             
             let foamPatch = SCNNode(geometry: foamPatchGeo)
             foamPatch.position = SCNVector3(fx, -0.28, fz)
-            foamPatch(rotatedBy: -Float.pi / 2)
-            foamPatch(rotatedBy: Float.random(in: 0...(2 * Float.pi)))
+            foamPatch.eulerDegrees = SCNVector3(-Float.pi / 2, 0, Float.random(in: 0...(2 * Float.pi)))
             terrainWrapper.addChildNode(foamPatch)
             
             // Gentle individual pulse
