@@ -8,11 +8,80 @@ Build settings from command line:
     SDKROOT = iphoneos26.5
     SYMROOT = /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build
 
-2026-10-12 08:17:18.337 xcodebuild[1856:9307] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+2026-10-12 09:28:38.213 xcodebuild[2728:12705] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
 --- xcodebuild: WARNING: Using the first of multiple matching destinations:
 { platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device }
-{ platform:macOS, arch:arm64, variant:Designed for [iPad,iPhone], id:46aa09660f71b1927d8dc10fdda7cd77746eda8e, name:My Mac }
+{ platform:macOS, arch:arm64, variant:Designed for [iPad,iPhone], id:bc4f6cba9a1e97bf550bcc9573a108c99398aeaf, name:My Mac }
 { platform:iOS Simulator, id:dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder, name:Any iOS Simulator Device }
+{ platform:visionOS Simulator, arch:arm64, variant:Designed for [iPad,iPhone], id:3F853DC5-005E-4601-ACD8-6DADCBC2DEBC, OS:26.2, name:Apple Vision Pro }
+{ platform:visionOS Simulator, arch:arm64, variant:Designed for [iPad,iPhone], id:BEBDC056-2028-499A-A128-A4346BD64217, OS:26.4.1, name:Apple Vision Pro }
+{ platform:visionOS Simulator, arch:arm64, variant:Designed for [iPad,iPhone], id:70D84F7E-3446-4AFC-82DC-7AC727F31257, OS:26.5, name:Apple Vision Pro }
+{ platform:iOS Simulator, arch:arm64, id:FA28F45E-187C-4D8F-B9A6-B6DF706CBD1D, OS:26.2, name:iPad (A16) }
+{ platform:iOS Simulator, arch:x86_64, id:FA28F45E-187C-4D8F-B9A6-B6DF706CBD1D, OS:26.2, name:iPad (A16) }
+{ platform:iOS Simulator, arch:arm64, id:7AAAEF7F-4ABB-416E-A374-4E08CAF6D297, OS:26.4.1, name:iPad (A16) }
+{ platform:iOS Simulator, arch:x86_64, id:7AAAEF7F-4ABB-416E-A374-4E08CAF6D297, OS:26.4.1, name:iPad (A16) }
+{ platform:iOS Simulator, arch:arm64, id:87CFFFAE-2BAE-496D-9B2D-3249B9B4CFBA, OS:26.5, name:iPad (A16) }
+{ platform:iOS Simulator, arch:x86_64, id:87CFFFAE-2BAE-496D-9B2D-3249B9B4CFBA, OS:26.5, name:iPad (A16) }
+{ platform:iOS Simulator, arch:arm64, id:EB7D7CC3-7982-4506-A383-843BB8467C05, OS:26.2, name:iPad Air 11-inch (M3) }
+{ platform:iOS Simulator, arch:x86_64, id:EB7D7CC3-7982-4506-A383-843BB8467C05, OS:26.2, name:iPad Air 11-inch (M3) }
+{ platform:iOS Simulator, arch:arm64, id:7F4AB63A-79BC-4B39-9021-1CB5F457C601, OS:26.4.1, name:iPad Air 11-inch (M4) }
+{ platform:iOS Simulator, arch:x86_64, id:7F4AB63A-79BC-4B39-9021-1CB5F457C601, OS:26.4.1, name:iPad Air 11-inch (M4) }
+{ platform:iOS Simulator, arch:arm64, id:CD273885-3D56-471B-AD88-07FFF01EA675, OS:26.5, name:iPad Air 11-inch (M4) }
+{ platform:iOS Simulator, arch:x86_64, id:CD273885-3D56-471B-AD88-07FFF01EA675, OS:26.5, name:iPad Air 11-inch (M4) }
+{ platform:iOS Simulator, arch:arm64, id:CD71493D-5602-4D0A-9D2C-91766B2BFF81, OS:26.2, name:iPad Air 13-inch (M3) }
+{ platform:iOS Simulator, arch:x86_64, id:CD71493D-5602-4D0A-9D2C-91766B2BFF81, OS:26.2, name:iPad Air 13-inch (M3) }
+{ platform:iOS Simulator, arch:arm64, id:276D9B17-03F8-4009-9233-0AC491CF464F, OS:26.4.1, name:iPad Air 13-inch (M4) }
+{ platform:iOS Simulator, arch:x86_64, id:276D9B17-03F8-4009-9233-0AC491CF464F, OS:26.4.1, name:iPad Air 13-inch (M4) }
+{ platform:iOS Simulator, arch:arm64, id:2390FFDB-6478-4BAD-8541-4DAD346BEF11, OS:26.5, name:iPad Air 13-inch (M4) }
+{ platform:iOS Simulator, arch:x86_64, id:2390FFDB-6478-4BAD-8541-4DAD346BEF11, OS:26.5, name:iPad Air 13-inch (M4) }
+{ platform:iOS Simulator, arch:arm64, id:A30A2DD1-DB1C-4D3B-9B8B-B422C02CC2CF, OS:26.2, name:iPad Pro 11-inch (M5) }
+{ platform:iOS Simulator, arch:x86_64, id:A30A2DD1-DB1C-4D3B-9B8B-B422C02CC2CF, OS:26.2, name:iPad Pro 11-inch (M5) }
+{ platform:iOS Simulator, arch:arm64, id:6A1D88F3-F58D-43EC-A7DB-764E2EFD4814, OS:26.4.1, name:iPad Pro 11-inch (M5) }
+{ platform:iOS Simulator, arch:x86_64, id:6A1D88F3-F58D-43EC-A7DB-764E2EFD4814, OS:26.4.1, name:iPad Pro 11-inch (M5) }
+{ platform:iOS Simulator, arch:arm64, id:468B2CC0-4D14-42A4-A7FB-B750EF6E38D1, OS:26.5, name:iPad Pro 11-inch (M5) }
+{ platform:iOS Simulator, arch:x86_64, id:468B2CC0-4D14-42A4-A7FB-B750EF6E38D1, OS:26.5, name:iPad Pro 11-inch (M5) }
+{ platform:iOS Simulator, arch:arm64, id:34A60270-E8F0-4906-B0EC-34347C86EBAF, OS:26.2, name:iPad Pro 13-inch (M5) }
+{ platform:iOS Simulator, arch:x86_64, id:34A60270-E8F0-4906-B0EC-34347C86EBAF, OS:26.2, name:iPad Pro 13-inch (M5) }
+{ platform:iOS Simulator, arch:arm64, id:B385244C-CB83-424B-92FD-32C1867E3F14, OS:26.4.1, name:iPad Pro 13-inch (M5) }
+{ platform:iOS Simulator, arch:x86_64, id:B385244C-CB83-424B-92FD-32C1867E3F14, OS:26.4.1, name:iPad Pro 13-inch (M5) }
+{ platform:iOS Simulator, arch:arm64, id:A2011F14-88A1-46AA-999A-FD6FEDCD870B, OS:26.5, name:iPad Pro 13-inch (M5) }
+{ platform:iOS Simulator, arch:x86_64, id:A2011F14-88A1-46AA-999A-FD6FEDCD870B, OS:26.5, name:iPad Pro 13-inch (M5) }
+{ platform:iOS Simulator, arch:arm64, id:20D070A5-D498-4E2F-BAE9-4A54D5F77DBB, OS:26.2, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, arch:x86_64, id:20D070A5-D498-4E2F-BAE9-4A54D5F77DBB, OS:26.2, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, arch:arm64, id:14DA5CF4-2301-414C-B814-97478EBD9560, OS:26.4.1, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, arch:x86_64, id:14DA5CF4-2301-414C-B814-97478EBD9560, OS:26.4.1, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, arch:arm64, id:1E926EE8-2A0B-4C47-B835-0C52B77DE728, OS:26.5, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, arch:x86_64, id:1E926EE8-2A0B-4C47-B835-0C52B77DE728, OS:26.5, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, arch:arm64, id:A3615395-EDA9-4A60-982A-D428BCC5719B, OS:26.2, name:iPhone 16e }
+{ platform:iOS Simulator, arch:x86_64, id:A3615395-EDA9-4A60-982A-D428BCC5719B, OS:26.2, name:iPhone 16e }
+{ platform:iOS Simulator, arch:arm64, id:25B395EC-01B8-4FB6-8D2A-1C484C360481, OS:26.2, name:iPhone 17 }
+{ platform:iOS Simulator, arch:x86_64, id:25B395EC-01B8-4FB6-8D2A-1C484C360481, OS:26.2, name:iPhone 17 }
+{ platform:iOS Simulator, arch:arm64, id:7D16E67F-1E34-43CB-BD36-B95CCE24981A, OS:26.4.1, name:iPhone 17 }
+{ platform:iOS Simulator, arch:x86_64, id:7D16E67F-1E34-43CB-BD36-B95CCE24981A, OS:26.4.1, name:iPhone 17 }
+{ platform:iOS Simulator, arch:arm64, id:88931AEA-62E6-447F-8697-DCE00A671384, OS:26.5, name:iPhone 17 }
+{ platform:iOS Simulator, arch:x86_64, id:88931AEA-62E6-447F-8697-DCE00A671384, OS:26.5, name:iPhone 17 }
+{ platform:iOS Simulator, arch:arm64, id:5FEB61C5-E3F5-471D-AE23-8A07438D5E92, OS:26.2, name:iPhone 17 Pro }
+{ platform:iOS Simulator, arch:x86_64, id:5FEB61C5-E3F5-471D-AE23-8A07438D5E92, OS:26.2, name:iPhone 17 Pro }
+{ platform:iOS Simulator, arch:arm64, id:4E3A6BB3-F417-4829-8DF5-0EA652541F40, OS:26.4.1, name:iPhone 17 Pro }
+{ platform:iOS Simulator, arch:x86_64, id:4E3A6BB3-F417-4829-8DF5-0EA652541F40, OS:26.4.1, name:iPhone 17 Pro }
+{ platform:iOS Simulator, arch:arm64, id:22452A91-4697-4369-8812-53ADB77EB73B, OS:26.5, name:iPhone 17 Pro }
+{ platform:iOS Simulator, arch:x86_64, id:22452A91-4697-4369-8812-53ADB77EB73B, OS:26.5, name:iPhone 17 Pro }
+{ platform:iOS Simulator, arch:arm64, id:BA9128D4-18C1-4D81-8EB6-C9DEA307B16B, OS:26.2, name:iPhone 17 Pro Max }
+{ platform:iOS Simulator, arch:x86_64, id:BA9128D4-18C1-4D81-8EB6-C9DEA307B16B, OS:26.2, name:iPhone 17 Pro Max }
+{ platform:iOS Simulator, arch:arm64, id:E3357B30-270D-49D5-87E0-79A796ACE8A3, OS:26.4.1, name:iPhone 17 Pro Max }
+{ platform:iOS Simulator, arch:x86_64, id:E3357B30-270D-49D5-87E0-79A796ACE8A3, OS:26.4.1, name:iPhone 17 Pro Max }
+{ platform:iOS Simulator, arch:arm64, id:841190F6-F927-4F0D-B152-62A06B4040CA, OS:26.5, name:iPhone 17 Pro Max }
+{ platform:iOS Simulator, arch:x86_64, id:841190F6-F927-4F0D-B152-62A06B4040CA, OS:26.5, name:iPhone 17 Pro Max }
+{ platform:iOS Simulator, arch:arm64, id:B8094BA5-47C4-4A9C-B87E-C73669585F82, OS:26.4.1, name:iPhone 17e }
+{ platform:iOS Simulator, arch:x86_64, id:B8094BA5-47C4-4A9C-B87E-C73669585F82, OS:26.4.1, name:iPhone 17e }
+{ platform:iOS Simulator, arch:arm64, id:DF686390-8E1F-46B8-A4D9-883644620714, OS:26.5, name:iPhone 17e }
+{ platform:iOS Simulator, arch:x86_64, id:DF686390-8E1F-46B8-A4D9-883644620714, OS:26.5, name:iPhone 17e }
+{ platform:iOS Simulator, arch:arm64, id:A1194899-F789-4C4B-A9E2-EFDC6C72EB35, OS:26.2, name:iPhone Air }
+{ platform:iOS Simulator, arch:x86_64, id:A1194899-F789-4C4B-A9E2-EFDC6C72EB35, OS:26.2, name:iPhone Air }
+{ platform:iOS Simulator, arch:arm64, id:3679014C-ECDC-4161-96E5-69B96F640760, OS:26.4.1, name:iPhone Air }
+{ platform:iOS Simulator, arch:x86_64, id:3679014C-ECDC-4161-96E5-69B96F640760, OS:26.4.1, name:iPhone Air }
+{ platform:iOS Simulator, arch:arm64, id:CB15797E-6053-40B1-BB72-7F30D005A4F2, OS:26.5, name:iPhone Air }
+{ platform:iOS Simulator, arch:x86_64, id:CB15797E-6053-40B1-BB72-7F30D005A4F2, OS:26.5, name:iPhone Air }
 note: Using codesigning identity override: 
 CreateBuildRequest
 
@@ -24,8 +93,77 @@ CreateBuildOperation
 
 --- xcodebuild: WARNING: Using the first of multiple matching destinations:
 { platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device }
-{ platform:macOS, arch:arm64, variant:Designed for [iPad,iPhone], id:46aa09660f71b1927d8dc10fdda7cd77746eda8e, name:My Mac }
+{ platform:macOS, arch:arm64, variant:Designed for [iPad,iPhone], id:bc4f6cba9a1e97bf550bcc9573a108c99398aeaf, name:My Mac }
 { platform:iOS Simulator, id:dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder, name:Any iOS Simulator Device }
+{ platform:visionOS Simulator, arch:arm64, variant:Designed for [iPad,iPhone], id:3F853DC5-005E-4601-ACD8-6DADCBC2DEBC, OS:26.2, name:Apple Vision Pro }
+{ platform:visionOS Simulator, arch:arm64, variant:Designed for [iPad,iPhone], id:BEBDC056-2028-499A-A128-A4346BD64217, OS:26.4.1, name:Apple Vision Pro }
+{ platform:visionOS Simulator, arch:arm64, variant:Designed for [iPad,iPhone], id:70D84F7E-3446-4AFC-82DC-7AC727F31257, OS:26.5, name:Apple Vision Pro }
+{ platform:iOS Simulator, arch:arm64, id:FA28F45E-187C-4D8F-B9A6-B6DF706CBD1D, OS:26.2, name:iPad (A16) }
+{ platform:iOS Simulator, arch:x86_64, id:FA28F45E-187C-4D8F-B9A6-B6DF706CBD1D, OS:26.2, name:iPad (A16) }
+{ platform:iOS Simulator, arch:arm64, id:7AAAEF7F-4ABB-416E-A374-4E08CAF6D297, OS:26.4.1, name:iPad (A16) }
+{ platform:iOS Simulator, arch:x86_64, id:7AAAEF7F-4ABB-416E-A374-4E08CAF6D297, OS:26.4.1, name:iPad (A16) }
+{ platform:iOS Simulator, arch:arm64, id:87CFFFAE-2BAE-496D-9B2D-3249B9B4CFBA, OS:26.5, name:iPad (A16) }
+{ platform:iOS Simulator, arch:x86_64, id:87CFFFAE-2BAE-496D-9B2D-3249B9B4CFBA, OS:26.5, name:iPad (A16) }
+{ platform:iOS Simulator, arch:arm64, id:EB7D7CC3-7982-4506-A383-843BB8467C05, OS:26.2, name:iPad Air 11-inch (M3) }
+{ platform:iOS Simulator, arch:x86_64, id:EB7D7CC3-7982-4506-A383-843BB8467C05, OS:26.2, name:iPad Air 11-inch (M3) }
+{ platform:iOS Simulator, arch:arm64, id:7F4AB63A-79BC-4B39-9021-1CB5F457C601, OS:26.4.1, name:iPad Air 11-inch (M4) }
+{ platform:iOS Simulator, arch:x86_64, id:7F4AB63A-79BC-4B39-9021-1CB5F457C601, OS:26.4.1, name:iPad Air 11-inch (M4) }
+{ platform:iOS Simulator, arch:arm64, id:CD273885-3D56-471B-AD88-07FFF01EA675, OS:26.5, name:iPad Air 11-inch (M4) }
+{ platform:iOS Simulator, arch:x86_64, id:CD273885-3D56-471B-AD88-07FFF01EA675, OS:26.5, name:iPad Air 11-inch (M4) }
+{ platform:iOS Simulator, arch:arm64, id:CD71493D-5602-4D0A-9D2C-91766B2BFF81, OS:26.2, name:iPad Air 13-inch (M3) }
+{ platform:iOS Simulator, arch:x86_64, id:CD71493D-5602-4D0A-9D2C-91766B2BFF81, OS:26.2, name:iPad Air 13-inch (M3) }
+{ platform:iOS Simulator, arch:arm64, id:276D9B17-03F8-4009-9233-0AC491CF464F, OS:26.4.1, name:iPad Air 13-inch (M4) }
+{ platform:iOS Simulator, arch:x86_64, id:276D9B17-03F8-4009-9233-0AC491CF464F, OS:26.4.1, name:iPad Air 13-inch (M4) }
+{ platform:iOS Simulator, arch:arm64, id:2390FFDB-6478-4BAD-8541-4DAD346BEF11, OS:26.5, name:iPad Air 13-inch (M4) }
+{ platform:iOS Simulator, arch:x86_64, id:2390FFDB-6478-4BAD-8541-4DAD346BEF11, OS:26.5, name:iPad Air 13-inch (M4) }
+{ platform:iOS Simulator, arch:arm64, id:A30A2DD1-DB1C-4D3B-9B8B-B422C02CC2CF, OS:26.2, name:iPad Pro 11-inch (M5) }
+{ platform:iOS Simulator, arch:x86_64, id:A30A2DD1-DB1C-4D3B-9B8B-B422C02CC2CF, OS:26.2, name:iPad Pro 11-inch (M5) }
+{ platform:iOS Simulator, arch:arm64, id:6A1D88F3-F58D-43EC-A7DB-764E2EFD4814, OS:26.4.1, name:iPad Pro 11-inch (M5) }
+{ platform:iOS Simulator, arch:x86_64, id:6A1D88F3-F58D-43EC-A7DB-764E2EFD4814, OS:26.4.1, name:iPad Pro 11-inch (M5) }
+{ platform:iOS Simulator, arch:arm64, id:468B2CC0-4D14-42A4-A7FB-B750EF6E38D1, OS:26.5, name:iPad Pro 11-inch (M5) }
+{ platform:iOS Simulator, arch:x86_64, id:468B2CC0-4D14-42A4-A7FB-B750EF6E38D1, OS:26.5, name:iPad Pro 11-inch (M5) }
+{ platform:iOS Simulator, arch:arm64, id:34A60270-E8F0-4906-B0EC-34347C86EBAF, OS:26.2, name:iPad Pro 13-inch (M5) }
+{ platform:iOS Simulator, arch:x86_64, id:34A60270-E8F0-4906-B0EC-34347C86EBAF, OS:26.2, name:iPad Pro 13-inch (M5) }
+{ platform:iOS Simulator, arch:arm64, id:B385244C-CB83-424B-92FD-32C1867E3F14, OS:26.4.1, name:iPad Pro 13-inch (M5) }
+{ platform:iOS Simulator, arch:x86_64, id:B385244C-CB83-424B-92FD-32C1867E3F14, OS:26.4.1, name:iPad Pro 13-inch (M5) }
+{ platform:iOS Simulator, arch:arm64, id:A2011F14-88A1-46AA-999A-FD6FEDCD870B, OS:26.5, name:iPad Pro 13-inch (M5) }
+{ platform:iOS Simulator, arch:x86_64, id:A2011F14-88A1-46AA-999A-FD6FEDCD870B, OS:26.5, name:iPad Pro 13-inch (M5) }
+{ platform:iOS Simulator, arch:arm64, id:20D070A5-D498-4E2F-BAE9-4A54D5F77DBB, OS:26.2, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, arch:x86_64, id:20D070A5-D498-4E2F-BAE9-4A54D5F77DBB, OS:26.2, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, arch:arm64, id:14DA5CF4-2301-414C-B814-97478EBD9560, OS:26.4.1, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, arch:x86_64, id:14DA5CF4-2301-414C-B814-97478EBD9560, OS:26.4.1, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, arch:arm64, id:1E926EE8-2A0B-4C47-B835-0C52B77DE728, OS:26.5, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, arch:x86_64, id:1E926EE8-2A0B-4C47-B835-0C52B77DE728, OS:26.5, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, arch:arm64, id:A3615395-EDA9-4A60-982A-D428BCC5719B, OS:26.2, name:iPhone 16e }
+{ platform:iOS Simulator, arch:x86_64, id:A3615395-EDA9-4A60-982A-D428BCC5719B, OS:26.2, name:iPhone 16e }
+{ platform:iOS Simulator, arch:arm64, id:25B395EC-01B8-4FB6-8D2A-1C484C360481, OS:26.2, name:iPhone 17 }
+{ platform:iOS Simulator, arch:x86_64, id:25B395EC-01B8-4FB6-8D2A-1C484C360481, OS:26.2, name:iPhone 17 }
+{ platform:iOS Simulator, arch:arm64, id:7D16E67F-1E34-43CB-BD36-B95CCE24981A, OS:26.4.1, name:iPhone 17 }
+{ platform:iOS Simulator, arch:x86_64, id:7D16E67F-1E34-43CB-BD36-B95CCE24981A, OS:26.4.1, name:iPhone 17 }
+{ platform:iOS Simulator, arch:arm64, id:88931AEA-62E6-447F-8697-DCE00A671384, OS:26.5, name:iPhone 17 }
+{ platform:iOS Simulator, arch:x86_64, id:88931AEA-62E6-447F-8697-DCE00A671384, OS:26.5, name:iPhone 17 }
+{ platform:iOS Simulator, arch:arm64, id:5FEB61C5-E3F5-471D-AE23-8A07438D5E92, OS:26.2, name:iPhone 17 Pro }
+{ platform:iOS Simulator, arch:x86_64, id:5FEB61C5-E3F5-471D-AE23-8A07438D5E92, OS:26.2, name:iPhone 17 Pro }
+{ platform:iOS Simulator, arch:arm64, id:4E3A6BB3-F417-4829-8DF5-0EA652541F40, OS:26.4.1, name:iPhone 17 Pro }
+{ platform:iOS Simulator, arch:x86_64, id:4E3A6BB3-F417-4829-8DF5-0EA652541F40, OS:26.4.1, name:iPhone 17 Pro }
+{ platform:iOS Simulator, arch:arm64, id:22452A91-4697-4369-8812-53ADB77EB73B, OS:26.5, name:iPhone 17 Pro }
+{ platform:iOS Simulator, arch:x86_64, id:22452A91-4697-4369-8812-53ADB77EB73B, OS:26.5, name:iPhone 17 Pro }
+{ platform:iOS Simulator, arch:arm64, id:BA9128D4-18C1-4D81-8EB6-C9DEA307B16B, OS:26.2, name:iPhone 17 Pro Max }
+{ platform:iOS Simulator, arch:x86_64, id:BA9128D4-18C1-4D81-8EB6-C9DEA307B16B, OS:26.2, name:iPhone 17 Pro Max }
+{ platform:iOS Simulator, arch:arm64, id:E3357B30-270D-49D5-87E0-79A796ACE8A3, OS:26.4.1, name:iPhone 17 Pro Max }
+{ platform:iOS Simulator, arch:x86_64, id:E3357B30-270D-49D5-87E0-79A796ACE8A3, OS:26.4.1, name:iPhone 17 Pro Max }
+{ platform:iOS Simulator, arch:arm64, id:841190F6-F927-4F0D-B152-62A06B4040CA, OS:26.5, name:iPhone 17 Pro Max }
+{ platform:iOS Simulator, arch:x86_64, id:841190F6-F927-4F0D-B152-62A06B4040CA, OS:26.5, name:iPhone 17 Pro Max }
+{ platform:iOS Simulator, arch:arm64, id:B8094BA5-47C4-4A9C-B87E-C73669585F82, OS:26.4.1, name:iPhone 17e }
+{ platform:iOS Simulator, arch:x86_64, id:B8094BA5-47C4-4A9C-B87E-C73669585F82, OS:26.4.1, name:iPhone 17e }
+{ platform:iOS Simulator, arch:arm64, id:DF686390-8E1F-46B8-A4D9-883644620714, OS:26.5, name:iPhone 17e }
+{ platform:iOS Simulator, arch:x86_64, id:DF686390-8E1F-46B8-A4D9-883644620714, OS:26.5, name:iPhone 17e }
+{ platform:iOS Simulator, arch:arm64, id:A1194899-F789-4C4B-A9E2-EFDC6C72EB35, OS:26.2, name:iPhone Air }
+{ platform:iOS Simulator, arch:x86_64, id:A1194899-F789-4C4B-A9E2-EFDC6C72EB35, OS:26.2, name:iPhone Air }
+{ platform:iOS Simulator, arch:arm64, id:3679014C-ECDC-4161-96E5-69B96F640760, OS:26.4.1, name:iPhone Air }
+{ platform:iOS Simulator, arch:x86_64, id:3679014C-ECDC-4161-96E5-69B96F640760, OS:26.4.1, name:iPhone Air }
+{ platform:iOS Simulator, arch:arm64, id:CB15797E-6053-40B1-BB72-7F30D005A4F2, OS:26.5, name:iPhone Air }
+{ platform:iOS Simulator, arch:x86_64, id:CB15797E-6053-40B1-BB72-7F30D005A4F2, OS:26.5, name:iPhone Air }
 note: Using codesigning identity override: 
 ComputePackagePrebuildTargetDependencyGraph
 
@@ -56,8 +194,12 @@ ExecuteExternalTool /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/X
 
 ExecuteExternalTool /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
 
-Build description signature: 5c40f2ef6e37ba5bdf206b25fe7333c1
-Build description path: /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/XCBuildData/5c40f2ef6e37ba5bdf206b25fe7333c1.xcbuilddata
+Build description signature: 6d082233ef95aaea27252f93903c00c0
+Build description path: /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/XCBuildData/6d082233ef95aaea27252f93903c00c0.xcbuilddata
+ClangStatCache /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk /Users/runner/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.5-23F81a-688ef53f1462e2c8f657fdc38a81448fee66e23052a0157c865c76b268046726.sdkstatcache
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld.xcodeproj
+    /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -o /Users/runner/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.5-23F81a-688ef53f1462e2c8f657fdc38a81448fee66e23052a0157c865c76b268046726.sdkstatcache
+
 CreateBuildDirectory /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build
     cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld.xcodeproj
     builtin-create-build-directory /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build
@@ -65,10 +207,6 @@ CreateBuildDirectory /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build
 CreateBuildDirectory /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex
     cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld.xcodeproj
     builtin-create-build-directory /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex
-
-ClangStatCache /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk /Users/runner/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.5-23F81a-688ef53f1462e2c8f657fdc38a81448fee66e23052a0157c865c76b268046726.sdkstatcache
-    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld.xcodeproj
-    /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -o /Users/runner/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.5-23F81a-688ef53f1462e2c8f657fdc38a81448fee66e23052a0157c865c76b268046726.sdkstatcache
 
 WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld-02b2e3fe7d949d6d64b5bbc91f14ba7c-VFS-iphoneos/all-product-headers.yaml
     cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld.xcodeproj
@@ -90,13 +228,13 @@ CreateBuildDirectory /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld
     cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld.xcodeproj
     builtin-create-build-directory /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/EagerLinkingTBDs/Release-iphoneos
 
-WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld.hmap (in target 'TinyWorld' from project 'TinyWorld')
-    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
-    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld.hmap
-
 WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld.DependencyStaticMetadataFileList (in target 'TinyWorld' from project 'TinyWorld')
     cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
     write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld.hmap (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld.hmap
 
 WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld.DependencyMetadataFileList (in target 'TinyWorld' from project 'TinyWorld')
     cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
@@ -146,13 +284,13 @@ MkDir /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos/Ti
     cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
     /bin/mkdir -p /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos/TinyWorld.app
 
-MkDir /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_output/unthinned (in target 'TinyWorld' from project 'TinyWorld')
-    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
-    /bin/mkdir -p /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_output/unthinned
-
 MkDir /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_output/thinned (in target 'TinyWorld' from project 'TinyWorld')
     cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
     /bin/mkdir -p /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_output/thinned
+
+MkDir /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_output/unthinned (in target 'TinyWorld' from project 'TinyWorld')
+    cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
+    /bin/mkdir -p /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_output/unthinned
 
 GenerateAssetSymbols /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/Assets.xcassets (in target 'TinyWorld' from project 'TinyWorld')
     cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
@@ -943,18 +1081,18 @@ copySceneKitAssets: Running scntool on /Users/runner/work/TinyWorld/TinyWorld/Ti
 CompileAssetCatalogVariant thinned /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos/TinyWorld.app /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/Assets.xcassets (in target 'TinyWorld' from project 'TinyWorld')
     cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
     /Applications/Xcode_26.6.app/Contents/Developer/usr/bin/actool /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/Assets.xcassets --compile /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_dependencies_thinned --output-partial-info-plist /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/assetcatalog_generated_info.plist_thinned --app-icon AppIcon --compress-pngs --enable-on-demand-resources YES --development-region en --target-device iphone --target-device ipad --minimum-deployment-target 16.0 --platform iphoneos
-/Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/Rendering/Nodes/EnvironmentNode.swift:516:43: error: '=' must have consistent whitespace on both sides
-            foamPatchMat.diffuse.contents =UIColor(red: 0.95, green: 0.95, blue: 0.88, alpha: 0.35)
-                                          ^
-                                            
+/Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/Rendering/Nodes/EnvironmentNode.swift:499:34: error: '=' must have consistent whitespace on both sides
+        pathMat.diffuse.contents =UIColor(red: 0.42, green: 0.33, blue: 0.22, alpha: 1.0)
+                                 ^
+                                   
 
 SwiftDriver TinyWorld normal arm64 com.apple.xcode.tools.swift.compiler (in target 'TinyWorld' from project 'TinyWorld')
     cd /Users/runner/work/TinyWorld/TinyWorld/TinyWorld
     builtin-SwiftDriver -- /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name TinyWorld -O -whole-module-optimization @/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld.SwiftFileList -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -target arm64-apple-ios16.0 -g -module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 5 -I /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos -F /Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos -c -num-threads 3 -Xcc -ivfsstatcache -Xcc /Users/runner/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.5-23F81a-688ef53f1462e2c8f657fdc38a81448fee66e23052a0157c865c76b268046726.sdkstatcache -output-file-map /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld_const_extract_protocols.json -Xcc -iquote -Xcc /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-generated-files.hmap -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-own-target-headers.hmap -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-all-target-headers.hmap -Xcc -iquote -Xcc /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/TinyWorld-project-headers.hmap -Xcc -I/Users/runner/work/TinyWorld/TinyWorld/TinyWorld/build/Release-iphoneos/include -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/DerivedSources-normal/arm64 -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/DerivedSources/arm64 -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/DerivedSources -emit-objc-header -emit-objc-header-path /Users/runner/Library/Developer/Xcode/DerivedData/TinyWorld-femiojjbxsyuuxcoioexadrtmnvl/Build/Intermediates.noindex/TinyWorld.build/Release-iphoneos/TinyWorld.build/Objects-normal/arm64/TinyWorld-Swift.h -working-directory /Users/runner/work/TinyWorld/TinyWorld/TinyWorld -no-emit-module-separately-wmo
-/Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/Rendering/Nodes/EnvironmentNode.swift:516:43: error: '=' must have consistent whitespace on both sides
-            foamPatchMat.diffuse.contents =UIColor(red: 0.95, green: 0.95, blue: 0.88, alpha: 0.35)
-                                          ^
-                                             (in target 'TinyWorld' from project 'TinyWorld')
+/Users/runner/work/TinyWorld/TinyWorld/TinyWorld/TinyWorld/Rendering/Nodes/EnvironmentNode.swift:499:34: error: '=' must have consistent whitespace on both sides
+        pathMat.diffuse.contents =UIColor(red: 0.42, green: 0.33, blue: 0.22, alpha: 1.0)
+                                 ^
+                                    (in target 'TinyWorld' from project 'TinyWorld')
 
 ** BUILD FAILED **
 
