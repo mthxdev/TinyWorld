@@ -447,14 +447,12 @@ setupOcean()
             campfire.addChildNode(flameNode)
             
             // Gentle flicker animation
-            let flicker = SCNAction.scale(to: SCNVector3(
-                flameNode.scale.x * Float.random(in: 0.85...1.1),
-                flameNode.scale.y * Float.random(in: 0.85...1.1),
-                flameNode.scale.z * Float.random(in: 0.85...1.1)
-            ), duration: Double.random(in: 0.3...0.7))
-            flicker.timingMode = .easeInEaseOut
-            let flickerBack = flicker.reversed()
-            flameNode.runAction(SCNAction.repeatForever(SCNAction.sequence([flicker, flickerBack])))
+            let flickerDuration = Double.random(in: 0.3...0.7)
+            let scaleUp = SCNAction.scale(to: 1.15, duration: flickerDuration)
+            scaleUp.timingMode = .easeInEaseOut
+            let scaleDown = SCNAction.scale(to: 0.9, duration: flickerDuration)
+            scaleDown.timingMode = .easeInEaseOut
+            flameNode.runAction(SCNAction.repeatForever(SCNAction.sequence([scaleUp, scaleDown])))
         }
         
         // Add a few fireflies/particles around the campfire for ambient life
