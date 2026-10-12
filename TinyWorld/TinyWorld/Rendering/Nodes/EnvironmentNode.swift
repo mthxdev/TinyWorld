@@ -89,7 +89,6 @@ class EnvironmentNode: SCNNode {
         terrainWrapper.addChildNode(terrain)
         
 setupOcean()
-        setupPaths()
         
         // Expanded model arrays using all available Kenney Nature Kit assets
         let treeModels = [
@@ -419,9 +418,9 @@ setupOcean()
         let campLight = SCNLight()
         campLight.type = .omni
         campLight.color = UIColor(red: 1.0, green: 0.5, blue: 0.15, alpha: 1.0)
-        campLight.intensity = 12 // Much subtler glow
+        campLight.intensity = 8 // Much subtler glow to avoid overexposure
         campLight.attenuationStartDistance = 0.2
-        campLight.attenuationEndDistance = 3.0 // Slightly larger falloff for softer edge
+        campLight.attenuationEndDistance = 3.0
         campLight.castsShadow = false
         
         let campLightNode = SCNNode()
@@ -429,31 +428,18 @@ setupOcean()
         campLightNode.position = SCNVector3(0, 0.25, 0)
         campfire.addChildNode(campLightNode)
         
-        // Add procedural flames for a cozy campfire look
+        // Single subtle flame cone for cozy campfire look
         let flameMat = SCNMaterial()
         flameMat.lightingModel = .constant
-        flameMat.diffuse.contents = UIColor(red: 1.0, green: 0.45, blue: 0.1, alpha: 1.0)
-        flameMat.emission.contents = UIColor(red: 1.0, green: 0.5, blue: 0.15, alpha: 1.0)
+        flameMat.diffuse.contents = UIColor(red: 1.0, green: 0.4, blue: 0.1, alpha: 0.7)
+        flameMat.emission.contents = UIColor(red: 1.0, green: 0.5, blue: 0.15, alpha: 0.3)
         flameMat.isDoubleSided = true
         
-        for i in 0..<5 {
-            let flameGeo = SCNCone(topRadius: 0.0, bottomRadius: 0.12, height: 0.35)
-            flameGeo.materials = [flameMat]
-            let flameNode = SCNNode(geometry: flameGeo)
-            let offset = Float(i - 2) * 0.06
-            flameNode.position = SCNVector3(offset, 0.18, 0)
-            flameNode.rotation = SCNVector4(0, 0, 1, Float.random(in: -0.15...0.15))
-            flameNode.scale = SCNVector3(Float.random(in: 0.7...1.1), Float.random(in: 0.8...1.2), Float.random(in: 0.7...1.1))
-            campfire.addChildNode(flameNode)
-            
-            // Gentle flicker animation
-            let flickerDuration = Double.random(in: 0.3...0.7)
-            let scaleUp = SCNAction.scale(to: 1.15, duration: flickerDuration)
-            scaleUp.timingMode = .easeInEaseOut
-            let scaleDown = SCNAction.scale(to: 0.9, duration: flickerDuration)
-            scaleDown.timingMode = .easeInEaseOut
-            flameNode.runAction(SCNAction.repeatForever(SCNAction.sequence([scaleUp, scaleDown])))
-        }
+        let flameGeo = SCNCone(topRadius: 0.0, bottomRadius: 0.08, height: 0.2)
+        flameGeo.materials = [flameMat]
+        let flameNode = SCNNode(geometry: flameGeo)
+        flameNode.position = SCNVector3(0, 0.15, 0)
+        campfire.addChildNode(flameNode)
         
         // Add a few fireflies/particles around the campfire for ambient life
         for _ in 0..<8 {
@@ -478,54 +464,9 @@ setupOcean()
         }
     }
     
-    // MARK: - Procedural Paths
-    private func setupPaths() {
-        // Create dirt paths connecting the center to key zones
-        // Paths are built from small overlapping cylinders for organic look
-        let pathCenters: [(Float, Float)] = [
-            (-9.0, -8.0),   // forest
-            (8.0, -7.0),    // pine hills
-            (0.0, 10.0),    // meadow
-            (-6.0, 9.0),    // flowering
-            (11.0, 4.0),    // rocky coast
-            (-3.0, -11.0),  // mixed
-            (5.0, -10.0),   // coastal pine
-        ]
-        
-        let pathMat = SCNMaterial()
-        pathMat.lightingModel = .physicallyBased
-        pathMat.diffuse.contents = UIColor(red: 0.42, green: 0.33, blue: 0.22, alpha: 1.0)
-        pathMat.roughness.contents = NSNumber(value: 0.95)
-        pathMat.metalness.contents = NSNumber(value: 0.0)
-        
-        for (tx, tz) in pathCenters {
-            // Interpolate path from center to target
-            let steps = 12
-            for i in 0...steps {
-                let t = Float(i) / Float(steps)
-                let px = 0 + (tx - 0) * t
-                let pz = 0 + (tz - 0) * t
-                
-                // Add slight curve for organic feel
-                let curve = sin(t * Float.pi) * 1.5
-                let cx = px + cos(t * 2.0) * curve * 0.3
-                let cz = pz + sin(t * 2.0) * curve * 0.3
-                
-                let py = TerrainBuilder.getHeight(at: cx, z: cz) + 0.02
-                
-                let pathSegment = SCNCylinder(radius: 0.45, height: 0.06)
-                pathSegment.materials = [pathMat]
-                let pathNode = SCNNode(geometry: pathSegment)
-                pathNode.position = SCNVector3(cx, py, cz)
-                pathNode.rotation = SCNVector4(1, 0, 0, -Float.pi / 2)
-                terrainWrapper.addChildNode(pathNode)
-            }
-        }
-    }
-    
     private func setupOcean() {
-        // Ocean floor - extends beyond island to horizon
-        let floorGeo = SCNPlane(width: 200.0, height: 200.0)
+        // Ocean floor - sized to match island without creating visible edges
+        let floorGeo = SCNPlane(width: 80.0, height: 80.0)
         let floorMat = SCNMaterial()
         floorMat.lightingModel = .physicallyBased
         floorMat.diffuse.contents = UIColor(red: 0.04, green: 0.06, blue: 0.10, alpha: 1.0)
