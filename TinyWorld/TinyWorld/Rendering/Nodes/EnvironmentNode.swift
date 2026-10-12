@@ -496,7 +496,7 @@ setupOcean()
         
         let pathMat = SCNMaterial()
         pathMat.lightingModel = .physicallyBased
-        pathMat.diffuse.contents =UIColor(red: 0.42, green: 0.33, blue: 0.22, alpha: 1.0)
+        pathMat.diffuse.contents = UIColor(red: 0.42, green: 0.33, blue: 0.22, alpha: 1.0)
         pathMat.roughness.contents = NSNumber(value: 0.95)
         pathMat.metalness.contents = NSNumber(value: 0.0)
         
